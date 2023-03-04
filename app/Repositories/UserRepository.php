@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+class UserRepository implements UserRepositoryInterface
+{
+
+    public function allUser()
+    {
+        return User::latest()->paginate(10);
+    }
+
+    public function storeUser($data)
+    {
+        return User::create($data);
+    }
+
+    public function findUser($id)
+    {
+        return User::find($id);
+    }
+
+    public function findUserByEmail($email)
+    {
+        return User::where(['email'=>$email])->first();
+    }
+
+    public function updateUser($data, $id)
+    {
+        $user = User::where('id', $id)->first();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->save();
+    }
+
+    public function password_reset($data)
+    {
+        $user = User::where('email', $data['email'])->first();
+        $user->password = Hash::make($data['password']);
+        $user->save();
+    }
+
+    public function destroyUser($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+    }
+}
