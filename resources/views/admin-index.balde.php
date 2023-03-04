@@ -147,3 +147,5 @@ modeSwitch.addEventListener("click" , () =>{
 
 </body>
 </html>
+
+hello i am kahi ray 
