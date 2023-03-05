@@ -39,6 +39,10 @@ Route::get('/admin_portal', function () {
     return view('admin/admin-index');
 });
 
+Route::get('/customer', function () {
+    return view('admin/all-customer');
+});
+
 Route::get('/forget_password', function () {
     return view('user/forgetPassword');
 });
