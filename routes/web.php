@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+
 
 
 /*
@@ -43,6 +45,8 @@ Route::get('/customer', function () {
     return view('admin/all-customer');
 });
 
+
+
 Route::get('/forget_password', function () {
     return view('user/forgetPassword');
 });
@@ -51,6 +55,7 @@ Route::get('/all-product', function () {
     return view('user/all-product');
 });
 
+
 Route::get('user/reset_password/{token}/{email}', [UserController::class, 'verify_reset_password'])->name('reset_password');
 Route::prefix('user')->middleware(['auth'])->group(function () {
     // Only authenticated users can access this route
@@ -58,6 +63,9 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::post('/submitEditProfileForm/{id}', [UserController::class, 'submitEditProfileForm']);
     
 });
+
+
+Route::get('/category', [AdminController::class, 'category']);
 
 Route::view('/register','user/register');
 Route::post('/login', [UserController::class, 'login']);

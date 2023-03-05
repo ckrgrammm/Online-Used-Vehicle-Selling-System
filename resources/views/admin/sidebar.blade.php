@@ -27,7 +27,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/forms/basic_elements.html">
+        <a class="nav-link" href="/category">
           <span class="menu-title">Product</span>
           <i class="mdi mdi-cube-outline menu-icon"></i>
         </a>
