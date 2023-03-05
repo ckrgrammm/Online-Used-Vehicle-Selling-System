@@ -45,7 +45,13 @@ Route::get('/customer', function () {
     return view('admin/all-customer');
 });
 
+Route::get('/add-customer', function () {
+    return view('admin/add-customer');
+});
 
+Route::get('/edit-customer', function () {
+    return view('admin/edit-customer');
+});
 
 Route::get('/forget_password', function () {
     return view('user/forgetPassword');

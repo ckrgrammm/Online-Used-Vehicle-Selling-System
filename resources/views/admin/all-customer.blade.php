@@ -29,7 +29,7 @@
     <thead>
         <tr>
             <th>
-                <a href="" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
+                <a href="/add-customer" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
             </th>
         </tr>
         <tr>
@@ -60,7 +60,7 @@
             <td>2011-04-25</td>
             <td>$320,800</td>
             <td> 
-                <a href="" class="btn btn-success" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
+                <a href="/edit-customer" class="btn btn-success" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
                 <a href="" class="btn btn-danger" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
             </td>
         </tr>
@@ -81,7 +81,13 @@
 
     <script>
         $(document).ready(function () {
-            $('#example').DataTable();
+            $('#example').DataTable({
+                "dom": 'ZBfrltip',
+                "buttons": [
+                    "pdfHtml5",
+                    "excelHtml5"
+                ],
+            });
         });
     </script>
 @endsection
