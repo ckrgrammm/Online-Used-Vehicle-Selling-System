@@ -21,7 +21,7 @@ use App\Http\Controllers\UserController;
 // });
 
 Route::get('/login', function () {
-    return view('login');
+    return view('user/login');
 })->name('login');;
 
 Route::get('logout', function () {
@@ -32,7 +32,7 @@ Route::get('logout', function () {
 
 
 Route::get('/', function () {
-    return view('index');
+    return view('user/index');
 });
 
 Route::get('/admin', function () {
@@ -40,22 +40,22 @@ Route::get('/admin', function () {
 });
 
 Route::get('/forget_password', function () {
-    return view('forgetPassword');
+    return view('user/forgetPassword');
 });
 
 Route::get('/all-product', function () {
-    return view('all-product');
+    return view('user/all-product');
 });
 
-Route::get('/reset_password/{token}/{email}', [UserController::class, 'verify_reset_password'])->name('reset_password');
-Route::middleware(['auth'])->group(function () {
+Route::get('user/reset_password/{token}/{email}', [UserController::class, 'verify_reset_password'])->name('reset_password');
+Route::prefix('user')->middleware(['auth'])->group(function () {
     // Only authenticated users can access this route
     Route::get('/edit-profile', [UserController::class, 'edit_profile']);
     Route::post('/submitEditProfileForm/{id}', [UserController::class, 'submitEditProfileForm']);
     
 });
 
-Route::view('/register','register');
+Route::view('/register','user/register');
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/forget_password', [UserController::class, 'forgetPassword']);

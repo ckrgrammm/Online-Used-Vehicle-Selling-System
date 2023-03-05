@@ -1,4 +1,4 @@
-@extends('master')
+@extends('user/master')
 @section('content')
 <!-- banner part start-->
 <section class="banner_part">

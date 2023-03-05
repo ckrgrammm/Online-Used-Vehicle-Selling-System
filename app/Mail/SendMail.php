@@ -26,6 +26,6 @@ class SendMail extends Mailable
     public function build()
     {
         return $this->subject('Email From Respectism.com')
-                    ->view('testMail');
+                    ->view('user/testMail');
     }
 }

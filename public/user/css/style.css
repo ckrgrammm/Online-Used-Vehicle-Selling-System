@@ -7780,7 +7780,7 @@ h6 {
 
 /*# Admin Dashboard */
  /* Google Font Import - Poppins */
- @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+ /* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
  *{
      margin: 0;
      padding: 0;
@@ -7788,23 +7788,23 @@ h6 {
      font-family: 'Poppins', sans-serif;
  }
  
- :root{
+ :root{ */
      /* ===== Colors ===== */
-     --body-color: #E4E9F7;
+     /* --body-color: #E4E9F7;
      --sidebar-color: #FFF;
      --primary-color: #695CFE;
      --primary-color-light: #F6F5FF;
      --toggle-color: #DDD;
-     --text-color: #707070;
+     --text-color: #707070; */
  
      /* ====== Transition ====== */
-     --tran-03: all 0.2s ease;
+     /* --tran-03: all 0.2s ease;
      --tran-03: all 0.3s ease;
      --tran-04: all 0.3s ease;
      --tran-05: all 0.3s ease;
- }
+ } */
  
- body{
+ /* body{
      min-height: 100vh;
      background-color: var(--body-color);
      transition: var(--tran-05);
@@ -7822,10 +7822,10 @@ h6 {
      --primary-color-light: #3a3b3c;
      --toggle-color: #fff;
      --text-color: #ccc;
- }
+ } */
  
  /* ===== Sidebar ===== */
-  .sidebar{
+  /* .sidebar{
      position: fixed;
      top: 0;
      left: 0;
@@ -7838,10 +7838,10 @@ h6 {
  }
  .sidebar.close{
      width: 88px;
- }
+ } */
  
  /* ===== Reusable code - Here ===== */
- .sidebar li{
+ /* .sidebar li{
      height: 50px;
      list-style: none;
      display: flex;
@@ -7879,10 +7879,10 @@ h6 {
  }
  .sidebar.close .text{
      opacity: 0;
- }
+ } */
  /* =========================== */
  
- .sidebar header{
+ /* .sidebar header{
      position: relative;
  }
  
@@ -8087,5 +8087,5 @@ h6 {
  }
  body.dark .home .text{
      color: var(--text-color);
- }
+ } */
   

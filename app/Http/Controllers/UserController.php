@@ -109,7 +109,7 @@ class UserController extends Controller
         if(!$verify){
             return redirect('/forget_password')->with('error', 'This link can only reset password once! Please resend again your reset password form');
         }
-        return view('forgetPasswordLink', compact('email', 'token'));
+        return view('user/forgetPasswordLink', compact('email', 'token'));
     }
 
    public function submitResetPasswordForm(Request $request)
@@ -146,7 +146,7 @@ class UserController extends Controller
    public function edit_profile(){
         $user_id = Session::get('user')['id'];
         $data = $this->userRepository->findUser($user_id);
-        return view('edit-profile', compact('data'));
+        return view('user/edit-profile', compact('data'));
    }
 
    public function submitEditProfileForm(Request $request, $id){
@@ -163,11 +163,11 @@ class UserController extends Controller
 
             $image = base64_decode($changed_profile_image);
             $image_name = uniqid(rand(), false) . '.png';
-            file_put_contents('../public/img/profile/'.$image_name, $image);
+            file_put_contents('../public/user/img/profile/'.$image_name, $image);
             $profile_image = $image_name;
             $user->image=$profile_image;
         }
         $user->save();
-        return redirect('edit-profile')->with('success', 'Successfully changed!');
+        return redirect('user/edit-profile')->with('success', 'Successfully changed!');
    }
 }

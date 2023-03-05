@@ -1,4 +1,4 @@
-@extends('master')
+@extends('user/master')
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/luxonauta/luxa@8a98/dist/compressed/luxa.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
@@ -212,7 +212,7 @@
             <div class="profile-pic bs-md">
               <h1 class="pic-label">Profile picture</h1>
               <div class="pic bs-md">
-                <img src="{{asset('img/profile/'.$data->image)}}" id="profile-image" alt="" width="4024" height="6048" loading="lazy">
+                <img src="{{asset('user/img/profile/'.$data->image)}}" id="profile-image" alt="" width="4024" height="6048" loading="lazy">
                 <a id="change-avatar" class="lx-btn"><i class="fas fa-camera-retro"></i>&nbsp;&nbsp;Change your profile picture.</a>
               </div>
               <div class="pic-info">
@@ -221,7 +221,7 @@
             </div>
           </div>
           <div class="lx-column">
-            <form class="edit-profile-form" id="edit-profile-form" method="POST" action="/submitEditProfileForm/{{$data->id}}" enctype="multipart/form-data">
+            <form class="edit-profile-form" id="edit-profile-form" method="POST" action="/user/submitEditProfileForm/{{$data->id}}" enctype="multipart/form-data">
                 {{-- <input type="hidden" name="old-profile-image" id="old-profile-image" value="{{$data->image}}"> --}}
                 @csrf
                 <input id='selectedFile' class="disp-none" style="display: none" type='file' accept="image/*">

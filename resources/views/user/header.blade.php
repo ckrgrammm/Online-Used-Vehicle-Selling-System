@@ -33,11 +33,11 @@ use App\Models\User;
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <img src="{{asset('img/profile/'.$data->image)}}" width="40" height="40" class="rounded-circle">
+                              <img src="{{asset('user/img/profile/'.$data->image)}}" width="40" height="40" class="rounded-circle">
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                               <a class="dropdown-item" href="#">Dashboard</a>
-                              <a class="dropdown-item" href="/edit-profile">Edit Profile</a>
+                              <a class="dropdown-item" href="user/edit-profile">Edit Profile</a>
                               <a class="dropdown-item" href="/logout">Log Out</a>
                             </div>
                           </li>   
