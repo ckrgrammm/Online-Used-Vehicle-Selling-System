@@ -170,4 +170,8 @@ class UserController extends Controller
         $user->save();
         return redirect('user/edit-profile')->with('success', 'Successfully changed!');
    }
+
+   public function sell(Request $req){
+    
+   }
 }

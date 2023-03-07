@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order__products', function (Blueprint $table) {
+        Schema::create('free_gifts', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('order_id');
-            $table->bigInteger('product_id');
-            $table->integer('quantity');
+            $table->string('giftName');
+            $table->string('giftDesc');
+            $table->string('giftRequiredPrice');
+            $table->string('image');
             $table->tinyInteger('deleted');
             $table->timestamps();
         });
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order__products');
+        Schema::dropIfExists('free_gifts');
     }
 };

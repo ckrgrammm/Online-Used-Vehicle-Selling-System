@@ -82,6 +82,7 @@
     <script>
         $(document).ready(function () {
             $('#example').DataTable({
+                "lengthMenu": [5, 10, 20, 50],
                 "dom": 'ZBfrltip',
                 "buttons": [
                     "pdfHtml5",

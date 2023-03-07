@@ -51,6 +51,9 @@ use App\Models\User;
                             <li class="nav-item">
                                 <a class="nav-link" href="/">Home</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/sell">Sell</a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_1"
                                     role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

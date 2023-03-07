@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Facades\ProductFacade;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Session;
+
 
 
 class ProductController extends Controller
@@ -23,19 +25,44 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string',
+            'make' => 'required|string',
+            'model' => 'required|string',
+            'price' => 'required|string',
+            'year' => 'required|string',
+            'mileage' => 'required|string',
+            'color' => 'required|string',
+            'transmission' => 'required|string',
             'description' => 'required|string',
-            'price' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'stock' => 'required|integer',
-            'category' => 'required|string',
-
+            'images' => 'required'
 
         ]);
-        
-        $product = ProductFacade::create($data);
 
-        return redirect()->route('products.show', ['product' => $product->id]);
+        $product = new Product();
+        $product->user_id = Session::get('user')['id'];
+        $product->make = $request->post('make');
+        $product->model = $request->post('model');
+        $product->price = $request->post('price');
+        $product->year = $request->post('year');
+        $product->mileage = $request->post('mileage');
+        $product->color = $request->post('color');
+        $product->transmission = $request->post('transmission');
+        $product->product_description = $request->post('description');
+        $images=array();
+        if($files=$request->file('images')){
+            foreach($files as $file){
+                $var = date_create();
+                $time = date_format($var, 'YmdHis');
+                $imageName = $time . '-' . $file->getClientOriginalName();
+                $file->move('../public/user/img/product/',$imageName);
+                $images[]=$imageName;
+            }
+        }
+        /*Insert your data*/
+        $product->product_image = implode("|",$images);
+        $product->save();
+        
+        return redirect('/all-product')->with('success', 'Information has been added');
+
     }
 
     public function show($id)

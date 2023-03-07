@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
+
 
 
 
@@ -53,6 +55,10 @@ Route::get('/edit-customer', function () {
     return view('admin/edit-customer');
 });
 
+Route::get('/sell', function () {
+    return view('user/sell');
+});
+
 Route::get('/forget_password', function () {
     return view('user/forgetPassword');
 });
@@ -78,6 +84,10 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/forget_password', [UserController::class, 'forgetPassword']);
 Route::post('/submitResetPasswordForm', [UserController::class, 'submitResetPasswordForm']);
+Route::post('/sell', [UserController::class, 'sell']);
+Route::resource('products', ProductController::class);
+
+
 
 
 
