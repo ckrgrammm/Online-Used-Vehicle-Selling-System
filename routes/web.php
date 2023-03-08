@@ -87,7 +87,8 @@ Route::post('/submitResetPasswordForm', [UserController::class, 'submitResetPass
 Route::post('/sell', [UserController::class, 'sell']);
 Route::resource('products', ProductController::class);
 
-
+Route::view('/temp','temp');
+Route::post('/payment',[PaymentController::class,'displayPayment']);
 
 
 
