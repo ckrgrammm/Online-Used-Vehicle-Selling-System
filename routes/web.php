@@ -55,6 +55,15 @@ Route::get('/edit-customer', function () {
     return view('admin/edit-customer');
 });
 
+/*
+Route::get('/product', function () {
+    return view('admin/all-product');
+});*/
+
+Route::get('/add-product', function () {
+    return view('admin/add-product');
+});
+
 Route::get('/sell', function () {
     return view('user/sell');
 });
@@ -77,7 +86,6 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/category', [AdminController::class, 'category']);
 
 Route::view('/register','user/register');
 Route::post('/login', [UserController::class, 'login']);
@@ -85,11 +93,24 @@ Route::post('/register', [UserController::class, 'register']);
 Route::post('/forget_password', [UserController::class, 'forgetPassword']);
 Route::post('/submitResetPasswordForm', [UserController::class, 'submitResetPasswordForm']);
 Route::post('/sell', [UserController::class, 'sell']);
-Route::resource('products', ProductController::class);
+//Route::resource('products', ProductController::class);
 
 Route::view('/temp','temp');
 Route::post('/payment',[PaymentController::class,'displayPayment']);
 
+Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
 
+
+/*
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
+Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
+Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+*/
 

@@ -13,8 +13,9 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = ProductFacade::getAll();
-        return view('products.index', ['products' => $products]);
+        $products = Product::all();
+
+        return view('admin/all-product', compact('products'));
     }
 
     public function create()
@@ -24,6 +25,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        /*
         $data = $request->validate([
             'make' => 'required|string',
             'model' => 'required|string',
@@ -37,6 +39,15 @@ class ProductController extends Controller
 
         ]);
 
+make
+   model  
+   price   
+   year
+   mileage
+   color
+   transmission
+   description
+   images
         $product = new Product();
         $product->user_id = Session::get('user')['id'];
         $product->make = $request->post('make');
@@ -57,11 +68,46 @@ class ProductController extends Controller
                 $images[]=$imageName;
             }
         }
-        /*Insert your data*/
+
+        //Insert your data
         $product->product_image = implode("|",$images);
         $product->save();
         
         return redirect('/all-product')->with('success', 'Information has been added');
+
+        */
+
+
+
+        //Observer Design Pattern
+        $product = new Product;
+
+        $product->user_id = auth()->user()->id;  // assuming you have an authenticated user
+        $product->make = $request->input('make');
+        $product->model = $request->input('model');
+        $product->year = $request->input('year');
+        $product->mileage = $request->input('mileage');
+        $product->color = $request->input('color');
+        $product->transmission = $request->input('transmission');
+        $product->product_description = $request->input('pDesc');
+        //$product->product_image = $request->input('pImg');
+        $images=array();
+        if($files=$request->file('images')){
+            foreach($files as $file){
+                $var = date_create();
+                $time = date_format($var, 'YmdHis');
+                $imageName = $time . '-' . $file->getClientOriginalName();
+                $file->move('../public/user/img/product/',$imageName);
+                $images[]=$imageName;
+            }
+        }
+        $product->price = $request->input('price');
+        $product->deleted = false;
+
+        $product->product_image = implode("|",$images);
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Information has been added');
 
     }
 
