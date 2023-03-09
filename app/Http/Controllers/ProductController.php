@@ -109,6 +109,7 @@ make
 
         return redirect()->route('products.index')->with('success', 'Information has been added');
 
+        
     }
 
     public function show($id)

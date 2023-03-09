@@ -58,7 +58,9 @@ Route::get('/edit-customer', function () {
 /*
 Route::get('/product', function () {
     return view('admin/all-product');
-});*/
+});
+
+*/
 
 Route::get('/add-product', function () {
     return view('admin/add-product');
@@ -101,6 +103,13 @@ Route::post('/payment',[PaymentController::class,'displayPayment']);
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+/*if (Auth::user()->isAdmin()) {
+    return redirect('/admin/all-product');
+}
+*/
+
+// Otherwise, redirect them to the user/all-product page
+return redirect('/user/all-product');
 
 
 

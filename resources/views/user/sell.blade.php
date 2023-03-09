@@ -330,7 +330,7 @@ p {
                                   @endif
                                   <label class="fieldlabels">Product Description: *</label>
                                   <textarea name="pDesc" id="pDesc" cols="30" rows="10"></textarea>
-                                  @if ($errors->has('pDesc'))
+                                  @if ($errors->has('description'))
                                       <span class="text-danger">{{ $errors->first('pDesc') }}</span>
                                   @endif
                               </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
