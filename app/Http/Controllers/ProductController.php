@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\ProductFacade;
+use Illuminate\Foundation\Auth;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Session;
@@ -40,14 +41,15 @@ class ProductController extends Controller
         ]);
 
 make
-   model  
-   price   
-   year
-   mileage
-   color
-   transmission
-   description
-   images
+model  
+price   
+year
+mileage
+color
+transmission
+description
+images
+
         $product = new Product();
         $product->user_id = Session::get('user')['id'];
         $product->make = $request->post('make');
@@ -91,24 +93,30 @@ make
         $product->transmission = $request->input('transmission');
         $product->product_description = $request->input('pDesc');
         //$product->product_image = $request->input('pImg');
-        $images=array();
-        if($files=$request->file('images')){
-            foreach($files as $file){
+        $images = array();
+        if ($files = $request->file('images')) {
+            foreach ($files as $file) {
                 $var = date_create();
                 $time = date_format($var, 'YmdHis');
                 $imageName = $time . '-' . $file->getClientOriginalName();
-                $file->move('../public/user/img/product/',$imageName);
-                $images[]=$imageName;
+                $file->move('../public/user/img/product/', $imageName);
+                $images[] = $imageName;
             }
         }
         $product->price = $request->input('price');
         $product->deleted = false;
 
-        $product->product_image = implode("|",$images);
+        $product->product_image = implode("|", $images);
         $product->save();
 
         return redirect()->route('products.index')->with('success', 'Information has been added');
-
+        /*
+        if (Auth::user()->isAdmin()) {
+            return redirect('/admin/all-product');
+        } else {
+            */
+            // Otherwise, redirect them to the user/all-product page
+            return redirect('/user/all-product');
         
     }
 

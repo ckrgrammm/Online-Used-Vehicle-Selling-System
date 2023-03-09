@@ -75,7 +75,7 @@ Route::get('/forget_password', function () {
 });
 
 Route::get('/all-product', function () {
-    return view('user/all-product');
+    return view('user/alls-product');
 });
 
 
@@ -109,7 +109,7 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 */
 
 // Otherwise, redirect them to the user/all-product page
-return redirect('/user/all-product');
+return redirect('/user/alls-product');
 
 
 
