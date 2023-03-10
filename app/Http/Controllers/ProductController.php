@@ -82,8 +82,53 @@ images
 
 
         //Observer Design Pattern
-        $product = new Product;
 
+
+        $product = new Product([
+            'user_id' => auth()->user()->id,
+            'make' => $request->input('make'),
+            'model' => $request->input('model'),
+            'year' => $request->input('year'),
+            'mileage' => $request->input('mileage'),
+            'color' => $request->input('color'),
+            'transmission' => $request->input('transmission'),
+            'product_description' => $request->input('pDesc'),
+            'price' => $request->input('price'),
+            'deleted' => false,
+        ]);
+
+        $request->validate([
+            'make' => 'required',
+            'model' => 'required',
+            'year' => 'required',
+            'mileage' => 'required|numeric',
+            'color' => 'required',
+            'transmission' => 'required',
+            'pDesc' => 'required',
+            'images' => 'required', // validate each image file in the array
+            'price' => 'required|numeric',
+        ]);
+
+        $images = array();
+        if ($files = $request->file('images')) {
+        foreach ($files as $file) {
+            $var = date_create();
+            $time = date_format($var, 'YmdHis');
+            $imageName = $time . '-' . $file->getClientOriginalName();
+            $file->move('../public/user/img/product/', $imageName);
+            $images[] = $imageName;
+        }
+    }
+
+
+        $product->product_image = implode("|", $images);
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Information has been added');
+
+
+
+        /*
         $product->user_id = auth()->user()->id;  // assuming you have an authenticated user
         $product->make = $request->input('make');
         $product->model = $request->input('model');
@@ -109,14 +154,18 @@ images
         $product->product_image = implode("|", $images);
         $product->save();
 
+        
         return redirect()->route('products.index')->with('success', 'Information has been added');
+        
         /*
         if (Auth::user()->isAdmin()) {
             return redirect('/admin/all-product');
         } else {
-            */
+            
+        
             // Otherwise, redirect them to the user/all-product page
             return redirect('/user/all-product');
+            */
         
     }
 
