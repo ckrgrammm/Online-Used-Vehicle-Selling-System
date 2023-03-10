@@ -6,6 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\UserRepository;
+use App\Observers\UserFormSubmissionObserver;
+
+use App\Models\User;
+use App\Models\Admin;
+
 
 
 class AppServiceProvider extends ServiceProvider
@@ -21,11 +26,10 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot()
     {
-        //
-        Schema::defaultStringLength(191);
+        User::observe(UserFormSubmissionObserver::class);
+        //Admin::observe(AdminFormSubmissionObserver::class);
     }
-
     
 }

@@ -325,14 +325,12 @@ p {
                                   
                                   <label class="fieldlabels">Transmission: * @if ($errors->has('transmission'))
                                       <span class="text-danger">{{ $errors->first('transmission') }}</span>
-                                  @endif</label> 
-                                  <input type="text" name="transmission" placeholder="Manual" />
-                                  
-                                  <label class="fieldlabels">Description: * @if ($errors->has('description'))
-                                      <span class="text-danger">{{ $errors->first('description') }}</span>
-                                  @endif</label>
+                                  @endif
+                                  <label class="fieldlabels">Description: *</label>
                                   <textarea name="description" id="description" cols="30" rows="10"></textarea>
-                                  
+                                  @if ($errors->has('description'))
+                                      <span class="text-danger">{{ $errors->first('description') }}</span>
+                                  @endif
                               </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
                           </fieldset>
                           <fieldset>
