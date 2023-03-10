@@ -281,21 +281,21 @@ p {
                                           <h2 class="steps">Step 1 - 4</h2>
                                       </div>
                                   </div> 
-                                  <label class="fieldlabels">Make: *</label> 
-                                  <input type="text" name="make" placeholder="Mercedes-Benz" /> 
-                                  @if ($errors->has('make'))
-                                      <span class="text-danger">{{ $errors->first('make') }}</span>
-                                  @endif
-                                  <label class="fieldlabels">Model: *</label> 
+                                  <label class="fieldlabels">Make: * @if ($errors->has('make'))
+                                    <span class="text-danger">{{ $errors->first('make') }}</span>
+                                  @endif</label> 
+                                  <input type="text" name="make" placeholder="Mercedes-Benz" />
+                                  
+                                  <label class="fieldlabels">Model: * @if ($errors->has('model'))
+                                    <span class="text-danger">{{ $errors->first('model') }}</span>
+                                  @endif</label> 
                                   <input type="text" name="model" placeholder="Mercedes-AMG G 63" />
-                                  @if ($errors->has('model'))
-                                      <span class="text-danger">{{ $errors->first('model') }}</span>
-                                  @endif
-                                  <label class="fieldlabels">Price: *</label> 
-                                  <input type="text" name="price" placeholder="RM500,000" />
-                                  @if ($errors->has('price'))
+                                  
+                                  <label class="fieldlabels">Price: * @if ($errors->has('price'))
                                       <span class="text-danger">{{ $errors->first('price') }}</span>
-                                  @endif
+                                  @endif</label> 
+                                  <input type="text" name="price" placeholder="RM500,000" />
+                                  
                               </div> <input type="button" name="next" class="next action-button" value="Next" />
                           </fieldset>
                           <fieldset>
@@ -308,31 +308,31 @@ p {
                                           <h2 class="steps">Step 2 - 4</h2>
                                       </div>
                                   </div> 
-                                  <label class="fieldlabels">Year: *</label> 
-                                  <input type="text" name="year" placeholder="2021" /> 
-                                  @if ($errors->has('year'))
+                                  <label class="fieldlabels">Year: * @if ($errors->has('year'))
                                       <span class="text-danger">{{ $errors->first('year') }}</span>
-                                  @endif
-                                  <label class="fieldlabels">Mileage: *</label> 
-                                  <input type="text" name="mileage" placeholder="10km" />
-                                  @if ($errors->has('mileage'))
+                                  @endif</label> 
+                                  <input type="text" name="year" placeholder="2021" /> 
+                                  
+                                  <label class="fieldlabels">Mileage: * @if ($errors->has('mileage'))
                                       <span class="text-danger">{{ $errors->first('mileage') }}</span>
-                                  @endif
-                                  <label class="fieldlabels">Color: *</label> 
-                                  <input type="text" name="color" placeholder="black and pink" /> 
-                                  @if ($errors->has('color'))
+                                  @endif</label> 
+                                  <input type="text" name="mileage" placeholder="10km" />
+                                  
+                                  <label class="fieldlabels">Color: * @if ($errors->has('color'))
                                       <span class="text-danger">{{ $errors->first('color') }}</span>
-                                  @endif
-                                  <label class="fieldlabels">Transmission: *</label> 
-                                  <input type="text" name="transmission" placeholder="Manual" />
-                                  @if ($errors->has('transmission'))
+                                  @endif</label> 
+                                  <input type="text" name="color" placeholder="black and pink" /> 
+                                  
+                                  <label class="fieldlabels">Transmission: * @if ($errors->has('transmission'))
                                       <span class="text-danger">{{ $errors->first('transmission') }}</span>
-                                  @endif
-                                  <label class="fieldlabels">Description: *</label>
-                                  <textarea name="description" id="description" cols="30" rows="10"></textarea>
-                                  @if ($errors->has('description'))
+                                  @endif</label> 
+                                  <input type="text" name="transmission" placeholder="Manual" />
+                                  
+                                  <label class="fieldlabels">Description: * @if ($errors->has('description'))
                                       <span class="text-danger">{{ $errors->first('description') }}</span>
-                                  @endif
+                                  @endif</label>
+                                  <textarea name="description" id="description" cols="30" rows="10"></textarea>
+                                  
                               </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
                           </fieldset>
                           <fieldset>
@@ -345,11 +345,11 @@ p {
                                           <h2 class="steps">Step 3 - 4</h2>
                                       </div>
                                   </div> 
-                                    <label class="fieldlabels">Upload Your Photo:</label> 
-                                    <div class="input-images-1" style="padding-top: .5rem;"></div>
-                                    @if ($errors->has('images'))
+                                    <label class="fieldlabels">Upload Your Photo: * @if ($errors->has('images'))
                                       <span class="text-danger">{{ $errors->first('images') }}</span>
-                                  @endif
+                                   @endif</label> 
+                                    <div class="input-images-1" style="padding-top: .5rem;"></div>
+                                    
                               </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
                           </fieldset>
                           <fieldset>

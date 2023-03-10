@@ -150,13 +150,8 @@ class UserController extends Controller
    }
 
    public function submitEditProfileForm(Request $request, $id){
-        $user=$this->userRepository->findUser($id);
-        $user->name=$request->post('user-name');
-        $user->email=$request->post('email');
-        $user->gender=$request->post('gender');
-        $user->address=$request->post('address');
-        $user->phoneNum=$request->post('phone-number');
         $changed_profile_image = $request->post('changed-profile-image');
+        $image_name = '';
         if($changed_profile_image != ""){
             list($type, $changed_profile_image) = explode(';',$changed_profile_image);
             list(, $changed_profile_image) = explode(',',$changed_profile_image);
@@ -164,14 +159,19 @@ class UserController extends Controller
             $image = base64_decode($changed_profile_image);
             $image_name = uniqid(rand(), false) . '.png';
             file_put_contents('../public/user/img/profile/'.$image_name, $image);
-            $profile_image = $image_name;
-            $user->image=$profile_image;
         }
-        $user->save();
+        $data = [
+            'name' => $request->post('user-name'),
+            'email' => $request->post('email'),
+            'gender' => $request->post('gender'),
+            'address' => $request->post('address'),
+            'phoneNum' => $request->post('phone-number'),
+            'image' => $image_name
+        ];
+        $this->userRepository->updateUser($data, $id);
+
         return redirect('user/edit-profile')->with('success', 'Successfully changed!');
    }
 
-   public function sell(Request $req){
-    
-   }
+   
 }

@@ -39,6 +39,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="/comment">
+          <span class="menu-title">Comment</span>
+          <i class="mdi mdi-comment-text-multiple-outline menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="general-pages">
           <span class="menu-title">Reports</span>
           <i class="menu-arrow"></i>

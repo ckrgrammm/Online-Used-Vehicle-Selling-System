@@ -34,6 +34,12 @@ class UserRepository implements UserRepositoryInterface
         $user = User::where('id', $id)->first();
         $user->name = $data['name'];
         $user->email = $data['email'];
+        $user->gender = $data['gender'];
+        $user->address = $data['address'];
+        if($data['image'] != ''){
+            $user->image = $data['image'];
+        }
+        $user->phoneNum = $data['phoneNum'];
         $user->save();
     }
 

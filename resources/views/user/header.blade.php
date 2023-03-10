@@ -52,7 +52,7 @@ use App\Models\User;
                                 <a class="nav-link" href="/">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/sell">Sell</a>
+                                <a class="nav-link" href="user/sell">Sell</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_1"

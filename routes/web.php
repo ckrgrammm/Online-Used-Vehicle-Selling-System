@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 
 
 
@@ -47,16 +48,16 @@ Route::get('/customer', function () {
     return view('admin/all-customer');
 });
 
+Route::get('/comment', function () {
+    return view('admin/all-comment');
+});
+
 Route::get('/add-customer', function () {
     return view('admin/add-customer');
 });
 
 Route::get('/edit-customer', function () {
     return view('admin/edit-customer');
-});
-
-Route::get('/sell', function () {
-    return view('user/sell');
 });
 
 Route::get('/forget_password', function () {
@@ -67,12 +68,19 @@ Route::get('/all-product', function () {
     return view('user/all-product');
 });
 
+Route::get('/reviews', function () {
+    return view('user/review');
+});
+
 
 Route::get('user/reset_password/{token}/{email}', [UserController::class, 'verify_reset_password'])->name('reset_password');
 Route::prefix('user')->middleware(['auth'])->group(function () {
     // Only authenticated users can access this route
     Route::get('/edit-profile', [UserController::class, 'edit_profile']);
     Route::post('/submitEditProfileForm/{id}', [UserController::class, 'submitEditProfileForm']);
+    Route::get('/sell', function () {
+        return view('user/sell');
+    });
     
 });
 
@@ -86,6 +94,7 @@ Route::post('/forget_password', [UserController::class, 'forgetPassword']);
 Route::post('/submitResetPasswordForm', [UserController::class, 'submitResetPasswordForm']);
 Route::post('/sell', [UserController::class, 'sell']);
 Route::resource('products', ProductController::class);
+Route::resource('reviews', ReviewController::class);
 
 
 
