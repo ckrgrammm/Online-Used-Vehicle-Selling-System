@@ -11,7 +11,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function allUser()
     {
-        return User::latest()->paginate(10);
+        return User::all();
     }
 
     public function storeUser($data)

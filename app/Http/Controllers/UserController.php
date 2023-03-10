@@ -25,6 +25,17 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
+    public function index(){
+        $users = $this->userRepository->allUser();
+        return view('admin/all-customer', compact('users'));
+    }
+
+    public function find($id){
+        $user = $this->userRepository->findUser($id);
+        return view('admin/edit-customer', compact('user'));
+
+    }
+
     public function login(Request $req){
         // $user = $this->userRepository->findUserByEmail($req->email);
         // if(!$user || !Hash::check($req->password, $user->password))

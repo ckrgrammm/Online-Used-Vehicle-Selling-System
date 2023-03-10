@@ -34,48 +34,36 @@
         </tr>
         <tr>
             <th>Name</th>
-            <th>Position</th>
-            <th>Office</th>
-            <th>Age</th>
-            <th>Start date</th>
-            <th>Salary</th>
+            <th>Gender</th>
+            <th>Address</th>
+            <th>Phone No</th>
+            <th>Role</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
+        @foreach ($users as $user)
+            <tr>
             <td>
                 <div class="d-flex align-items-center">
-                  <div class="avatar mr-3" style="background-image: url({{asset('user/img/profile/59901786640343b8c1a77.png')}})"></div>
+                  <div class="avatar mr-3" style="background-image: url({{asset('user/img/profile/'.$user->image)}})"></div>
 
                   <div class="">
-                    <p class="font-weight-bold mb-0">Ethan Black</p>
-                    <p class="text-muted mb-0">ethan-black@example.com</p>
+                    <p class="font-weight-bold mb-0">{{$user->name}}</p>
+                    <p class="text-muted mb-0">{{$user->email}}</p>
                   </div>
                 </div>
             </td>
-            <td>System Architect</td>
-            <td>Edinburgh</td>
-            <td>61</td>
-            <td>2011-04-25</td>
-            <td>$320,800</td>
+            <td>{{$user->gender}}</td>
+            <td>{{$user->address}}</td>
+            <td>{{$user->phoneNum}}</td>
+            <td>{{$user->role}}</td>
             <td> 
-                <a href="/edit-customer" class="btn btn-success" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
+                <a href="/edit-customer/{{$user->id}}" class="btn btn-success" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
                 <a href="" class="btn btn-danger" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
             </td>
         </tr>
-        <tr>
-            <td>Garrett Winters</td>
-            <td>Accountant</td>
-            <td>Tokyo</td>
-            <td>63</td>
-            <td>2011-07-25</td>
-            <td>$170,750</td>
-            <td> 
-                <a href="" class="btn btn-success" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
-                <a href="" class="btn btn-danger" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
-            </td>
-        </tr>
+        @endforeach
     </tbody>
 </table>
 

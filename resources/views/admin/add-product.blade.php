@@ -1,5 +1,7 @@
 @extends('admin/master')
 @section('content')
+<link rel="stylesheet" href="{{asset('user/image-uploader/image-uploader.css')}}">
+<script src="{{asset('user/image-uploader/image-uploader.js')}}"></script>
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -58,7 +60,7 @@
 
                 <div class="form-group">
                     <label for="Transmission">Transmission</label>
-                    <input type="text" class="form-control"  name="transmission" id="transmission" placeholder="HONDA VTEC">
+                    <input type="text" class="form-control" name="transmission" id="transmission" placeholder="HONDA VTEC">
                     @error('transmission')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -80,13 +82,10 @@
 
                 <div class="form-group">
                     <label>Product Image Upload</label>
-                    <input type="file" name="pImg" class="file-upload-default">
-                    <div class="input-group col-xs-12">
-                        <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                        <span class="input-group-append">
-                            <button class="file-upload-browse btn btn-gradient-primary" type="button">Upload</button>
-                        </span>
-                        @error('pImg')
+                    <input type="file" name="images" class="file-upload-default">
+                    <div class="input-images-1">
+                        
+                        @error('images')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -104,6 +103,16 @@
                     @enderror
                 </div>
 
+                @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
 
 
 
@@ -113,4 +122,13 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    $(function() {
+
+        $('.input-images-1').imageUploader();
+
+    });
+</script>
 @endsection

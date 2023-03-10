@@ -44,9 +44,7 @@ Route::get('/admin_portal', function () {
     return view('admin/admin-index');
 });
 
-Route::get('/customer', function () {
-    return view('admin/all-customer');
-});
+Route::get('/customer', [UserController::class, 'index']);
 
 Route::get('/comment', function () {
     return view('admin/all-comment');
@@ -56,9 +54,7 @@ Route::get('/add-customer', function () {
     return view('admin/add-customer');
 });
 
-Route::get('/edit-customer', function () {
-    return view('admin/edit-customer');
-});
+Route::get('/edit-customer/{id}', [UserController::class, 'find']);
 
 Route::get('/sell', function () {
     return view('user/sell');
