@@ -46,6 +46,11 @@
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
+        @if(\Session::has('success'))
+            <div class="alert alert-success">
+                <p>{{ \Session::get('success') }}</p>
+            </div><br>
+        @endif
         <h4 class="card-title">Customer</h4>
         <p class="card-description"> Edit Info </p>
         <form class="forms-sample" method="POST" action="{{ route('customers.update', $user->id) }}" >
@@ -111,7 +116,7 @@
       <div class="card-body">
         <h4 class="card-title">Password</h4>
         <p class="card-description"> Edit Password </p>
-        <form class="forms-sample" method="POST" action="/checkCurrentPassword/{{$user->id}}" >
+        <form class="forms-sample" method="POST" action="/edit_password/{{$user->id}}" >
           @csrf
           @if(!(\Session::has('appendFields')) && !$errors->has("password"))
           <div class="form-group">

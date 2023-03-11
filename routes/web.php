@@ -81,6 +81,7 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::get('/sell', function () {
         return view('user/sell');
     });
+    Route::get('/changePassword', [UserController::class, 'changePassword']);
     
 });
 
@@ -95,8 +96,9 @@ Route::post('/sell', [UserController::class, 'sell']);
 Route::resource('products', ProductController::class);
 Route::resource('reviews', ReviewController::class);
 Route::resource('customers', UserController::class);
-Route::post('/checkCurrentPassword/{id}', [UserController::class, 'checkCurrentPassword']);
+Route::post('/edit_password/{id}', [UserController::class, 'edit_password']);
 Route::get('/deleteUser/{id}', [UserController::class, 'destroyUser']);
+
 
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');

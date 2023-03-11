@@ -37,7 +37,8 @@ use App\Models\User;
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                               <a class="dropdown-item" href="#">Dashboard</a>
-                              <a class="dropdown-item" href="user/edit-profile">Edit Profile</a>
+                              <a class="dropdown-item" href="/user/edit-profile">Edit Profile</a>
+                              <a class="dropdown-item" href="/user/changePassword">Change Password</a>
                               <a class="dropdown-item" href="/logout">Log Out</a>
                             </div>
                           </li>   

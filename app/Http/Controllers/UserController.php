@@ -98,7 +98,7 @@ class UserController extends Controller
         return redirect('customers')->with('success', 'Information has been deleted');
     }
 
-    public function checkCurrentPassword(Request $req, $id){
+    public function edit_password(Request $req, $id){
         $user = $this->userRepository->findUser($id);
         if(!$req->password){
             if(!Hash::check($req->current_password, $user->password))
@@ -114,7 +114,7 @@ class UserController extends Controller
                 'password' => 'required|string|min:6|confirmed',
             ]);
             $this->userRepository->edit_password($req, $id);
-            return redirect('customers')->with('success', 'Information has been updated');
+            return back()->with('success', 'Password changed successfully');
         }
     }
 
@@ -241,6 +241,12 @@ class UserController extends Controller
         $data = $this->userRepository->findUser($user_id);
         return view('user/edit-profile', compact('data'));
    }
+
+    public function changePassword(){
+        $user_id = Session::get('user')['id'];
+        $data = $this->userRepository->findUser($user_id);
+        return view('user/changePassword', compact('data'));
+    }
 
    public function submitEditProfileForm(Request $request, $id){
         $changed_profile_image = $request->post('changed-profile-image');

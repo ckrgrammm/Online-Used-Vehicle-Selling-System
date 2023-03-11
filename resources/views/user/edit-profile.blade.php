@@ -271,15 +271,6 @@
                 </div>
                 <div id="address-helper" class="helper"></div>
               </div>
-              <div class="fieldset">
-                <label for="pass">Password</label>
-                <div class="input-wrapper">
-                  <span class="icon"><i class="fas fa-key"></i></span>
-                  <input type="password" id="pass" name="pass" value="" autocomplete="current-password" placeholder="Enter password to reset password">
-                  <span toggle="#pass" class="fa fa-fw fa-eye field-icon toggle-password" style="margin-top: 15px;margin-left: 5px;"></span>
-                </div>
-                <div id="pass-helper" class="helper"></div>
-              </div>
               <div class="actions">
                 <a href="/" id="cancel" class="lx-btn"><i class="fas fa-ban"></i>&nbsp;&nbsp;Cancel</a>
                 {{-- <a id="clear" class="lx-btn"><i class="fas fa-broom"></i>&nbsp;&nbsp;Clean</a> --}}
