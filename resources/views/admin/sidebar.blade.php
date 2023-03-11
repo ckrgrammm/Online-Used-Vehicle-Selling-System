@@ -15,7 +15,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/customer">
+        <a class="nav-link" href="{{route('customers.index')}}">
           <span class="menu-title">Customer</span>
           <i class="mdi mdi-account menu-icon"></i>
         </a>

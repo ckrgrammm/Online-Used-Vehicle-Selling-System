@@ -3,50 +3,61 @@
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Basic form elements</h4>
-        <p class="card-description"> Basic form elements </p>
-        <form class="forms-sample">
+        <h4 class="card-title">Customer</h4>
+        <p class="card-description"> Add Customer </p>
+        <form class="forms-sample" method="POST" action="{{route('customers.store')}}">
+          @csrf
           <div class="form-group">
             <label for="exampleInputName1">Name</label>
-            <input type="text" class="form-control" id="exampleInputName1" placeholder="Name">
+            <input type="text" name="name" class="form-control" id="exampleInputName1" placeholder="Name" value="{{old('name')}}">
+            @if ($errors->has('name'))
+                <span class="text-danger" style="font-size: 14px">{{ $errors->first('name') }}</span>
+            @endif
           </div>
           <div class="form-group">
             <label for="exampleInputEmail3">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
+            <input type="email" name="email" class="form-control" id="exampleInputEmail3" placeholder="Email" value="{{old('email')}}">
+            @if ($errors->has('email'))
+                <span class="text-danger" style="font-size: 14px">{{ $errors->first('email') }}</span>
+            @endif
           </div>
           <div class="form-group">
             <label for="exampleInputPassword4">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword4" placeholder="Password">
+            <div class="input-group">
+              <input type="password" name="password" class="form-control" id="exampleInputPassword4" placeholder="Password" value="{{old('password')}}">
+              <span class="field-icon input-group-text"><i class="fa fa-fw fa-eye toggle-password" toggle="#exampleInputPassword4"></i></span>
+            </div>       
+            @if ($errors->has('password'))
+              <span class="text-danger" style="font-size: 14px">{{ $errors->first('password') }}</span>
+            @endif
           </div>
           <div class="form-group">
             <label for="exampleSelectGender">Gender</label>
-            <select class="form-control" id="exampleSelectGender">
-              <option>Male</option>
-              <option>Female</option>
+            <select class="form-control" name="gender" id="exampleSelectGender">
+              <option value="">Choose a gender</option>
+              <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+              <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
             </select>
-          </div>
-          <div class="form-group">
-            <label>File upload</label>
-            <input type="file" name="img[]" class="file-upload-default">
-            <div class="input-group col-xs-12">
-              <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-              <span class="input-group-append">
-                <button class="file-upload-browse btn btn-gradient-primary" type="button">Upload</button>
-              </span>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputCity1">City</label>
-            <input type="text" class="form-control" id="exampleInputCity1" placeholder="Location">
-          </div>
-          <div class="form-group">
-            <label for="exampleTextarea1">Textarea</label>
-            <textarea class="form-control" id="exampleTextarea1" rows="4"></textarea>
+            @if ($errors->has('gender'))
+              <span class="text-danger" style="font-size: 14px">{{ $errors->first('gender') }}</span>
+            @endif
           </div>
           <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-          <button class="btn btn-light">Cancel</button>
+          <button type="button" class="btn btn-light" onclick="history.back()">Cancel</button>
         </form>
       </div>
     </div>
   </div>
+
+  <script>
+    $(".toggle-password").click(function() {
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+</script>
 @endsection

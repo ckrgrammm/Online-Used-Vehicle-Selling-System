@@ -44,17 +44,17 @@ Route::get('/admin_portal', function () {
     return view('admin/admin-index');
 });
 
-Route::get('/customer', [UserController::class, 'index']);
+// Route::get('/customer', [UserController::class, 'index']);
 
 Route::get('/comment', function () {
     return view('admin/all-comment');
 });
 
-Route::get('/add-customer', function () {
-    return view('admin/add-customer');
-});
+// Route::get('/add-customer', function () {
+//     return view('admin/add-customer');
+// });
 
-Route::get('/edit-customer/{id}', [UserController::class, 'find']);
+// Route::get('/edit-customer/{id}', [UserController::class, 'find']);
 
 Route::get('/sell', function () {
     return view('user/sell');
@@ -68,9 +68,9 @@ Route::get('/all-product', function () {
     return view('user/alls-product');
 });
 
-Route::get('/reviews', function () {
-    return view('user/review');
-});
+// Route::get('/reviews', function () {
+//     return view('user/review');
+// });
 
 
 Route::get('user/reset_password/{token}/{email}', [UserController::class, 'verify_reset_password'])->name('reset_password');
@@ -93,6 +93,10 @@ Route::post('/forget_password', [UserController::class, 'forgetPassword']);
 Route::post('/submitResetPasswordForm', [UserController::class, 'submitResetPasswordForm']);
 Route::post('/sell', [UserController::class, 'sell']);
 Route::resource('products', ProductController::class);
+Route::resource('reviews', ReviewController::class);
+Route::resource('customers', UserController::class);
+Route::post('/checkCurrentPassword/{id}', [UserController::class, 'checkCurrentPassword']);
+Route::get('/deleteUser/{id}', [UserController::class, 'destroyUser']);
 
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');

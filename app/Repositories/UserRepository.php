@@ -11,7 +11,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function allUser()
     {
-        return User::all();
+        return User::where('deleted', 0)->get();
     }
 
     public function storeUser($data)
@@ -43,6 +43,13 @@ class UserRepository implements UserRepositoryInterface
         $user->save();
     }
 
+    public function edit_password($data, $id)
+    {
+        $user = User::find($id);
+        $user->password = Hash::make($data['password']);
+        $user->save();
+    }
+
     public function password_reset($data)
     {
         $user = User::where('email', $data['email'])->first();
@@ -53,6 +60,7 @@ class UserRepository implements UserRepositoryInterface
     public function destroyUser($id)
     {
         $user = User::find($id);
-        $user->delete();
+        $user->deleted = 1;
+        $user->save();
     }
 }

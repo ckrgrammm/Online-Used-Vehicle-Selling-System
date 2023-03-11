@@ -25,11 +25,17 @@
 
 </style>
 
+@if(\Session::has('success'))
+    <div class="alert alert-success">
+        <p>{{ \Session::get('success') }}</p>
+    </div><br>
+@endif
+
 <table id="example" class="table table-hover" style="width:100%">
     <thead>
         <tr>
             <th>
-                <a href="/add-customer" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
+                <a href="{{route('customers.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
             </th>
         </tr>
         <tr>
@@ -59,8 +65,8 @@
             <td>{{$user->phoneNum}}</td>
             <td>{{$user->role}}</td>
             <td> 
-                <a href="/edit-customer/{{$user->id}}" class="btn btn-success" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
-                <a href="" class="btn btn-danger" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
+                <a href="{{route('customers.edit', $user->id)}}" class="btn btn-success" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
+                <a href="/deleteUser/{{$user->id}}" class="btn btn-danger delete_button" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
             </td>
         </tr>
         @endforeach
@@ -76,6 +82,24 @@
                     "pdfHtml5",
                     "excelHtml5"
                 ],
+            });
+        });
+    </script>
+
+    <script>
+        $(".delete_button").click(function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');
+            swal({
+                title: "Confirmation",
+                text: "Are you sure to delete this record?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    window.location.href = url;
+                }
             });
         });
     </script>

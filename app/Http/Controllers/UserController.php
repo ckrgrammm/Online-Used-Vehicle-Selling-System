@@ -30,10 +30,92 @@ class UserController extends Controller
         return view('admin/all-customer', compact('users'));
     }
 
-    public function find($id){
+    public function create(){
+        return view('admin/add-customer');
+    }
+
+    public function store(Request $req){
+        $req->validate([
+            'name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:6',
+            'gender' => 'required|in:male,female'
+        ]);
+
+        $data = [
+            'name' => $req->name,
+            'email' => $req->email,
+            'password' => Hash::make($req->password),
+            'image' => 'unknown_profile.png',
+            'gender' => $req->gender
+        ];
+        $this->userRepository->storeUser($data);
+        return redirect('customers')->with('success', 'Successfully added a customer');
+
+    }
+
+    public function edit($id){
         $user = $this->userRepository->findUser($id);
         return view('admin/edit-customer', compact('user'));
 
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
+            'email' => 'required|email',
+        ]);
+
+        $changed_profile_image = $request->post('changed-profile-image');
+        $image_name = '';
+        if($changed_profile_image != ""){
+            list($type, $changed_profile_image) = explode(';',$changed_profile_image);
+            list(, $changed_profile_image) = explode(',',$changed_profile_image);
+
+            $image = base64_decode($changed_profile_image);
+            $image_name = uniqid(rand(), false) . '.png';
+            file_put_contents('../public/user/img/profile/'.$image_name, $image);
+        }
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'gender' => $request->gender,
+            'address' => $request->address,
+            'image' => $image_name,
+            'phoneNum' => $request->phoneNum,
+        ];
+        $this->userRepository->updateUser($data, $id);
+
+        return redirect('customers')->with('success', 'Information has been updated');
+    }
+
+    public function destroyUser(string $id)
+    {
+        $this->userRepository->destroyUser($id);
+
+        return redirect('customers')->with('success', 'Information has been deleted');
+    }
+
+    public function checkCurrentPassword(Request $req, $id){
+        $user = $this->userRepository->findUser($id);
+        if(!$req->password){
+            if(!Hash::check($req->current_password, $user->password))
+            {
+                return back()->with('error', 'Invalid current password');
+            }
+            else
+            {
+                return back()->with('appendFields', true);
+            }
+        } else {
+            $req->validate([
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+            $this->userRepository->edit_password($req, $id);
+            return redirect('customers')->with('success', 'Information has been updated');
+        }
     }
 
     public function login(Request $req){

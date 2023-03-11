@@ -14,6 +14,11 @@
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css"> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.bootstrap.min.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="{{asset('user/css/all.css')}}">
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 
     {{-- jquery --}}
     <!-- plugins:js -->
@@ -123,6 +128,11 @@
 
         .table-hover tbody tr:hover td{
             background-color: #cfe2ff !important;
+        }
+
+        .alert p{
+            margin-top: 0;
+            margin-bottom: 0 !important;
         }
     </style>
 </head>
