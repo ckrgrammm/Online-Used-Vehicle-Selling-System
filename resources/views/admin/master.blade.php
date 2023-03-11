@@ -134,6 +134,12 @@
             margin-top: 0;
             margin-bottom: 0 !important;
         }
+
+        .btn-edit,
+        .btn-delete {
+            font-size: 14px;
+            padding: 10px 15px;
+        }
     </style>
 </head>
 <body>

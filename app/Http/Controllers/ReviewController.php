@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Repositories\Interfaces\ReviewRepositoryInterface;
 use Session;
 use App\Models\Comment;
 
 
-class ReviewControlller extends Controller
+class ReviewController extends Controller
 {
     private $reviewRepository;
 
@@ -22,7 +24,8 @@ class ReviewControlller extends Controller
      */
     public function index()
     {
-        //
+        $comments = $this->reviewRepository->allReview();
+        return view('admin/all-comment', compact('comments'));
     }
 
     /**

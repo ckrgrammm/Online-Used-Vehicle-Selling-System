@@ -39,7 +39,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/comment">
+        <a class="nav-link" href="{{route('comments.index')}}">
           <span class="menu-title">Comment</span>
           <i class="mdi mdi-comment-text-multiple-outline menu-icon"></i>
         </a>

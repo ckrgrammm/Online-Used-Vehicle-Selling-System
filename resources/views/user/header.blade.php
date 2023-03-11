@@ -36,7 +36,9 @@ use App\Models\User;
                               <img src="{{asset('user/img/profile/'.$data->image)}}" width="40" height="40" class="rounded-circle">
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                              <a class="dropdown-item" href="#">Dashboard</a>
+                              @if($data->role != 'user')
+                                <a class="dropdown-item" href="#">Dashboard</a>
+                              @endif
                               <a class="dropdown-item" href="/user/edit-profile">Edit Profile</a>
                               <a class="dropdown-item" href="/user/changePassword">Change Password</a>
                               <a class="dropdown-item" href="/logout">Log Out</a>

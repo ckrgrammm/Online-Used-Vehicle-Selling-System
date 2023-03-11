@@ -11,7 +11,11 @@ class ReviewRepository implements ReviewRepositoryInterface
 
     public function allReview()
     {
-        return Comment::orderByDesc('created_at')->get();
+        return Comment::where('comments.deleted', 0)
+                    ->join('users', 'comments.user_id', '=', 'users.id')
+                    ->select('comments.*', 'users.name as user_name', 'users.email as user_email', 'users.image as user_image')
+                    ->orderByDesc('comments.created_at')
+                    ->get();
     }
 
     public function storeReview($data)
