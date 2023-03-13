@@ -7,5 +7,6 @@ Interface ReviewRepositoryInterface{
     public function storeReview($data);
     public function findReview($id);
     public function updateReview($data, $id); 
+    public function updateLikes($data, $id);
     public function destroyReview($id);
 }

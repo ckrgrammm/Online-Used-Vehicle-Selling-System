@@ -166,6 +166,7 @@
                 if ($container.data('index') >= 0) {
 
                     // Get the image index
+                    // console.log("index : " + $container.data('index'));
                     let index = parseInt($container.data('index'));
 
                     // Update other indexes
@@ -185,8 +186,12 @@
 
                     // Update input files
                     $input.prop('files', files);
-                    document.querySelector('.upload-text').setAttribute('style', 'display:flex');
 
+                    if ($input.prop('files').length === 0) {
+                        document.querySelector('.upload-text').setAttribute('style', 'display:flex');
+                    }
+                    // console.log("files length : " + $input.prop('files').length);
+                    // console.log(files);
 
                 }
 

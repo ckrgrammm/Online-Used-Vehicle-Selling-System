@@ -68,9 +68,8 @@ Route::get('/all-product', function () {
     return view('user/alls-product');
 });
 
-Route::get('/reviews', function () {
-    return view('user/review');
-});
+Route::get('/reviews', [ReviewController::class, 'review_page']);
+
 
 
 Route::get('user/reset_password/{token}/{email}', [UserController::class, 'verify_reset_password'])->name('reset_password');
@@ -98,6 +97,9 @@ Route::resource('comments', ReviewController::class);
 Route::resource('customers', UserController::class);
 Route::post('/edit_password/{id}', [UserController::class, 'edit_password']);
 Route::get('/deleteUser/{id}', [UserController::class, 'destroyUser']);
+Route::get('/deleteReview/{id}', [ReviewController::class, 'destroyReview']);
+
+Route::get('/reviews/{reviewId}/like', [ReviewController::class, 'like']);
 
 
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');

@@ -25,22 +25,30 @@ class ReviewRepository implements ReviewRepositoryInterface
 
     public function findReview($id)
     {
-        return Comment::find($id);
+        return Comment::join('users', 'users.id', '=', 'comments.user_id')
+                    ->select('comments.*', 'users.name as user_name', 'users.email as user_email')
+                    ->where('comments.id', $id)
+                    ->first();
     }
 
     public function updateReview($data, $id)
     {
         $review = Comment::where('id', $id)->first();
-        $review->user_id = $data['user_id'];
-        $review->rating = $data['rating'];
-        $review->review = $data['review'];
-        $review->dateTime = $data['dateTime'];
+        $review->comment = $data['comment'];
+        $review->save();
+    }
+
+    public function updateLikes($data, $id)
+    {
+        $review = Comment::where('id', $id)->first();
+        $review->likes = $data;
         $review->save();
     }
 
     public function destroyReview($id)
     {
         $review = Comment::find($id);
-        $review->delete();
+        $review->deleted = 1;
+        $review->save();
     }
 }

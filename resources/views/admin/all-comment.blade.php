@@ -1,5 +1,9 @@
 @extends('admin/master')
 @section('content')
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
 <style>
 
 .avatar {
@@ -21,6 +25,33 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.swiper {
+    width: 180px;
+    height: 40%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    /* background: #fff; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100px !important;
+    height: 100px !important;
+    object-fit: cover;
+    border-radius: unset !important;
+}
+
+.swiper {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 </style>
@@ -61,14 +92,33 @@
                   </div>
                 </div>
             </td>
-            <td>{{$comment->rating}}</td>
+            <td>{{$comment->rating}} <i class="fas fa-star text-warning"></i></td>
             <td>{{$comment->review}}</td>
-            <td>{{$comment->image}}</td>
-            <td>{{$comment->dateTime}}</td>
+            <td>
+                @if($comment->image != NULL)
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        @foreach (explode('|', $comment->image) as $image)
+                            <div class="swiper-slide">
+                                <a href="{{asset('user/img/review/'.$image)}}" class="image-link">
+                                    <img src="{{asset('user/img/review/'.$image)}}" class="img-fluid">
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                @else
+                    <p style="text-align: center">No Image</p>   
+                @endif
+            </td>
+            <td>{{$comment->created_at}}</td>
             <td>{{$comment->comment}}</td>
             <td> 
                 <a href="{{route('comments.edit', $comment->id)}}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
-                <a href="/deleteUser/{{$comment->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
+                <a href="/deleteReview/{{$comment->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
             </td>
         </tr>
         @endforeach
@@ -81,9 +131,24 @@
             "lengthMenu": [5, 10, 20, 50],
             "dom": 'ZBfrltip',
             "buttons": [
-                "pdfHtml5",
-                "excelHtml5"
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    }
+                },
             ],
+            "drawCallback": function() {
+                $('.image-link').magnificPopup({
+                    type: 'image'
+                });
+            }
         });
     });
 </script>
@@ -105,4 +170,26 @@
         });
     });
 </script>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+  <!-- Initialize Swiper -->
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
+  </script>
+
+
 @endsection
