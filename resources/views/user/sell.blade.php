@@ -2,8 +2,14 @@
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
 <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="{{asset('user/image-uploader/image-uploader.css')}}">
-<script src="{{asset('user/image-uploader/image-uploader.js')}}"></script>
+<link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
+<link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.min.css">
+<script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+<script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+
 <style>
     * {
         margin: 0;
@@ -230,6 +236,62 @@
     .submit-btn {
         float: unset !important;
     }
+
+    .filepond--credits{
+        display: none;
+    }
+        /**
+        * FilePond Custom Styles
+        */
+    .filepond--drop-label {
+        color: #4c4e53;
+    }
+    
+    .filepond--label-action {
+        text-decoration-color: #babdc0;
+    }
+    
+    .filepond--panel-root {
+        border-radius: 2em;
+        background-color: #edf0f4;
+        height: 1em;
+    }
+    
+    .filepond--item-panel {
+        background-color: #595e68;
+    }
+    
+    .filepond--drip-blob {
+        background-color: #7f8a9a;
+    }
+    
+    .filepond--item {
+        width: calc(50% - 0.5em);
+    }
+    
+    @media (min-width: 30em) {
+        .filepond--item {
+            width: calc(50% - 0.5em);
+        }
+    }
+    
+    @media (min-width: 50em) {
+        .filepond--item {
+            width: calc(33.33% - 0.5em);
+        }
+    }
+
+    .filepond--root {
+        max-height: 100em;
+    }
+
+    .filepond--root .filepond--drop-label {
+        cursor: pointer;
+    }
+
+    .filepond--drop-label.filepond--drop-label label {
+        cursor: pointer;
+    }
 </style>
 <!--================Home Banner Area =================-->
 <!-- breadcrumb start-->
@@ -266,6 +328,7 @@
                               <li class="active" id="account"><strong>Car</strong></li>
                               <li id="personal"><strong>Details</strong></li>
                               <li id="payment"><strong>Image</strong></li>
+                              <li style="display: none"></li>
                               <li id="confirm"><strong>Finish</strong></li>
                           </ul>
                           <div class="progress">
@@ -345,11 +408,10 @@
                                           <h2 class="steps">Step 3 - 4</h2>
                                       </div>
                                   </div> 
-                                    <label class="fieldlabels">Upload Your Photo: * @if ($errors->has('images'))
-                                      <span class="text-danger">{{ $errors->first('images') }}</span>
+                                    <label class="fieldlabels">Upload Your Photo: * @if ($errors->has('filepond'))
+                                      <span class="text-danger">{{ $errors->first('filepond') }}</span>
                                     @endif</label> 
-                                    <div class="input-images-1" style="padding-top: .5rem;"></div>
-                                    
+                                    <input type="file" class="filepond" name="filepond[]" multiple data-max-file-size="3MB" data-max-files="9" />
                               </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
                           </fieldset>
                           <fieldset>
@@ -397,12 +459,42 @@
 <!-- ================ contact section end ================= -->
 
 <script>
+    /*
+We want to preview images, so we need to register the Image Preview plugin
+*/
+FilePond.registerPlugin(
+	
+	// encodes the file as base64 data
+    FilePondPluginFileEncode,
+	
+	// validates the size of the file
+	FilePondPluginFileValidateSize,
+	
+	// corrects mobile image orientation
+	FilePondPluginImageExifOrientation,
+	
+	// previews dropped images
+    FilePondPluginImagePreview
+  
+);
+
+// Select the file input and use create() to turn it into a pond
+const inputElement = document.querySelector('input[type="file"]');
+  const pond = FilePond.create(inputElement, {
+    imagePreviewHeight: 200,
+    imagePreviewWidth: 200,
+    allowImagePreview: true,
+    allowMultiple: true
+  });
+</script>
+
+<script>
     $(document).ready(function() {
 
         var current_fs, next_fs, previous_fs; //fieldsets
         var opacity;
         var current = 1;
-        var steps = $("fieldset").length;
+        var steps = $("fieldset").length - 1;
 
         setProgressBar(current);
 

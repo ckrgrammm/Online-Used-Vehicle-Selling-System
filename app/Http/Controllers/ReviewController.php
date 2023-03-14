@@ -43,20 +43,20 @@ class ReviewController extends Controller
      */
     public function store(Request $req)
     {
-        $images=array();
+        $images = array();
         $review_img = NULL;
-        if($files=$req->file('images')){
-            foreach($files as $file){
-                $var = date_create();
-                $time = date_format($var, 'YmdHis');
-                $imageName = $time . '-' . $file->getClientOriginalName();
-                $file->move('../public/user/img/review/', $imageName);
-                $images[]=$imageName;
+        if ($files = $req->input('filepond')) {
+            foreach ($files as $file) {
+                $json_string = json_decode($file, true);
+                $data_column = $json_string['data'];
+
+                $image = base64_decode($data_column);
+                $image_name = uniqid(rand(), false) . '.png';
+                file_put_contents('../public/user/img/review/'.$image_name, $image);
+                $images[] = $image_name;
             }
-            //Insert your data
             $review_img = implode("|",$images);
         }
-
 
         $data = [
             'user_id' => 2,

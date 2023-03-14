@@ -79,10 +79,7 @@ images
 
         */
 
-
-
         //Observer Design Pattern
-
 
         $product = new Product([
             'user_id' => auth()->user()->id,
@@ -105,20 +102,22 @@ images
             'color' => 'required',
             'transmission' => 'required',
             'pDesc' => 'required',
-            'images' => 'required', // validate each image file in the array
+            'filepond' => 'required', // validate each image file in the array
             'price' => 'required|numeric',
         ]);
 
         $images = array();
-        if ($files = $request->file('images')) {
-        foreach ($files as $file) {
-            $var = date_create();
-            $time = date_format($var, 'YmdHis');
-            $imageName = $time . '-' . $file->getClientOriginalName();
-            $file->move('../public/user/img/product/', $imageName);
-            $images[] = $imageName;
+        if ($files = $request->input('filepond')) {
+            foreach ($files as $file) {
+                $json_string = json_decode($file, true);
+                $data_column = $json_string['data'];
+
+                $image = base64_decode($data_column);
+                $image_name = uniqid(rand(), false) . '.png';
+                file_put_contents('../public/user/img/product/'.$image_name, $image);
+                $images[] = $image_name;
+            }
         }
-    }
 
 
         $product->product_image = implode("|", $images);

@@ -2,8 +2,14 @@
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
 <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="{{asset('user/image-uploader/image-uploader.css')}}">
-<script src="{{asset('user/image-uploader/image-uploader.js')}}"></script>
+<link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
+<link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.min.css">
+<script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+<script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+
 <style>
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
@@ -388,6 +394,63 @@ h2 {
   }
 }
 
+.filepond--credits{
+        display: none;
+    }
+        /**
+        * FilePond Custom Styles
+        */
+    .filepond--drop-label {
+        color: #4c4e53;
+    }
+    
+    .filepond--label-action {
+        text-decoration-color: #babdc0;
+    }
+    
+    .filepond--panel-root {
+        border-radius: 2em;
+        background-color: #edf0f4;
+        height: 1em;
+    }
+    
+    .filepond--item-panel {
+        background-color: #595e68;
+    }
+    
+    .filepond--drip-blob {
+        background-color: #7f8a9a;
+    }
+    
+    .filepond--item {
+        width: calc(50% - 0.5em);
+    }
+    
+    @media (min-width: 30em) {
+        .filepond--item {
+            width: calc(50% - 0.5em);
+        }
+    }
+    
+    @media (min-width: 50em) {
+        .filepond--item {
+            width: calc(33.33% - 0.5em);
+        }
+    }
+
+    .filepond--root {
+        max-height: 100em;
+    }
+
+    .filepond--root .filepond--drop-label {
+        border: 1px solid #ff5a49;
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    .filepond--drop-label.filepond--drop-label label {
+        cursor: pointer;
+    }
 </style>
 <button type="button" name="add_review" id="add_review" class="btn btn-primary">Review</button>
 
@@ -464,7 +527,7 @@ h2 {
                           <input type="hidden" name="product_id" value="" />
                         </div>
 
-                        <div class="input-images-1" style="padding-top: .5rem;padding-bottom: 1.5rem;"></div>
+                        <input type="file" class="filepond" name="filepond[]" multiple data-max-file-size="3MB" data-max-files="9" />
                         
                       </div>
                   
@@ -594,8 +657,32 @@ h2 {
     </script>
 
 <script>
-    $(function() {
-        $('.input-images-1').imageUploader();
-    });
+    /*
+We want to preview images, so we need to register the Image Preview plugin
+*/
+FilePond.registerPlugin(
+	
+	// encodes the file as base64 data
+    FilePondPluginFileEncode,
+	
+	// validates the size of the file
+	FilePondPluginFileValidateSize,
+	
+	// corrects mobile image orientation
+	FilePondPluginImageExifOrientation,
+	
+	// previews dropped images
+    FilePondPluginImagePreview
+  
+);
+
+// Select the file input and use create() to turn it into a pond
+const inputElement = document.querySelector('input[type="file"]');
+  const pond = FilePond.create(inputElement, {
+    imagePreviewHeight: 200,
+    imagePreviewWidth: 200,
+    allowImagePreview: true,
+    allowMultiple: true
+  });
 </script>
 @endsection
