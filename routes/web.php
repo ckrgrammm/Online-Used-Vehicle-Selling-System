@@ -125,3 +125,11 @@ Route::put('/products/{id}', [ProductController::class, 'update'])->name('produc
 Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 */
 
+Route::view('/temp','user/temp');
+Route::get('/payment', [PaymentController::class, 'displayPayment'])->name('payment.display');
+Route::post('/payment', [PaymentController::class, 'createPayment'])->name('payment.create');
+Route::get('/payment-history', [PaymentController::class, 'displayPaymentHistory'])->name('payment.displayHistory');
+
+use App\Http\Controllers\FreeGiftController;
+
+Route::get('/freegift', [FreeGiftController::class, 'getData']);
