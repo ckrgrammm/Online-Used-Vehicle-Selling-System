@@ -1,12 +1,18 @@
 <?php
 
+
 namespace App\Http\Controllers;
+
+
+use Illuminate\Support\Facades\Storage;
 
 use App\Facades\ProductFacade;
 use Illuminate\Foundation\Auth;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Session;
+use Illuminate\Support\Facades\DB;
+
 
 
 
@@ -16,8 +22,33 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
+        //return view('admin/all-product', compact('products'));
+        return view('user/all-product', compact('products'));
+    }
+
+    public function admin()
+    {
+
+        $products = Product::all();
+
         return view('admin/all-product', compact('products'));
     }
+
+    public function details($id)
+    {
+        $product = Product::find($id);
+
+        return view('user/product-details', compact('product'));
+    }
+
+    public function cart($id)
+    {
+        $product = Product::find($id);
+        $products = [$product]; // create an array of products with a single product
+
+        return view('user/cart', compact('products'));
+    }
+
 
     public function create()
     {
@@ -27,19 +58,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         /*
-        $data = $request->validate([
-            'make' => 'required|string',
-            'model' => 'required|string',
-            'price' => 'required|string',
-            'year' => 'required|string',
-            'mileage' => 'required|string',
-            'color' => 'required|string',
-            'transmission' => 'required|string',
-            'description' => 'required|string',
-            'images' => 'required'
-
-        ]);
-
 make
 model  
 price   
@@ -50,52 +68,36 @@ transmission
 description
 images
 
-        $product = new Product();
-        $product->user_id = Session::get('user')['id'];
-        $product->make = $request->post('make');
-        $product->model = $request->post('model');
-        $product->price = $request->post('price');
-        $product->year = $request->post('year');
-        $product->mileage = $request->post('mileage');
-        $product->color = $request->post('color');
-        $product->transmission = $request->post('transmission');
-        $product->product_description = $request->post('description');
-        $images=array();
-        if($files=$request->file('images')){
-            foreach($files as $file){
-                $var = date_create();
-                $time = date_format($var, 'YmdHis');
-                $imageName = $time . '-' . $file->getClientOriginalName();
-                $file->move('../public/user/img/product/',$imageName);
-                $images[]=$imageName;
-            }
+*/
+        //Observer Design Pattern
+        if ($this->middleware('isAdmin')) {
+            $product = new Product([
+                'user_id' => auth()->user()->id,
+                'make' => $request->input('make'),
+                'model' => $request->input('model'),
+                'year' => $request->input('year'),
+                'mileage' => $request->input('mileage'),
+                'color' => $request->input('color'),
+                'transmission' => $request->input('transmission'),
+                'product_description' => $request->input('pDesc'),
+                'price' => $request->input('price'),
+                'deleted' => false,
+            ]);
+        } else {
+            $product = new Product([
+                'user_id' => auth()->user()->id,
+                'make' => $request->input('make'),
+                'model' => $request->input('model'),
+                'year' => $request->input('year'),
+                'mileage' => $request->input('mileage'),
+                'color' => $request->input('color'),
+                'transmission' => $request->input('transmission'),
+                'product_description' => $request->input('pDesc'),
+                'price' => $request->input('price'),
+                'deleted' => false,
+            ]);
         }
 
-        //Insert your data
-        $product->product_image = implode("|",$images);
-        $product->save();
-        
-        return redirect('/all-product')->with('success', 'Information has been added');
-
-        */
-
-
-
-        //Observer Design Pattern
-
-
-        $product = new Product([
-            'user_id' => auth()->user()->id,
-            'make' => $request->input('make'),
-            'model' => $request->input('model'),
-            'year' => $request->input('year'),
-            'mileage' => $request->input('mileage'),
-            'color' => $request->input('color'),
-            'transmission' => $request->input('transmission'),
-            'product_description' => $request->input('pDesc'),
-            'price' => $request->input('price'),
-            'deleted' => false,
-        ]);
 
         $request->validate([
             'make' => 'required',
@@ -111,35 +113,6 @@ images
 
         $images = array();
         if ($files = $request->file('images')) {
-        foreach ($files as $file) {
-            $var = date_create();
-            $time = date_format($var, 'YmdHis');
-            $imageName = $time . '-' . $file->getClientOriginalName();
-            $file->move('../public/user/img/product/', $imageName);
-            $images[] = $imageName;
-        }
-    }
-
-
-        $product->product_image = implode("|", $images);
-        $product->save();
-
-        return redirect()->route('products.index')->with('success', 'Information has been added');
-
-
-
-        /*
-        $product->user_id = auth()->user()->id;  // assuming you have an authenticated user
-        $product->make = $request->input('make');
-        $product->model = $request->input('model');
-        $product->year = $request->input('year');
-        $product->mileage = $request->input('mileage');
-        $product->color = $request->input('color');
-        $product->transmission = $request->input('transmission');
-        $product->product_description = $request->input('pDesc');
-        //$product->product_image = $request->input('pImg');
-        $images = array();
-        if ($files = $request->file('images')) {
             foreach ($files as $file) {
                 $var = date_create();
                 $time = date_format($var, 'YmdHis');
@@ -148,46 +121,93 @@ images
                 $images[] = $imageName;
             }
         }
-        $product->price = $request->input('price');
-        $product->deleted = false;
+
 
         $product->product_image = implode("|", $images);
         $product->save();
 
-        
-        return redirect()->route('products.index')->with('success', 'Information has been added');
-        
-        /*
-        if (Auth::user()->isAdmin()) {
-            return redirect('/admin/all-product');
+
+
+
+        if ($this->middleware('isAdmin')) {
+            return redirect()->route('products.admin')->with('success', 'Information has been added');
         } else {
-            
-        
-            // Otherwise, redirect them to the user/all-product page
-            return redirect('/user/all-product');
-            */
-        
+            return redirect()->route('products.index')->with('success', 'Information has been added');
+        }
     }
 
-    public function show($id)
-    {
-        $product = ProductFacade::getById($id);
-        return view('products.show', ['product' => $product]);
-    }
 
-    public function edit($id)
-    {
-        $product = ProductFacade::getById($id);
-        return view('products.edit', ['product' => $product]);
-    }
 
-    public function update(Request $request, $id)
+
+    public function edit(Request $request, $id)
     {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'price' => 'required|numeric',
-            'quantity'
+        $product = Product::find($id);
+
+        // Check if user is authorized to edit the product
+        if ($this->middleware('isAdmin') && $product->user_id !== auth()->user()->id) {
+            return redirect()->back()->with('error', 'You are not authorized to edit this product.');
+        }
+
+        // Validate the request data
+        $validatedData = $request->validate([
+            'make' => 'required|string',
+            'model' => 'required|string',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'mileage' => 'required|integer|min:0|max:999999',
+            'color' => 'required|string',
+            'transmission' => 'required|string',
+            'pDesc' => 'required|string',
+            'price' => 'required|numeric|min:0',
         ]);
+
+        // Update the product with the validated data
+        $product->make = $validatedData['make'];
+        $product->model = $validatedData['model'];
+        $product->year = $validatedData['year'];
+        $product->mileage = $validatedData['mileage'];
+        $product->color = $validatedData['color'];
+        $product->transmission = $validatedData['transmission'];
+        $product->product_description = $validatedData['pDesc'];
+        $product->price = $validatedData['price'];
+        $product->save();
+
+        return redirect()->route('products.store', ['id' => $id])->with('success', 'Product updated successfully.');
+    }
+
+
+
+
+
+    public function destroy(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        // authorize user to delete product
+        //$this->middleware('isAdmin');
+
+        // check if product has any orders
+        if ($product->orders()->exists()) {
+            return redirect()->back()->withErrors(['Product has existing orders and cannot be deleted']);
+        }
+
+        // delete product image from disk
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+
+        // delete product variations and images from disk
+        if ($product->variations) {
+            foreach ($product->variations as $variation) {
+                if ($variation->image) {
+                    Storage::disk('public')->delete($variation->image);
+                }
+                $variation->delete();
+            }
+        }
+
+        // delete product
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
 }

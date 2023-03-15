@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\LoanController;
+
 
 
 
@@ -35,14 +37,21 @@ Route::get('logout', function () {
 });
 
 
+Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
+    Route::get('/admin_portal', function () {
+        return view('admin/admin-index');
+    });
+});
 
 Route::get('/', function () {
     return view('user/index');
 });
 
+/*
 Route::get('/admin_portal', function () {
     return view('admin/admin-index');
 });
+*/
 
 // Route::get('/customer', [UserController::class, 'index']);
 
@@ -64,9 +73,15 @@ Route::get('/forget_password', function () {
     return view('user/forgetPassword');
 });
 
+
 Route::get('/all-product', function () {
-    return view('user/alls-product');
+    return view('user/all-product');
 });
+
+
+
+
+
 
 Route::get('/reviews', function () {
     return view('user/review');
@@ -100,26 +115,33 @@ Route::post('/edit_password/{id}', [UserController::class, 'edit_password']);
 Route::get('/deleteUser/{id}', [UserController::class, 'destroyUser']);
 
 
-Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-/*if (Auth::user()->isAdmin()) {
-    return redirect('/admin/all-product');
-}
-*/
-
-// Otherwise, redirect them to the user/all-product page
-return redirect('/user/alls-product');
 
 
+Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
+    Route::get('/add-product', function () {
+        return view('admin/add-product');
+    });
 
-/*
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
-Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
-Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
-Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-*/
+
+});
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.delete');
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::get('/product_details/{id}', [ProductController::class, 'details'])->name('products.details');
+    Route::get('/cart/{id}', [ProductController::class, 'cart'])->name('products.cart');
+
+    Route::get('/admin/all-product', [ProductController::class, 'admin'])->name('products.admin');
+    Route::get('/filter', [ProductController::class, 'filterByMake'])->name('filterByMake');
+
+
+
+
+
+
+
+
+
+
 
