@@ -27,10 +27,17 @@
     <!-- style CSS -->
     <link rel="stylesheet" href="{{asset('user/css/style.css')}}">
 
+    <link rel="stylesheet" href="{{asset('user/css/lightslider.min.css')}}">
+
+    
+
+    
     {{-- sweetalert --}}
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- jquery plugins here-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <!-- jquery -->
     <script src="{{asset('user/js/jquery-1.12.1.min.js')}}"></script>
 </head>
@@ -39,6 +46,9 @@
     {{-- @include('flash-message') --}}
     @yield('content')
     {{View::make('user/footer')}}
+    <script src="{{asset('user/js/lightslider.min.js')}}"></script>
+
+
 
     <!-- popper js -->
     <script src="{{asset('user/js/popper.min.js')}}"></script>
@@ -66,5 +76,16 @@
     <script src="{{asset('user/js/price_rangs.js')}}"></script>
     <!-- custom js -->
     <script src="{{asset('user/js/custom.js')}}"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+
+
+
+
 </body>
+
 </html>

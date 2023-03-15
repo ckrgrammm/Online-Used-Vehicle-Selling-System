@@ -8,7 +8,7 @@ use App\Models\User;
         <div class="row align-items-center">
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="navbar-brand" href="index.html"> <h2>Respectism</h2> </a>
+                    <a class="navbar-brand" href="/"> <h2>Respectism</h2> </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,9 @@ use App\Models\User;
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="user/sell">Sell</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('products.index')}}">Find</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_1"
