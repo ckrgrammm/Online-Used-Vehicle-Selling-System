@@ -74,10 +74,22 @@
             </div>
         </div>
     </div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <select class="form-control" id="filter-rating">
+                <option value="all" selected>All Ratings</option>
+                <option value="5">5 stars</option>
+                <option value="4">4 stars</option>
+                <option value="3">3 stars</option>
+                <option value="2">2 stars</option>
+                <option value="1">1 star</option>
+            </select>
+        </div>
+    </div>
     <div class="mt-5" id="review_content">
         @if (count($output['review_data']) > 0)
             @for ($i = 0; $i < count($output['review_data']); $i++)
-                <div class="row mb-3">
+                <div class="row mb-3 review-item {{$output['review_data'][$i]['rating']}}-review">
                     <div class="col-sm-1">
                         <img src="{{asset('user/img/profile/'.$output['review_data'][$i]['user_image'])}}" class="rounded-circle pt-2 pb-2">
                     </div>
@@ -213,7 +225,26 @@ color:#e9ecef;
 .image-uploader .upload-text{
   cursor: pointer;
 }
+
+select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
 </style>
+
+<script>
+    $(document).ready(function() {
+        $("#filter-rating").change(function() {
+            var selectedValue = $(this).val();
+            if(selectedValue == "all"){
+                $(".review-item").show();
+            } else {
+                $(".review-item").hide();
+                $("." + selectedValue + "-review").show();
+            }
+        });
+    });
+</script>
 
 <script>
 $(document).ready(function() {

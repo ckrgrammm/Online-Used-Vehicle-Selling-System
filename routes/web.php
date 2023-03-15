@@ -37,21 +37,21 @@ Route::get('logout', function () {
 });
 
 
-Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
-    Route::get('/admin_portal', function () {
-        return view('admin/admin-index');
-    });
-});
+// Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
+//     Route::get('/admin_portal', function () {
+//         return view('admin/admin-index');
+//     });
+// });
 
 Route::get('/', function () {
     return view('user/index');
 });
 
-/*
+
 Route::get('/admin_portal', function () {
     return view('admin/admin-index');
 });
-*/
+
 
 // Route::get('/customer', [UserController::class, 'index']);
 
