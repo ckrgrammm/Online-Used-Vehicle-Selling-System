@@ -33,7 +33,7 @@ class PaymentQueryBuilder
 
     public function get()
     {
-        return $this->query->get();
+        return $this->query->where('deleted', 0)->get();
     }
 
     public function first()

@@ -1,23 +1,107 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DateTime;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Session;
+use Illuminate\Foundation\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\FreeGiftController;
 use App\Builders\PaymentBuilder;
 use App\Builders\PaymentQueryBuilder;
+use App\Models\Payment;
 
 class PaymentController extends Controller
 {
+    protected $paymentBuilder;
+
+    public function __construct(PaymentBuilder $paymentBuilder)
+    {
+        $this->paymentBuilder = $paymentBuilder;
+    }
+
+    public function index()
+    {
+        $payments = $this->paymentBuilder->readAll();
+
+        return view('admin/all-payment', compact('payments'));
+    }
+
+    public function edit($id)
+    {
+        $payment = $this->paymentBuilder->readById($id);
+
+        $date = new DateTime();
+        $payment->payment_date = $date->format('Y-m-d');
+
+        return view('admin/edit-payment', compact('payment'));
+    }
+    
+    public function create(){
+        return view('admin/add-payment');
+    }
+    public function store(Request $req){
+        $req->validate([
+            'order_id' => 'required|string|regex:/^[0-9]{1,4}$/',
+            'total_charge' => 'required|int|regex:/^[0-9]{0,10}$/',
+            'date' => 'required|date',
+            'method' => 'required',
+            'address' => 'required|string'
+        ]);
+        $date_string = $req->input('date');
+        $payment_date = DateTime::createFromFormat('Y-m-d', $date_string);
+        $data = [
+            'order_id' => $req->order_id,
+            'total_charge' => $req->total_charge,
+            'payment_date' => $payment_date,
+            'payment_method' => $req->method,
+            'billing_address' => $req->address,
+            'deleted' => 0
+        ];
+        $this->paymentBuilder->create($data);
+        return redirect('payments')->with('success', 'Successfully added a payment');
+
+    }
+
+    public function update(Request $req, $id)
+    {
+        $req->validate([
+            'order_id' => 'required|string|regex:/^[0-9]{1,4}$/',
+            'total_charge' => 'required|int|regex:/^[0-9]{0,10}$/',
+            'date' => 'required|date',
+            'method' => 'required',
+            'address' => 'required|string'
+        ]);
+        $date_string = $req->input('date');
+        $payment_date = DateTime::createFromFormat('Y-m-d', $date_string);
+        $data = [
+            'order_id' => $req->order_id,
+            'total_charge' => $req->total_charge,
+            'payment_date' => $payment_date,
+            'payment_method' => $req->method,
+            'billing_address' => $req->address,
+            'deleted' => 0
+        ];
+
+        $this->paymentBuilder->update($id,$data);
+        return redirect('payments')->with('success', 'Payment information has been updated');
+
+    }
+
+    public function destroyPayment(string $id)
+    {
+        $this->paymentBuilder->delete($id);
+
+        return redirect('payments')->with('success', 'Payment information has been deleted');
+    }
+
     public function displayPayment(){
 
         $user_id = Session::get('user')['id'];
 
         $freeGiftController = new FreeGiftController();
-        $freeGifts = $freeGiftController->getData();
+        $freeGifts = $freeGiftController->get();
         $request = app('request');
         $orderId = $request->query('orderId');
 

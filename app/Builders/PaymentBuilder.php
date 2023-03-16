@@ -38,6 +38,7 @@ class PaymentBuilder
     public function delete($id)
     {
         $payment = Payment::findOrFail($id);
-        $payment->delete();
+        $payment->deleted = 1;
+        $payment->update();
     }
 }
