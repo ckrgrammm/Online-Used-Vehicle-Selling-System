@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\FreeGiftController;
+use App\Http\Controllers\PaymentController;
 
 
 
