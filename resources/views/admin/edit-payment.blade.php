@@ -11,9 +11,11 @@
           <div class="form-group">
             <label for="order_id">Order ID</label>
             <input type="text" name="order_id" class="form-control" id="order_id" placeholder="123" value="{{old('order_id', $payment->order_id)}}" maxlength="4">
-            @if ($errors->has('order_id'))
-                <span class="text-danger" style="font-size: 14px">{{ $errors->first('order_id') }}</span>
-            @endif
+            @error('order_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
           </div>
           <div class="form-group">
                     <label for="total_charge">Total Charge (RM)</label>
@@ -55,7 +57,15 @@
                     </span>
                     @enderror
                 </div>
-
+                @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
           <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
           <button type="button" class="btn btn-light" onclick="history.back()">Cancel</button>
         </form>

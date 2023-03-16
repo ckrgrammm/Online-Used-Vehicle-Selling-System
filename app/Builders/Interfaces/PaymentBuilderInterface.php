@@ -2,7 +2,7 @@
 
 namespace App\Builders;
 
-interface PaymentRepositoryInterface
+interface PaymentBuilderInterface
 {
     public function getAll(): Collection;
 

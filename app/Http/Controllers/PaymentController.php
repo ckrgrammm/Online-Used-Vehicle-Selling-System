@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Session;
 use Illuminate\Foundation\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,7 @@ use App\Http\Controllers\FreeGiftController;
 use App\Builders\PaymentBuilder;
 use App\Builders\PaymentQueryBuilder;
 use App\Models\Payment;
+use App\Models\Order;
 
 class PaymentController extends Controller
 {
@@ -43,7 +45,14 @@ class PaymentController extends Controller
     }
     public function store(Request $req){
         $req->validate([
-            'order_id' => 'required|string|regex:/^[0-9]{1,4}$/',
+            'order_id' => [
+                'required',
+                'string',
+                'regex:/^[0-9]{1,4}$/',
+                Rule::exists('orders', 'id')->where(function ($query) {
+                    $query->where('status', 'Available');
+                })
+            ],
             'total_charge' => 'required|int|regex:/^[0-9]{0,10}$/',
             'date' => 'required|date',
             'method' => 'required',
@@ -60,6 +69,25 @@ class PaymentController extends Controller
             'deleted' => 0
         ];
         $this->paymentBuilder->create($data);
+
+        //update order status to Paid
+        $order = Order::find($req->order_id);
+        if ($order && $order->status === 'Available') {
+            $order->status = 'Paid';
+            $order->save();
+        }
+        $product_id = $order->product_id;
+
+        $orders = Order::where('product_id', $product_id)->get();
+
+        //update order status same product id to Sold
+        foreach ($orders as $order) {
+            if ($order->status === 'Available') {
+                $order->status = 'Sold';
+                $order->save();
+            }
+        }
+
         return redirect('payments')->with('success', 'Successfully added a payment');
 
     }
@@ -67,12 +95,21 @@ class PaymentController extends Controller
     public function update(Request $req, $id)
     {
         $req->validate([
-            'order_id' => 'required|string|regex:/^[0-9]{1,4}$/',
+            'order_id' => [
+                'required',
+                'string',
+                'regex:/^[0-9]{1,4}$/',
+                Rule::exists('orders', 'id')->where(function ($query) {
+                    $query->where('status', 'Available');
+                })
+            ],
             'total_charge' => 'required|int|regex:/^[0-9]{0,10}$/',
             'date' => 'required|date',
             'method' => 'required',
             'address' => 'required|string'
         ]);
+
+
         $date_string = $req->input('date');
         $payment_date = DateTime::createFromFormat('Y-m-d', $date_string);
         $data = [
@@ -85,6 +122,25 @@ class PaymentController extends Controller
         ];
 
         $this->paymentBuilder->update($id,$data);
+
+        //update order status to Paid
+        $order = Order::find($req->order_id);
+        if ($order && $order->status === 'Available') {
+            $order->status = 'Paid';
+            $order->save();
+        }
+        $product_id = $order->product_id;
+
+        $orders = Order::where('product_id', $product_id)->get();
+
+        //update order status same product id to Sold
+        foreach ($orders as $order) {
+            if ($order->status === 'Available') {
+                $order->status = 'Sold';
+                $order->save();
+            }
+        }
+
         return redirect('payments')->with('success', 'Payment information has been updated');
 
     }
@@ -165,8 +221,7 @@ class PaymentController extends Controller
                         'orderId'=>$orderId
                     ]);
        }
-//need to update the order status to Paid
-//need to modify the product to deleted = 1
+
        public function createPayment(Request $req)
     {
         $req->validate([
@@ -211,6 +266,24 @@ class PaymentController extends Controller
                 'deleted' => 0
             ]);
 
+        //update order status to Paid
+        $order = Order::find($req->input('order_id_hidden'));
+        if ($order && $order->status === 'Available') {
+            $order->status = 'Paid';
+            $order->save();
+        }
+        $product_id = $order->product_id;
+
+        $orders = Order::where('product_id', $product_id)->get();
+
+        //update order status same product id to Sold
+        foreach ($orders as $order) {
+            if ($order->status === 'Available') {
+                $order->status = 'Sold';
+                $order->save();
+            }
+        }
+
         return redirect('/payment-history')->with('success', 'Payment successful! Thank you for your purchase.');
     }
 
@@ -223,7 +296,7 @@ class PaymentController extends Controller
                     ->join('orders','orders.user_id','=','users.id')
                     ->join('products','products.id','=','orders.product_id')
                     ->join('payments','payments.order_id','=','orders.id')
-                    ->where('orders.status','Available')//need to change to paid
+                    ->where('orders.status','Paid')//need to change to paid
                     ->where('orders.deleted',0)
                     ->where('products.deleted',0)//need to change to 1
                     ->select('*');
