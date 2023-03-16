@@ -33,8 +33,8 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/forms/basic_elements.html">
-          <span class="menu-title">Sales</span>
+        <a class="nav-link" href="/payments">
+          <span class="menu-title">Payment</span>
           <i class="mdi mdi-coin menu-icon"></i>
         </a>
       </li>
@@ -42,6 +42,12 @@
         <a class="nav-link" href="{{route('comments.index')}}">
           <span class="menu-title">Comment</span>
           <i class="mdi mdi-comment-text-multiple-outline menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/freegifts">
+          <span class="menu-title">Free Gift</span>
+          <i class="mdi mdi-gift menu-icon"></i>
         </a>
       </li>
       <li class="nav-item">

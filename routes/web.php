@@ -7,7 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\LoanController;
-
+use App\Http\Controllers\FreeGiftController;
 
 
 
@@ -147,11 +147,16 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
 
 
 
-Route::view('/temp','user/temp');
-Route::get('/payment', [PaymentController::class, 'displayPayment'])->name('payment.display');
-Route::post('/payment', [PaymentController::class, 'createPayment'])->name('payment.create');
-Route::get('/payment-history', [PaymentController::class, 'displayPaymentHistory'])->name('payment.displayHistory');
-
-use App\Http\Controllers\FreeGiftController;
-
-Route::get('/freegift', [FreeGiftController::class, 'getData']);
+    Route::resource('payments', PaymentController::class);
+    Route::get('/deletePayment/{id}', [PaymentController::class, 'destroyPayment']);
+    Route::view('/temp','user/temp');
+    Route::get('/payment', [PaymentController::class, 'displayPayment'])->name('payment.display');
+    Route::post('/payment', [PaymentController::class, 'createPayment'])->name('payment.create');
+    Route::get('/payment-history', [PaymentController::class, 'displayPaymentHistory'])->name('payment.displayHistory');
+    
+    
+    Route::apiResource('freegifts', FreeGiftController::class, ['names' => 'freegifts']);
+    Route::get('/freegifts/create/new', [FreeGiftController::class, 'create'])->name('freegifts.create');//to fix create modify to show by using /new
+    Route::get('/freegifts/edit/{id}', [FreeGiftController::class, 'edit'])->name('freegifts.edit');
+    Route::get('/deleteGift/{id}', [FreeGiftController::class, 'destroyGift']);
+    
