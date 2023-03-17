@@ -33,4 +33,11 @@ class ProductRepository
         $product = Product::findOrFail($id);
         $product->delete();
     }
+
+    public function setDeleted($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->deleted = 1;
+        $product->save();
+    }
 }

@@ -9,10 +9,12 @@ use Session;
 use Illuminate\Foundation\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\FreeGiftController;
+use App\Http\Controllers\ProductController;
 use App\Builders\PaymentBuilder;
 use App\Builders\PaymentQueryBuilder;
 use App\Models\Payment;
 use App\Models\Order;
+use App\Models\Product;
 
 class PaymentController extends Controller
 {
@@ -69,6 +71,13 @@ class PaymentController extends Controller
             'deleted' => 0
         ];
         $this->paymentBuilder->create($data);
+        $freeGiftController = new FreeGiftController();
+        $freeGifts = $freeGiftController->get();
+        foreach ($freeGifts['freeGifts'] as $item) {
+            if (intval($item['giftRequiredPrice']) <= $req->total_charge && $item['qty'] > 0) {
+                $freeGiftController->decrease($item['id']);
+            }
+        }
 
         //update order status to Paid
         $order = Order::find($req->order_id);
@@ -152,7 +161,8 @@ class PaymentController extends Controller
         return redirect('payments')->with('success', 'Payment information has been deleted');
     }
 
-    public function displayPayment(){
+    public function displayPayment()
+    {
 
         $user_id = Session::get('user')['id'];
 
@@ -171,14 +181,14 @@ class PaymentController extends Controller
                     ->where('products.deleted',0)
                     ->select('*', 'orders.id AS order_id');
     
-        $productDetail = $productDetailQuery->get();
-        $totalPrice = $productDetailQuery->sum('price');
+        $productDetail = $productDetailQuery->first();
+        $productPrice = $productDetail->price;
         
 
         $count=0;
         $freeGiftName="";
         foreach ($freeGifts['freeGifts'] as $item) {
-            if (intval($item['giftRequiredPrice']) <= $totalPrice) {
+            if (intval($item['giftRequiredPrice']) <= $productPrice && $item['qty'] > 0) {
                 $count++;
                 $freeGiftName .= $item['giftName'];
                 $freeGiftName .= ',';
@@ -187,7 +197,7 @@ class PaymentController extends Controller
         $gift = rtrim($freeGiftName, ",");
         
 
-        $tax = $totalPrice * 0.1;
+        $tax = $productPrice * 0.1;
                     $shippingMethods = [
                         [
                             'id' => 'gls',
@@ -214,13 +224,13 @@ class PaymentController extends Controller
                     return view('user/payment', [
                         'shippingMethods' => $shippingMethods,
                         'productDetail' => $productDetail,
-                        'totalPrice' => $totalPrice,
+                        'productPrice' => $productPrice,
                         'tax' => $tax,
                         'gift' => $gift,
                         'count'=>$count,
                         'orderId'=>$orderId
                     ]);
-       }
+    }
 
        public function createPayment(Request $req)
     {
@@ -266,6 +276,17 @@ class PaymentController extends Controller
                 'deleted' => 0
             ]);
 
+            //decrease gift
+            $freeGiftController = new FreeGiftController();
+            $freeGifts = $freeGiftController->get();
+            foreach ($freeGifts['freeGifts'] as $item) {
+                if (intval($item['giftRequiredPrice']) <= $req->input('grand_total_hidden') && $item['qty'] > 0) {
+                    $response = $freeGiftController->decrease($item['id']);
+                }
+            }
+            
+
+
         //update order status to Paid
         $order = Order::find($req->input('order_id_hidden'));
         if ($order && $order->status === 'Available') {
@@ -273,6 +294,9 @@ class PaymentController extends Controller
             $order->save();
         }
         $product_id = $order->product_id;
+
+        $productController = new ProductController();
+        $products = $productController->setDeleted($product_id);
 
         $orders = Order::where('product_id', $product_id)->get();
 
@@ -283,11 +307,13 @@ class PaymentController extends Controller
                 $order->save();
             }
         }
+        
 
         return redirect('/payment-history')->with('success', 'Payment successful! Thank you for your purchase.');
     }
 
-    public function displayPaymentHistory(){
+    public function displayPaymentHistory()
+    {
 
         $user_id = Session::get('user')['id'];
 
@@ -296,9 +322,9 @@ class PaymentController extends Controller
                     ->join('orders','orders.user_id','=','users.id')
                     ->join('products','products.id','=','orders.product_id')
                     ->join('payments','payments.order_id','=','orders.id')
-                    ->where('orders.status','Paid')//need to change to paid
+                    ->where('orders.status','Paid')
                     ->where('orders.deleted',0)
-                    ->where('products.deleted',0)//need to change to 1
+                    ->where('products.deleted',1)
                     ->select('*');
     
         $productDetail = $productDetailQuery->get();

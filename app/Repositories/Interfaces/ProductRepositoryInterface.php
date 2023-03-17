@@ -13,4 +13,6 @@ interface ProductRepositoryInterface
     public function update($id, array $attributes);
 
     public function delete($id);
+
+    public function setDeleted($id);
 }

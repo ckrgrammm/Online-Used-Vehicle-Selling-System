@@ -15,7 +15,8 @@ use App\Http\Controllers\FreeGiftController;
 */
 Route::post('freegifts', [FreeGiftController::class, 'store']);
 Route::get('freegifts', [FreeGiftController::class, 'show']);
-
+Route::put('freegifts/decrease/{id}', [FreeGiftController::class, 'decrease']);
+Route::put('freegifts/increase/{id}', [FreeGiftController::class, 'increase']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

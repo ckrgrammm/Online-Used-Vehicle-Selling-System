@@ -154,4 +154,42 @@ class FreeGiftController extends Controller
         $freegift = json_decode($response->getContent(), true)['free_gift'];
         return view('admin/edit-gift', compact('freegift'));
     }
+
+    public function decrease($id)
+    {
+            try {
+                $response = $this->client->put('http://127.0.0.1:9000/api/free-gifts/decrease/' . $id);
+                $responseBody = json_decode($response->getBody(), true);
+                
+                // Check the response status code and response body for errors
+                if ($response->getStatusCode() !== 200 || !isset($responseBody['success']) || !$responseBody['success']) {
+                    throw new \Exception('Failed to decrease the quantity of gift ' . $id);
+                }
+            } catch (\Exception $e) {
+                // Handle the exception here, such as logging it or returning an error response
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+
+        return response()->json(['message' => 'Free gifts updated successfully'], 200);
+    }
+
+    public function increase($id)
+    {
+            try {
+                $response = $this->client->put('http://127.0.0.1:9000/api/free-gifts/increase/' . $id);
+                $responseBody = json_decode($response->getBody(), true);
+                
+                // Check the response status code and response body for errors
+                if ($response->getStatusCode() !== 200 || !isset($responseBody['success']) || !$responseBody['success']) {
+                    throw new \Exception('Failed to decrease the quantity of gift ' . $id);
+                }
+            } catch (\Exception $e) {
+                // Handle the exception here, such as logging it or returning an error response
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+
+        return response()->json(['message' => 'Free gifts updated successfully'], 200);
+    }
+
+
 }

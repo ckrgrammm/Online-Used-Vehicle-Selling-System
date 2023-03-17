@@ -24,15 +24,13 @@
             <span class="text-muted">Your order</span>
           </h4>
           <ul class="list-group mb-3">
-          @foreach ($productDetail as $detail)
             <li class="list-group-item d-flex justify-content-between lh-condensed">
               <div>
-                <h6 class="my-0">{{ $detail->make }} {{ $detail->model }}</h6>
-                <small class="text-muted">{{ $detail->product_description }}</small>
+                <h6 class="my-0">{{ $productDetail->make }} {{ $productDetail->model }}</h6>
+                <small class="text-muted">{{ $productDetail->product_description }}</small>
               </div>
-              <span class="text-muted">RM{{ $detail->price }}</span>
+              <span class="text-muted">RM{{ $productDetail->price }}</span>
             </li>
-            @endforeach
             <li class="list-group-item d-flex justify-content-between lh-condensed" style="color:red !important">
               <div>
                 <h6 class="my-0">Service Tax</h6>
@@ -51,11 +49,12 @@
               <div class="text-success">
                 <h6 class="my-0">Free Gift</h6>
                 @php
-                $name = explode(',', $gift);
+                $name = explode(',', $gift); 
                 @endphp
                 @foreach ($name as $giftName)
                 <small>{{$giftName}}</small><br>
                 @endforeach
+
               </div>
               
               <span class="text-success">{{ $count }} item</span>
@@ -203,6 +202,7 @@
             
             <input type="hidden" name="grand_total_hidden" id="grand_total_hidden">
             <input type="hidden" name="order_id_hidden" id="order_id_hidden" value="{{$orderId}}">
+            <input type="hidden" name="product_price" id="product_price" value="{{$productPrice}}">
           </form>
         </div>
       </div>
@@ -260,7 +260,7 @@ var grandTotal = 0;
 function updateShippingPrice(name,price){
   document.getElementById("updateDesc").innerHTML = " - "+ name;
   document.getElementById("showShippingPrice").innerHTML = "RM" + price;
-  grandTotal = parseInt(price) + parseInt({{$tax}}) + parseInt({{$totalPrice}});
+  grandTotal = parseInt(price) + parseInt({{$tax}}) + parseInt({{$productPrice}});
   document.getElementById("showTotalPrice").innerHTML ="RM "+grandTotal;
   document.getElementById("grand_total_hidden").value = grandTotal;
   document.getElementById("totalPrice").value = grandTotal;

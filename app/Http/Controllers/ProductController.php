@@ -196,4 +196,15 @@ images
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
+
+    public function setDeleted($id)
+    {
+        $product = Product::find($id);
+
+        $product->deleted = 1;
+        $product->save();
+
+        return response()->json(['message' => 'Product set deleted to 1 successfully'], 200);
+    }
+
 }
