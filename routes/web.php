@@ -100,7 +100,10 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
     
 });
 
-
+Route::get('/auth/google', [UserController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
+Route::get('/sendOTP/{phoneNumber}', [UserController::class, 'sendOTP']);
+Route::get('/validateOTP/{otp}', [UserController::class, 'validateOTP']);
 
 Route::view('/register','user/register');
 Route::post('/login', [UserController::class, 'login']);
@@ -137,16 +140,6 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
 
     Route::get('/admin/all-product', [ProductController::class, 'admin'])->name('products.admin');
     Route::get('/filter', [ProductController::class, 'filterByMake'])->name('filterByMake');
-
-
-
-
-
-
-
-
-
-
 
     Route::resource('payments', PaymentController::class);
     Route::get('/deletePayment/{id}', [PaymentController::class, 'destroyPayment']);
