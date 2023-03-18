@@ -115,7 +115,7 @@ images
         $product->product_image = implode("|", $images);
         $product->save();
 
-        if ($this->middleware('isAdmin')) {
+        if (auth()->user()->role == "admin" || auth()->user()->role == "staff") {
             return redirect()->route('products.admin')->with('success', 'Information has been added');
         } else {
             return redirect()->route('products.index')->with('success', 'Information has been added');
@@ -196,15 +196,4 @@ images
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
-
-    public function setDeleted($id)
-    {
-        $product = Product::find($id);
-
-        $product->deleted = 1;
-        $product->save();
-
-        return response()->json(['message' => 'Product set deleted to 1 successfully'], 200);
-    }
-
 }

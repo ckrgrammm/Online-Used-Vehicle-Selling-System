@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Mail;
 use Session;
+use Socialite;
 use App\Mail\SendMail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
@@ -270,7 +271,76 @@ class UserController extends Controller
         $this->userRepository->updateUser($data, $id);
 
         return redirect('user/edit-profile')->with('success', 'Successfully changed!');
-   }
+    }
 
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')
+        ->with(['prompt' => 'select_account'])
+        ->redirect();
+    }
+    
+    public function handleGoogleCallback(Request $req)
+    {
+        $user = Socialite::driver('google')->user();
+
+        // Check if the user already exists in the database
+        $existingUser = $this->userRepository->findUserByEmail($user->getEmail());
+
+        if ($existingUser) {
+            $req->session()->put('user', $existingUser);
+            // If the user exists, log them in
+            Auth::login($existingUser);
+        } else {
+            // If the user does not exist, create a new user account
+            $data = [
+                'name' => $user->getName(),
+                'email' => $user->getEmail(),
+                'password' => bcrypt(Str::random(16)),
+                'image' => 'unknown_profile.png'
+            ];
+            $newUser = $this->userRepository->storeUser($data);
+            $req->session()->put('user', $newUser);
+            // Log in the new user
+            Auth::login($newUser);
+        }
+
+        // Redirect to the home page
+        return redirect('/');
+    }
+
+    function sendOTP($phoneNumber) {
+        $basic  = new \Vonage\Client\Credentials\Basic("08be4743", "KV9sx0mPOEbygjZZ");
+        $client = new \Vonage\Client($basic);
+
+        $otp = rand(100000, 999999);
+        Session::put('otp', $otp);
+
+        $response = $client->sms()->send(
+            new \Vonage\SMS\Message\SMS("6".$phoneNumber, "Respectism", 'Hello! Your Respectism OTP code is '.$otp.'.')
+        );
+        
+        $message = $response->current();
+        
+        if ($message->getStatus() == 0) {
+            $response = array('message' => 'The message was sent successfully');
+            
+        } else {
+            $response = array('message' => $message->getStatus());
+        }
+        return json_encode($response);
+    }
+    
+    function validateOTP($otp) {
+        $sessionOTP = Session::get('otp');
+        if ($sessionOTP == $otp) {
+            // OTP is valid
+            $response = array('message' => 'true');
+        } else {
+            // OTP is invalid
+            $response = array('message' => 'false');
+        }
+        return json_encode($response);
+    }
    
 }
