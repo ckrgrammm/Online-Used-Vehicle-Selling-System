@@ -9,6 +9,7 @@ use Session;
 use Illuminate\Foundation\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\FreeGiftController;
+use App\Http\Controllers\GiftRecordController;
 use App\Http\Controllers\ProductController;
 use App\Builders\PaymentBuilder;
 use App\Builders\PaymentQueryBuilder;
@@ -70,14 +71,27 @@ class PaymentController extends Controller
             'billing_address' => $req->address,
             'deleted' => 0
         ];
-        $this->paymentBuilder->create($data);
+        $payment = $this->paymentBuilder->create($data);
+        $paymentId = $payment->id;
+
         $freeGiftController = new FreeGiftController();
         $freeGifts = $freeGiftController->get();
+        $giftIds = array();
         foreach ($freeGifts['freeGifts'] as $item) {
-            if (intval($item['giftRequiredPrice']) <= $req->total_charge && $item['qty'] > 0) {
+            if (intval($item['giftRequiredPrice']) <= $req->total_charge && $item['qty'] > 0 && $item['deleted'] == 0) {
                 $freeGiftController->decrease($item['id']);
+                $giftIds[] = $item['id']; 
             }
         }
+        $giftIdsString = implode(',', $giftIds);
+
+        //update giftRecord
+        $giftRecordController = new GiftRecordController();
+        $recordData = new Request([
+            'paymentId' => $paymentId,
+            'giftId' => $giftIdsString,
+        ]);
+        $giftRecordController->storeFromPayment($recordData);
 
         //update order status to Paid
         $order = Order::find($req->order_id);
@@ -103,15 +117,28 @@ class PaymentController extends Controller
 
     public function update(Request $req, $id)
     {
-        $req->validate([
-            'order_id' => [
+        if($req->old_order_id==$req->order_id){
+            $req->validate([
+                'order_id' => [
+                'required',
+                'string',
+                'regex:/^[0-9]{1,4}$/',
+                Rule::exists('orders', 'id')->where(function ($query) {
+                    $query->where('status', 'Paid');
+                })
+            ]]);
+        }else{
+            $req->validate([
+                'order_id' => [
                 'required',
                 'string',
                 'regex:/^[0-9]{1,4}$/',
                 Rule::exists('orders', 'id')->where(function ($query) {
                     $query->where('status', 'Available');
                 })
-            ],
+            ]]);
+        }
+        $req->validate([
             'total_charge' => 'required|int|regex:/^[0-9]{0,10}$/',
             'date' => 'required|date',
             'method' => 'required',
@@ -130,7 +157,41 @@ class PaymentController extends Controller
             'deleted' => 0
         ];
 
-        $this->paymentBuilder->update($id,$data);
+        $payment = $this->paymentBuilder->update($id,$data);
+        $paymentId = $payment->id;
+
+        $freeGiftController = new FreeGiftController();
+        $freeGifts = $freeGiftController->get();
+        $giftIds = array();
+        foreach ($freeGifts['freeGifts'] as $item) {
+            if (intval($item['giftRequiredPrice']) <= $req->total_charge && $item['qty'] > 0 && $item['deleted'] == 0) {
+                $freeGiftController->decrease($item['id']);
+                $giftIds[] = $item['id']; 
+            }
+        }
+        $giftIdsString = implode(',', $giftIds);
+
+        //update giftRecord
+        $giftRecordController = new GiftRecordController();
+        $giftRecordResponse = $giftRecordController->checkPaymentId($paymentId);
+        $recordData = new Request([
+            'paymentId' => $paymentId,
+            'giftId' => $giftIdsString,
+        ]);
+        
+        if($giftRecordResponse->getStatusCode() == 200){//inc the gift that have in gift record
+            $giftRecord = json_decode($giftRecordResponse->getContent())->gift_record;
+            $giftRecordId = $giftRecord->id;
+            $ids = $giftRecord->giftId;
+            $idsStrings = explode(',', $ids);
+            foreach ($idsStrings as $idsString) {
+                $freeGiftController->increase($idsString);
+              }
+
+            $giftRecordController->updateFromPayment($giftRecordId,$recordData);
+        }else{
+            $giftRecordController->storeFromPayment($recordData);
+        }
 
         //update order status to Paid
         $order = Order::find($req->order_id);
@@ -188,7 +249,7 @@ class PaymentController extends Controller
         $count=0;
         $freeGiftName="";
         foreach ($freeGifts['freeGifts'] as $item) {
-            if (intval($item['giftRequiredPrice']) <= $productPrice && $item['qty'] > 0) {
+            if (intval($item['giftRequiredPrice']) <= $productPrice && $item['qty'] > 0 && $item['deleted'] == 0) {
                 $count++;
                 $freeGiftName .= $item['giftName'];
                 $freeGiftName .= ',';
@@ -275,38 +336,51 @@ class PaymentController extends Controller
                 'billing_address' => $req->address . ', ' . $req->zip . ' ' . $req->state . ', ' . $req->country,
                 'deleted' => 0
             ]);
+            $paymentId = $payment->id;
 
-            //decrease gift
             $freeGiftController = new FreeGiftController();
             $freeGifts = $freeGiftController->get();
+            $giftIds = array();
             foreach ($freeGifts['freeGifts'] as $item) {
-                if (intval($item['giftRequiredPrice']) <= $req->input('grand_total_hidden') && $item['qty'] > 0) {
-                    $response = $freeGiftController->decrease($item['id']);
+                if (intval($item['giftRequiredPrice']) <= $req->product_price && $item['qty'] > 0 && $item['deleted'] == 0) {
+                    
+                    $freeGiftController->decrease($item['id']);
+                    $giftIds[] = $item['id']; 
                 }
             }
-            
-
-
-        //update order status to Paid
-        $order = Order::find($req->input('order_id_hidden'));
-        if ($order && $order->status === 'Available') {
-            $order->status = 'Paid';
-            $order->save();
-        }
-        $product_id = $order->product_id;
+            $giftIdsString = implode(',', $giftIds);
+    
+            //update giftRecord
+            $giftRecordController = new GiftRecordController();
+            $recordData = new Request([
+                'paymentId' => $paymentId,
+                'giftId' => $giftIdsString,
+            ]);
+            $giftRecordController->storeFromPayment($recordData);
+    
+            //update order status to Paid
+            $order = Order::find($req->order_id_hidden);
+            if ($order && $order->status === 'Available') {
+                $order->status = 'Paid';
+                $order->save();
+            }
+            $product_id = $order->product_id;
+    
+            $orders = Order::where('product_id', $product_id)->get();
+    
+            //update order status same product id to Sold
+            foreach ($orders as $order) {
+                if ($order->status === 'Available') {
+                    $order->status = 'Sold';
+                    $order->save();
+                }
+            }
 
         $productController = new ProductController();
         $products = $productController->setDeleted($product_id);
 
         $orders = Order::where('product_id', $product_id)->get();
 
-        //update order status same product id to Sold
-        foreach ($orders as $order) {
-            if ($order->status === 'Available') {
-                $order->status = 'Sold';
-                $order->save();
-            }
-        }
         
 
         return redirect('/payment-history')->with('success', 'Payment successful! Thank you for your purchase.');

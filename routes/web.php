@@ -9,7 +9,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\FreeGiftController;
 use App\Http\Controllers\PaymentController;
-
+use App\Http\Controllers\GiftRecordController;
 
 
 
@@ -160,4 +160,9 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     Route::get('/freegifts/create/new', [FreeGiftController::class, 'create'])->name('freegifts.create');//to fix create modify to show by using /new
     Route::get('/freegifts/edit/{id}', [FreeGiftController::class, 'edit'])->name('freegifts.edit');
     Route::get('/deleteGift/{id}', [FreeGiftController::class, 'destroyGift']);
+
+    Route::apiResource('gift-records', GiftRecordController::class, ['names' => 'giftRecords']);
+    Route::get('/gift-records/create/new', [GiftRecordController::class, 'create'])->name('giftRecords.create');//to fix create modify to show by using /new
+    Route::get('/gift-records/edit/{id}', [GiftRecordController::class, 'edit'])->name('giftRecords.edit');
+    Route::get('/deleteGiftRecords/{id}', [GiftRecordController::class, 'destroyGiftRecord']);
     
