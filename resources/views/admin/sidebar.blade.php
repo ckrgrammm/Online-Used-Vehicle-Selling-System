@@ -51,6 +51,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="/gift-records">
+          <span class="menu-title">Gift Record</span>
+          <i class="mdi mdi-label menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item"> 
         <a class="nav-link" data-bs-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="general-pages">
           <span class="menu-title">Reports</span>
           <i class="menu-arrow"></i>

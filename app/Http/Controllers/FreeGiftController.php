@@ -52,7 +52,7 @@ class FreeGiftController extends Controller
         $response = $this->client->request('GET', 'http://127.0.0.1:9000/api/free-gifts/' . $id);
         $freeGift = json_decode($response->getBody()->getContents(), true);
         if (!$freeGift) {
-            return response()->json(['error' => 'Free gift not found'], 404);
+            return null;
         }
 
         return response()->json($freeGift);

@@ -79,20 +79,21 @@ class PaymentController extends Controller
         $giftIds = array();
         foreach ($freeGifts['freeGifts'] as $item) {
             if (intval($item['giftRequiredPrice']) <= $req->total_charge && $item['qty'] > 0 && $item['deleted'] == 0) {
+                //decrease free gift quantity
                 $freeGiftController->decrease($item['id']);
                 $giftIds[] = $item['id']; 
             }
         }
         $giftIdsString = implode(',', $giftIds);
-
-        //update giftRecord
-        $giftRecordController = new GiftRecordController();
-        $recordData = new Request([
-            'paymentId' => $paymentId,
-            'giftId' => $giftIdsString,
-        ]);
-        $giftRecordController->storeFromPayment($recordData);
-
+        if($giftIdsString){
+            //update giftRecord
+            $giftRecordController = new GiftRecordController();
+            $recordData = new Request([
+                'paymentId' => $paymentId,
+                'giftId' => $giftIdsString,
+            ]);
+            $giftRecordController->storeFromPayment($recordData);
+        }
         //update order status to Paid
         $order = Order::find($req->order_id);
         if ($order && $order->status === 'Available') {
@@ -110,6 +111,9 @@ class PaymentController extends Controller
                 $order->save();
             }
         }
+        //set product deleted to 1
+        $productController = new ProductController();
+        $products = $productController->setDeleted($product_id);
 
         return redirect('payments')->with('success', 'Successfully added a payment');
 
@@ -165,12 +169,12 @@ class PaymentController extends Controller
         $giftIds = array();
         foreach ($freeGifts['freeGifts'] as $item) {
             if (intval($item['giftRequiredPrice']) <= $req->total_charge && $item['qty'] > 0 && $item['deleted'] == 0) {
+                //decrease free gift quantity
                 $freeGiftController->decrease($item['id']);
                 $giftIds[] = $item['id']; 
             }
         }
         $giftIdsString = implode(',', $giftIds);
-
         //update giftRecord
         $giftRecordController = new GiftRecordController();
         $giftRecordResponse = $giftRecordController->checkPaymentId($paymentId);
@@ -179,7 +183,8 @@ class PaymentController extends Controller
             'giftId' => $giftIdsString,
         ]);
         
-        if($giftRecordResponse->getStatusCode() == 200){//inc the gift that have in gift record
+        //increase the gift that have in gift record
+        if($giftRecordResponse){
             $giftRecord = json_decode($giftRecordResponse->getContent())->gift_record;
             $giftRecordId = $giftRecord->id;
             $ids = $giftRecord->giftId;
@@ -199,8 +204,16 @@ class PaymentController extends Controller
             $order->status = 'Paid';
             $order->save();
         }
+        //update old order status
+        $old_order = Order::find($req->old_order_id);
+        if ($order && ($order->status === 'Paid'||$order->status === 'Sold')) {
+            $order->status = 'Available';
+            $order->save();
+        }
+        $old_product_id = $old_order->product_id;
         $product_id = $order->product_id;
 
+        $old_order = Order::where('product_id', $old_product_id)->get();
         $orders = Order::where('product_id', $product_id)->get();
 
         //update order status same product id to Sold
@@ -210,6 +223,12 @@ class PaymentController extends Controller
                 $order->save();
             }
         }
+
+        //set product deleted to 1
+        $productController = new ProductController();
+        $products = $productController->setDeleted($product_id);
+        $old_products = $productController->setNoDeleted($old_product_id);
+
 
         return redirect('payments')->with('success', 'Payment information has been updated');
 
@@ -349,15 +368,15 @@ class PaymentController extends Controller
                 }
             }
             $giftIdsString = implode(',', $giftIds);
-    
-            //update giftRecord
-            $giftRecordController = new GiftRecordController();
-            $recordData = new Request([
-                'paymentId' => $paymentId,
-                'giftId' => $giftIdsString,
-            ]);
-            $giftRecordController->storeFromPayment($recordData);
-    
+            if($giftIdsString){
+                //update giftRecord
+                $giftRecordController = new GiftRecordController();
+                $recordData = new Request([
+                    'paymentId' => $paymentId,
+                    'giftId' => $giftIdsString,
+                ]);
+                $giftRecordController->storeFromPayment($recordData);
+            }
             //update order status to Paid
             $order = Order::find($req->order_id_hidden);
             if ($order && $order->status === 'Available') {
@@ -375,13 +394,9 @@ class PaymentController extends Controller
                     $order->save();
                 }
             }
-
+            //set product deleted to 1
         $productController = new ProductController();
         $products = $productController->setDeleted($product_id);
-
-        $orders = Order::where('product_id', $product_id)->get();
-
-        
 
         return redirect('/payment-history')->with('success', 'Payment successful! Thank you for your purchase.');
     }

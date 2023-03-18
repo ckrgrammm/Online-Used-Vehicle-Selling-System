@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label for="order_id">Order ID</label>
                     <input type="text" class="form-control" name="order_id" id="order_id" placeholder="123" maxlength="4">
-                    @error('order_id')
+                    @error($errors->has('order_id'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <label for="total_charge">Total Charge (RM)</label>
                     <input type="text" class="form-control" name="total_charge" id="total_charge" placeholder="">
-                    @error('total_charge')
+                    @error($errors->has('total_charge'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <label for="date">Payment Date</label>
                     <input type="date" class="form-control" name="date" id="date">
-                    @error('date')
+                    @error($errors->has('date'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -45,7 +45,7 @@
                         <option value="credit card" style="padding: 5px">Credit Card</option>
                         <option value="debit card" style="padding: 5px">Debit Card</option>
                     </select>
-                    @error('method')
+                    @error($errors->has('method'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -55,7 +55,7 @@
                 <div class="form-group">
                     <label for="address">Address</label>
                     <textarea class="form-control" name="address" id="address" rows="4" placeholder="No 123, Jalan Besar" maxlength="255"></textarea>
-                    @error('address')
+                    @error($errors->has('address'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>

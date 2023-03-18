@@ -266,7 +266,7 @@
                 <div class="form-group">
                     <label for="giftName">Gift Name</label>
                     <input type="text" class="form-control" name="giftName" id="giftName" value="{{old('giftName', $freegift['giftName'])}}">
-                    @error('giftName')
+                    @error($errors->has('giftName'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -275,7 +275,7 @@
                 <div class="form-group">
                     <label for="giftDesc">Gift Description</label>
                     <input type="text" class="form-control" name="giftDesc" id="giftDesc" maxlength="255" value="{{old('giftDesc', $freegift['giftDesc'])}}">
-                    @error('giftDesc')
+                    @error($errors->has('giftDesc'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -284,7 +284,7 @@
                 <div class="form-group">
                     <label for="giftRequiredPrice">Gift Required Price (RM)</label>
                     <input type="text" class="form-control" name="giftRequiredPrice" id="giftRequiredPrice" value="{{old('giftRequiredPrice', $freegift['giftRequiredPrice'])}}">
-                    @error('giftRequiredPrice')
+                    @error($errors->has('giftRequiredPrice'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -293,7 +293,7 @@
                 <div class="form-group">
                     <label for="qty">Gift Quantity</label>
                     <input type="number" class="form-control" name="qty" id="qty" min="0" value="{{old('qty', $freegift['qty'])}}">
-                    @error('qty')
+                    @error($errors->has('qty'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -302,7 +302,7 @@
                 <div class="form-group">
                     <label>Gift Image Upload <span class="text-muted">(image will not update if no uploaded)</span></label>
                     <input type="file" class="filepond" name="giftImages" id="giftImages" accept="image/*" multiple data-max-file-size="3MB" data-max-files="1"/>
-                    @error('giftImages')
+                    @error($errors->has('giftImages'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

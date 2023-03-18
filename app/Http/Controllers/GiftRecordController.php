@@ -17,20 +17,18 @@ class GiftRecordController extends Controller
         $this->client = new Client();
     }
 
+    
     public function index()
     {
         $giftRecords = $this->get();
         
-         // return view('admin/all-gift', compact('giftRecords'));
-         return view('admin/all-gift', [
+         return view('admin/all-gift-record', [
             'giftRecords' => $giftRecords
         ]);
     }
 
     public function get()
     {
-
-        // gift-records for testing
         $response = $this->client->request('GET', 'http://127.0.0.1:9000/api/gift-records');
         $giftRecords = json_decode($response->getBody()->getContents(), true);
 
@@ -47,45 +45,58 @@ class GiftRecordController extends Controller
         $response = $this->client->request('GET', 'http://127.0.0.1:9000/api/gift-records/' . $id);
         $giftRecord = json_decode($response->getBody()->getContents(), true);
         if (!$giftRecord) {
-            return response()->json(['error' => 'Gift Record not found'], 404);
+            return null;
         }
 
         return response()->json($giftRecord);
     }
     public function store(Request $req){
-        $validator = Validator::make($req->all(), [
-            'paymentId' => ['required', 'string', 'regex:/^.{0,255}$/', 
-                function ($attribute, $value, $fail) {
-                    $response = Http::get('https://127.0.0.1:9000/api/gift-records/checkPaymentId/' . $value);
-            
-                    if (!($response->ok() && $response->json()['is_unique'])) {
-                        $fail('The '.$attribute.' has already been used.');
-                    }
-                }],
-            'giftId' => ['required','string','regex:/^[0-9,]{0,255}$/',
-                function ($attribute, $value, $fail) {
-                    $giftIds = explode(',', $value);
-                    foreach ($giftIds as $giftId) {
-                        $gift = Gift::where('id', $giftId)
-                            ->where('quantity', '>', 0)
-                            ->where('deleted', 0)
-                            ->first();
-                        if (!$gift) {
-                            $fail('The '.$attribute.' is invalid.');
-                            break;
+        $iString = null;
+        $req->validate([
+            'paymentId' => [
+                'required', 'integer', 'regex:/^.{0,255}$/','exists:payments,id', function ($attribute, $value, $fail) {
+                    $response = $this->checkPaymentId($value);
+                    if($response!=null){
+                    $giftRecords = json_decode($response->getContent(), true);
+                        if ($response->getStatusCode() == 200) {
+                            $fail('The '.$attribute.' has already been used.');
                         }
                     }
                 }
             ],
+            'giftId' => ['string', 'regex:/^[0-9][0-9,]{0,254}$/',
+            function ($attribute, $value, $fail) use (&$iString) {
+                $freeGiftController = new FreeGiftController();
+                $i = array();
+                $giftIds = explode(',', $value);
+                foreach ($giftIds as $index => $giftId) {
+                    foreach ($giftIds as $prevIndex => $prevGiftId) {
+                        if ($index !== $prevIndex && $giftId === $prevGiftId) {
+                            $fail('The '.$attribute.' cannot contain duplicate giftIds.');
+                        }
+                    }
+                    if($giftId){
+                        $freeGifts = $freeGiftController->show(intval($giftId));
+                        if($freeGifts){
+                            $freeGiftsData = json_decode($freeGifts->getContent(), true);
+                            if ($freeGiftsData['free_gift']['qty'] > 0 && $freeGiftsData['free_gift']['deleted'] == 0) {
+                                //decrease free gift quantity
+                                $freeGiftController->decrease($freeGiftsData['free_gift']['id']);
+                                $i[] = $freeGiftsData['free_gift']['id']; 
+                            }else{
+                                $fail('The '.$attribute.' has not available');
+                            }
+                        }else{
+                            $fail('The '.$attribute.' is invalid.');
+                        }
+                    }
+                }
+                $iString = implode(',', $i);
+            }]
         ]);
-        
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-
         $data = [
             'paymentId' => $req->paymentId,
-            'giftId' => $req->giftId,
+            'giftId' => $iString,
             'deleted' => 0
         ];
         
@@ -93,70 +104,95 @@ class GiftRecordController extends Controller
                 'json' => $data
             ]);
             $giftRecords = json_decode($response->getBody()->getContents(), true);
-            return redirect('giftRecords')->with('success', 'Successfully added a gift');
+            return redirect('gift-records')->with('success', 'Successfully added a gift record');
         
     }
 
     public function update($id,Request $req)
     {
+        $iString = null;
+        $old_giftId = $req->old_giftId;
         $req->validate([
-            'paymentId' => ['required', 'integer', 'regex:/^.{0,255}$/', 
-                function ($attribute, $value, $fail) {
-                    $response = $this->client->get('http://127.0.0.1:9000/api/gift-records/checkPaymentId/'.$value);
-                    $giftRecords = json_decode($response->getBody()->getContents(), true);
-                    
-                    if ($response->getStatusCode() == 404 && $giftRecords['gift_record']['id']!=$value) {
-                        $fail('The '.$attribute.' has already been used.');
+            'paymentId' => [
+                'required', 'integer', 'regex:/^.{0,255}$/','exists:payments,id', function ($attribute, $value, $fail)use ($id) {
+                    $response = $this->checkPaymentId($value);
+                    if($response!=null){
+                    $giftRecords = json_decode($response->getContent(), true);
+                        if($response->getStatusCode() == 200 && $giftRecords['gift_record']['id'] != $id){
+                            $fail('The '.$attribute.' has already been used.');
+                        }
                     }
                 }
             ],
-            'giftId' => ['string', 'regex:/^[0-9,]{0,255}$/'],
+            'giftId' => ['string', 'regex:/^[0-9][0-9,]{0,254}$/',
+            function ($attribute, $value, $fail) use (&$iString,$old_giftId) {
+                $freeGiftController = new FreeGiftController();
+                $i = array();
+                $giftIds = explode(',', $value);
+                $old_giftIds = explode(',', $old_giftId);
+                foreach($old_giftIds as $old_giftId){
+                    if($old_giftId){
+                        $freeGifts = $freeGiftController->show(intval($old_giftId));
+                        if($freeGifts){
+                            $freeGiftsData = json_decode($freeGifts->getContent(), true);
+                                //increase free gift quantity
+                                $freeGiftController->increase($freeGiftsData['free_gift']['id']);
+                        }
+                    }
+                }
+                foreach ($giftIds as $index => $giftId) {
+                    foreach ($giftIds as $prevIndex => $prevGiftId) {
+                        if ($index !== $prevIndex && $giftId === $prevGiftId) {
+                            $fail('The '.$attribute.' cannot contain duplicate giftIds.');
+                        }
+                    }
+                    if($giftId){
+                        $freeGifts = $freeGiftController->show(intval($giftId));
+                        if($freeGifts){
+                            $freeGiftsData = json_decode($freeGifts->getContent(), true);
+                            if ($freeGiftsData['free_gift']['qty'] > 0 && $freeGiftsData['free_gift']['deleted'] == 0) {
+                                //decrease free gift quantity
+                                $freeGiftController->decrease($freeGiftsData['free_gift']['id']);
+                                $i[] = $freeGiftsData['free_gift']['id']; 
+                            }else{
+                                $fail('The '.$attribute.' has not available');
+                            }
+                        }else{
+                            $fail('The '.$attribute.' is invalid.');
+                        }
+                    }
+                }
+                $iString = implode(',', $i);
+            }]
         ]);
-
-        $freeGiftController = new FreeGiftController();
-        $freeGifts = $freeGiftController->get();
-        $input = $req->all();
-        $giftIds = explode(',', $input['giftId']);//update inc and dec and
-        $i = array();
-
-        foreach ($giftIds as $giftId) {
-            $gift = FreeGift::where('id', $giftId)
-                ->where('quantity', '>', 0)
-                ->where('deleted', 0)
-                ->first();
-            
-            if ($gift) {
-                $response = $freeGiftController->decrease($gift['id']);
-                $i[] = $gift['id']; 
-            }
-        }
-        $iString = implode(',', $i);
-            $data = [
-                'paymentId' => $req->paymentId,
-                'giftId' => $iString
-            ];
+        $data = [
+            'paymentId' => $req->paymentId,
+            'giftId' => $iString,
+            'deleted' => 0
+        ];
+        
         $response = $this->client->put('http://127.0.0.1:9000/api/gift-records/'.$id, [
                     'json' => $data
                 ]);
             $giftRecords = json_decode($response->getBody()->getContents(), true);
-            return redirect('giftRecords')->with('success', 'Successfully edit a gift');
+            return redirect('gift-records')->with('success', 'Successfully edit a gift record');
     }
 
 
-    public function destroyGift($id)
+    public function destroyGiftRecord($id)
     {
         $response = $this->client->delete('http://127.0.0.1:9000/api/gift-records/'.$id);
 
         $giftRecords = json_decode($response->getBody()->getContents(), true);
 
-        return redirect('giftRecords')->with('success', 'Successfully deleted a gift');
+        return redirect('gift-records')->with('success', 'Successfully deleted a gift record');
     }
 
     public function edit($id)
     {
         $response = $this->show($id);
-        $giftRecord = json_decode($response->getContent(), true)['free_gift'];
-        return view('admin/edit-gift', compact('giftRecord'));
+        $giftRecord = json_decode($response->getContent(), true)['gift_record'];
+        return view('admin/edit-gift-record', compact('giftRecord'));
     }
 
     public function storeFromPayment(Request $req){
@@ -178,7 +214,7 @@ class GiftRecordController extends Controller
         $giftRecords = json_decode($response->getBody()->getContents(), true);
 
         if ($giftRecords === null) {
-            return response()->json(['message' => 'Gift Records is null'], 404);
+            return null;
         }
         
         return response()->json($giftRecords);
@@ -191,8 +227,7 @@ class GiftRecordController extends Controller
                 function ($attribute, $value, $fail) {
                     $response = $this->client->get('http://127.0.0.1:9000/api/gift-records/checkPaymentId/'.$value);
                     $giftRecords = json_decode($response->getBody()->getContents(), true);
-                    
-                    if ($response->getStatusCode() == 404 && $giftRecords['gift_record']['id']!=$value) {
+                    if ($response->getStatusCode() == 404) {
                         $fail('The '.$attribute.' has already been used.');
                     }
                 }
@@ -209,6 +244,6 @@ class GiftRecordController extends Controller
                     'json' => $data
                 ]);
             $giftRecords = json_decode($response->getBody()->getContents(), true);
-            return redirect('giftRecords')->with('success', 'Successfully edit a gift');
+            return redirect('gift-records')->with('success', 'Successfully edit a gift record');
     }
 }
