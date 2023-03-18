@@ -1,22 +1,37 @@
 @extends('user/master')
 @section('content')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/luxonauta/luxa@8a98/dist/compressed/luxa.css">
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/luxonauta/luxa@8a98/dist/compressed/luxa.css"> --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.4.1/croppie.min.js"></script>
 <style>
-  /* html, body {
-	 font-family: "Roboto", sans-serif;
-	 font-size: 88%;
+  input{
+    width: 100%;
+  }
+
+  .lx-row {
+    width: 100%;
+    display: flex;
+    flex-flow: wrap row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
 }
- body {
-	 display: grid;
-	 grid-template-rows: auto 1fr auto;
-	 background-image: url("https://i.postimg.cc/fbSXnBct/video.png");
-	 background-attachment: fixed;
-	 background-size: contain;
-	 background-position: center;
-	 background-repeat: no-repeat;
-} */
+
+.lx-column {
+    display: block;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.bs-md {
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+}
+
+.align-stretch {
+    align-items: stretch !important;
+}
+
  main {
 	 min-height: 100vh;
 	 padding: 2rem 0;
@@ -173,12 +188,17 @@
 	 justify-content: center;
 	 font-weight: 700;
 	 color: white;
+   cursor: pointer;
 }
+
+main section form .actions .lx-btn#save {
+	 color: white !important;
+}
+
  main section form .actions .lx-btn#cancel, main section form .actions .lx-btn.cancel {
 	 background-color: #f55;
 }
  main section form .actions .lx-btn#clear, main section form .actions .lx-btn.clear {
-	 color: black;
 	 background-color: white;
 }
  main section form .actions .lx-btn#save, main section form .actions .lx-btn.save {
@@ -196,7 +216,58 @@
 		 margin: 0;
 	}
 }
- 
+
+.alert{
+  left: 10%;
+  width: 80%;
+  margin-top: 1rem;
+}
+
+.card {
+    width: 400px;
+    border: none;
+    height: 300px;
+    /* box-shadow: 0px 5px 20px 0px #d2dae3; */
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.card h6 {
+    color: red;
+    font-size: 20px
+}
+
+.inputs input {
+    width: 40px;
+    height: 40px
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border: 2px solid red
+}
+
+.validate {
+    /* border-radius: 20px; */
+    height: 40px;
+    background-color: red;
+    border: 1px solid red;
+    width: 140px
+}
+
+.footer_part{
+  display: none;
+}
 </style>
 <main class="has-dflex-center">
     <section>
@@ -252,6 +323,7 @@
                 <div class="input-wrapper">
                   <span class="icon"><i class="fas fa-phone"></i></span>
                   <input type="text" id="phone-number" name="phone-number" value="{{$data->phoneNum}}" required>
+                  <button class="btn btn-outline-secondary" type="button" id="button-addon2" disabled>Send OTP</button>
                 </div>
                 <div id="phone-number-helper" class="helper"></div>
               </div>
@@ -304,17 +376,151 @@
       </div>
     </div>
   </div>
-  
-  {{-- <script src="https://use.fontawesome.com/releases/v5.14.0/js/all.js" defer crossorigin="anonymous" data-search-pseudo-elements></script> --}}
+
+  <div class="modal fade" id="verifyOTPModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Verify OTP</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container d-flex justify-content-center align-items-center">
+            <div class="position-relative">
+                <div class="card p-2 text-center">
+                    <h6>Please enter the one time password <br> to verify your account</h6>
+                    <div> <span>A code has been sent to</span> <small>*******9897</small> </div>
+                    <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> <input class="m-2 text-center form-control rounded" type="text" id="first" maxlength="1" /> <input class="m-2 text-center form-control rounded" type="text" id="second" maxlength="1" /> <input class="m-2 text-center form-control rounded" type="text" id="third" maxlength="1" /> <input class="m-2 text-center form-control rounded" type="text" id="fourth" maxlength="1" /> <input class="m-2 text-center form-control rounded" type="text" id="fifth" maxlength="1" /> <input class="m-2 text-center form-control rounded" type="text" id="sixth" maxlength="1" /> </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger px-4 validate" id="validateOTPBtn">Validate</button>
+        </div>
+      </div>
+    </div>
+
+  <script>
+    // Get the input element
+    var inputElement = document.getElementById('phone-number');
+    var inputValue = $("input[name='phone-number']").val();
+    var validateOTP = false;
+    // Set up an event listener to monitor changes to the input value
+    inputElement.addEventListener('input', function() {
+      // Get the current value of the input
+      inputValue = inputElement.value;
+      // console.log(inputValue);
+
+      if(inputValue != {{$data->phoneNum}}){
+        document.querySelector('#button-addon2').disabled = false;
+      } else {
+        document.querySelector('#button-addon2').disabled = true;
+      }
+    });
+  </script>
+
+  <script>
+    const button = document.querySelector('#button-addon2');
+    let sec = 60;
+    let countdown = null;
+
+    const updateButton = () => {
+      button.innerHTML = `wait ${sec}s`;
+      
+      if (sec === 0) {
+        clearInterval(countdown);
+        sec = 60;
+        button.innerHTML = 'Send OTP';
+        button.disabled = false;
+        return;
+      }
+
+      sec--;
+    }
+
+    button.onclick = () => {
+      button.disabled = true;
+      $('#verifyOTPModal').modal('show');
+      updateButton();
+      countdown = setInterval(function() {
+        updateButton();
+      }, 1000);
+      fetch('/sendOTP/'+inputValue)
+        .then(response => response.json())
+        .then(data => {
+          $("input[name='phone-number']").val("");
+        });
+    }
+  </script>
+
+  <script>
+    const validateOTPBtn = document.querySelector('#validateOTPBtn');
+    validateOTPBtn.onclick = () => {
+      var input1Value = document.getElementById("first").value;
+      var input2Value = document.getElementById("second").value;
+      var input3Value = document.getElementById("third").value;
+      var input4Value = document.getElementById("fourth").value;
+      var input5Value = document.getElementById("fifth").value;
+      var input6Value = document.getElementById("sixth").value;
+      var concatenatedString = input1Value + input2Value + input3Value + input4Value + input5Value + input6Value;
+
+      fetch('/validateOTP/'+concatenatedString)
+        .then(response => response.json())
+        .then(data => {
+            if(data.message == 'true'){
+              $('#verifyOTPModal').modal('hide');
+              swal({
+                  title: "Success!",
+                  text: "OTP code matched!",
+                  icon: "success",
+                  button: "OK",
+              });
+              $("input[name='phone-number']").val(inputValue);
+              validateOTP = true;
+            } else {
+              swal({
+                  title: "Invalid OTP code!",
+                  text: "Please enter again",
+                  icon: "error",
+                  button: "OK",
+              });
+
+            }
+        });
+    }
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+
+    function OTPInput() {
+    const inputs = document.querySelectorAll('#otp > *[id]');
+    for (let i = 0; i < inputs.length; i++) { inputs[i].addEventListener('keydown', function(event) { if (event.key==="Backspace" ) { inputs[i].value='' ; if (i !==0) inputs[i - 1].focus(); } else { if (i===inputs.length - 1 && inputs[i].value !=='' ) { return true; } else if (event.keyCode> 47 && event.keyCode < 58) { inputs[i].value=event.key; if (i !==inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } else if (event.keyCode> 64 && event.keyCode < 91) { inputs[i].value=String.fromCharCode(event.keyCode); if (i !==inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } } }); } } OTPInput(); });
+  </script>
 
   <script>
     $("#save").click(function(){
+      if(inputValue != {{$data->phoneNum}} && validateOTP == false){
+        swal({
+            title: "Please send OTP code",
+            text: "The phone number will not be saved if it has not been verified, do you want to continue?",
+            icon: "warning",
+            buttons: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+              $("input[name='phone-number']").val({{$data->phoneNum}});
+              $("#edit-profile-form").submit();
+            } 
+          });
+      } else {
         $("#edit-profile-form").submit();
+      }
+      
     })
-
-    // var assetUrl = '{{ asset('') }}';
-    // var imageUrl = assetUrl + 'img/profile/' + document.getElementById("old-profile-image").value + '.png';
-    // document.querySelector('#profile-image').setAttribute("src", imageUrl);
   </script>
 
   <script>

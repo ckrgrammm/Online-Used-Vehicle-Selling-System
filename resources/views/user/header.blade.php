@@ -55,7 +55,7 @@ use App\Models\User;
                                 <a class="nav-link" href="/">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="user/sell">Sell</a>
+                                <a class="nav-link" href="/user/sell">Sell</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{route('products.index')}}">Find</a>
