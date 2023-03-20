@@ -292,6 +292,10 @@
     .filepond--drop-label.filepond--drop-label label {
         cursor: pointer;
     }
+
+    .g-recaptcha div{
+        width: auto !important;
+    }
 </style>
 <!--================Home Banner Area =================-->
 <!-- breadcrumb start-->
@@ -431,6 +435,10 @@
                                   <div class="row justify-content-center">
                                       <div class="col-7 text-center">
                                           <h5 class="purple-text text-center">You Have Successfully Filled Up The Form</h5>
+                                          {!! NoCaptcha::display() !!}
+                                          @if ($errors->has('g-recaptcha-response'))
+                                            <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span><br>
+                                          @endif
                                           <input type="submit" name="submit" class="action-button submit-btn" value="Submit" />
                                       </div>
                                   </div>
@@ -457,7 +465,7 @@
     </div>
 </section>
 <!-- ================ contact section end ================= -->
-
+{!! NoCaptcha::renderJs() !!}
 <script>
     /*
 We want to preview images, so we need to register the Image Preview plugin

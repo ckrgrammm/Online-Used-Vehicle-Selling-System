@@ -6,6 +6,9 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Anhskohbo\\NoCaptcha\\Facades\\NoCaptcha' => $vendorDir . '/anhskohbo/no-captcha/src/Facades/NoCaptcha.php',
+    'Anhskohbo\\NoCaptcha\\NoCaptcha' => $vendorDir . '/anhskohbo/no-captcha/src/NoCaptcha.php',
+    'Anhskohbo\\NoCaptcha\\NoCaptchaServiceProvider' => $vendorDir . '/anhskohbo/no-captcha/src/NoCaptchaServiceProvider.php',
     'App\\Builders\\PaymentBuilder' => $baseDir . '/app/Builders/PaymentBuilder.php',
     'App\\Builders\\PaymentQueryBuilder' => $baseDir . '/app/Builders/PaymentQueryBuilder.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
@@ -13,6 +16,7 @@ return array(
     'App\\Facades\\ProductFacade' => $baseDir . '/app/Facades/ProductFacade.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\FreeGiftController' => $baseDir . '/app/Http/Controllers/FreeGiftController.php',
+    'App\\Http\\Controllers\\GiftRecordController' => $baseDir . '/app/Http/Controllers/GiftRecordController.php',
     'App\\Http\\Controllers\\PaymentController' => $baseDir . '/app/Http/Controllers/PaymentController.php',
     'App\\Http\\Controllers\\ProductController' => $baseDir . '/app/Http/Controllers/ProductController.php',
     'App\\Http\\Controllers\\ReviewController' => $baseDir . '/app/Http/Controllers/ReviewController.php',
@@ -4922,6 +4926,15 @@ return array(
     'Ramsey\\Uuid\\UuidInterface' => $vendorDir . '/ramsey/uuid/src/UuidInterface.php',
     'Ramsey\\Uuid\\Validator\\GenericValidator' => $vendorDir . '/ramsey/uuid/src/Validator/GenericValidator.php',
     'Ramsey\\Uuid\\Validator\\ValidatorInterface' => $vendorDir . '/ramsey/uuid/src/Validator/ValidatorInterface.php',
+    'ReCaptcha\\ReCaptcha' => $vendorDir . '/google/recaptcha/src/ReCaptcha/ReCaptcha.php',
+    'ReCaptcha\\RequestMethod' => $vendorDir . '/google/recaptcha/src/ReCaptcha/RequestMethod.php',
+    'ReCaptcha\\RequestMethod\\Curl' => $vendorDir . '/google/recaptcha/src/ReCaptcha/RequestMethod/Curl.php',
+    'ReCaptcha\\RequestMethod\\CurlPost' => $vendorDir . '/google/recaptcha/src/ReCaptcha/RequestMethod/CurlPost.php',
+    'ReCaptcha\\RequestMethod\\Post' => $vendorDir . '/google/recaptcha/src/ReCaptcha/RequestMethod/Post.php',
+    'ReCaptcha\\RequestMethod\\Socket' => $vendorDir . '/google/recaptcha/src/ReCaptcha/RequestMethod/Socket.php',
+    'ReCaptcha\\RequestMethod\\SocketPost' => $vendorDir . '/google/recaptcha/src/ReCaptcha/RequestMethod/SocketPost.php',
+    'ReCaptcha\\RequestParameters' => $vendorDir . '/google/recaptcha/src/ReCaptcha/RequestParameters.php',
+    'ReCaptcha\\Response' => $vendorDir . '/google/recaptcha/src/ReCaptcha/Response.php',
     'SebastianBergmann\\CliParser\\AmbiguousOptionException' => $vendorDir . '/sebastian/cli-parser/src/exceptions/AmbiguousOptionException.php',
     'SebastianBergmann\\CliParser\\Exception' => $vendorDir . '/sebastian/cli-parser/src/exceptions/Exception.php',
     'SebastianBergmann\\CliParser\\OptionDoesNotAllowArgumentException' => $vendorDir . '/sebastian/cli-parser/src/exceptions/OptionDoesNotAllowArgumentException.php',

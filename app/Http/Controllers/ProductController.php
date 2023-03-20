@@ -12,6 +12,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Session;
 use Illuminate\Support\Facades\DB;
+use ReCaptcha\ReCaptcha;
 
 
 
@@ -98,6 +99,7 @@ images
             'pDesc' => 'required',
             'filepond' => 'required', // validate each image file in the array
             'price' => 'required|numeric',
+            'g-recaptcha-response' => 'required|captcha'
         ]);
 
         $images = array();
