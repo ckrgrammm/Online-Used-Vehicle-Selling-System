@@ -413,9 +413,9 @@ input[type=number]::-webkit-outer-spin-button {
     inputElement.addEventListener('input', function() {
       // Get the current value of the input
       inputValue = inputElement.value;
-      // console.log(inputValue);
+      console.log(inputValue);
 
-      if(inputValue != {{$data->phoneNum}}){
+      if(inputValue != "{{$data->phoneNum}}"){
         document.querySelector('#button-addon2').disabled = false;
       } else {
         document.querySelector('#button-addon2').disabled = true;
@@ -504,7 +504,7 @@ input[type=number]::-webkit-outer-spin-button {
 
   <script>
     $("#save").click(function(){
-      if(inputValue != {{$data->phoneNum}} && validateOTP == false){
+      if(inputValue != "{{$data->phoneNum}}" && validateOTP == false){
         swal({
             title: "Please send OTP code",
             text: "The phone number will not be saved if it has not been verified, do you want to continue?",
@@ -512,7 +512,7 @@ input[type=number]::-webkit-outer-spin-button {
             buttons: true,
         }).then((willDelete) => {
             if (willDelete) {
-              $("input[name='phone-number']").val({{$data->phoneNum}});
+              $("input[name='phone-number']").val("{{$data->phoneNum}}");
               $("#edit-profile-form").submit();
             } 
           });
@@ -520,7 +520,7 @@ input[type=number]::-webkit-outer-spin-button {
         $("#edit-profile-form").submit();
       }
       
-    })
+    });
   </script>
 
   <script>
