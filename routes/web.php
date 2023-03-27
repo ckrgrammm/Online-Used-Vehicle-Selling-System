@@ -10,6 +10,7 @@ use App\Http\Controllers\LoanController;
 use App\Http\Controllers\FreeGiftController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GiftRecordController;
+use App\Http\Controllers\VisitorController;
 
 
 
@@ -44,9 +45,7 @@ Route::get('logout', function () {
 //     });
 // });
 
-Route::get('/', function () {
-    return view('user/index');
-});
+Route::get('/', [VisitorController::class, 'store']);
 
 
 Route::get('/admin_portal', function () {

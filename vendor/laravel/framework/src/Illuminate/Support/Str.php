@@ -217,6 +217,24 @@ class Str
     }
 
     /**
+     * Get the character at the specified index.
+     *
+     * @param  string  $subject
+     * @param  int  $index
+     * @return string|false
+     */
+    public static function charAt($subject, $index)
+    {
+        $length = mb_strlen($subject);
+
+        if ($index < 0 ? $index < -$length : $index > $length - 1) {
+            return false;
+        }
+
+        return mb_substr($subject, $index, 1);
+    }
+
+    /**
      * Determine if a given string contains a given substring.
      *
      * @param  string  $haystack
@@ -611,6 +629,32 @@ class Str
     }
 
     /**
+     * Determine if a given string matches a given pattern.
+     *
+     * @param  string|iterable<string>  $pattern
+     * @param  string  $value
+     * @return bool
+     */
+    public static function isMatch($pattern, $value)
+    {
+        $value = (string) $value;
+
+        if (! is_iterable($pattern)) {
+            $pattern = [$pattern];
+        }
+
+        foreach ($pattern as $pattern) {
+            $pattern = (string) $pattern;
+
+            if (preg_match($pattern, $value) === 1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get the string matching the given pattern.
      *
      * @param  string  $pattern
@@ -764,7 +808,7 @@ class Str
             while (($len = strlen($string)) < $length) {
                 $size = $length - $len;
 
-                $bytesSize = (int) ceil(($size) / 3) * 3;
+                $bytesSize = (int) ceil($size / 3) * 3;
 
                 $bytes = random_bytes($bytesSize);
 

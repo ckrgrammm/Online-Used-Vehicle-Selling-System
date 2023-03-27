@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FreeGiftController;
 use App\Http\Controllers\GiftRecordController;
+use App\Http\Controllers\VisitorController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +15,8 @@ use App\Http\Controllers\GiftRecordController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
 Route::post('freegifts', [FreeGiftController::class, 'store']);
 Route::get('freegifts', [FreeGiftController::class, 'show']);
 Route::put('freegifts/decrease/{id}', [FreeGiftController::class, 'decrease']);

@@ -30,6 +30,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
         Concerns\HasGlobalScopes,
         Concerns\HasRelationships,
         Concerns\HasTimestamps,
+        Concerns\HasUniqueIds,
         Concerns\HidesAttributes,
         Concerns\GuardsAttributes,
         ForwardsCalls;
@@ -1286,6 +1287,10 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
             $this->updateTimestamps();
         }
 
+        if ($this->usesUniqueIds()) {
+            $this->setUniqueIds();
+        }
+
         // If the model has an incrementing key, we can use the "insertGetId" method on
         // the query builder, which will give us back the final inserted ID for this
         // table from the database. Not all tables have to be incrementing though.
@@ -2318,7 +2323,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
             return $this->$method(...$parameters);
         }
 
-        if ($resolver = ($this->relationResolver(static::class, $method))) {
+        if ($resolver = $this->relationResolver(static::class, $method)) {
             return $resolver($this);
         }
 

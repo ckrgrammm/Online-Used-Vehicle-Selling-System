@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="col-md-12 form-group p_star">
                                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" value="" placeholder="Confirm Password">
-                                    <span toggle="#confirm_password" class="fa fa-fw fa-eye field-icon toggle-confirm_password"></span>
+                                    <span toggle="#password_confirmation" class="fa fa-fw fa-eye field-icon toggle-confirm_password"></span>
                                 </div>
                                 <div class="col-md-12 form-group">
                                     <button type="submit" value="submit" class="btn_3">
