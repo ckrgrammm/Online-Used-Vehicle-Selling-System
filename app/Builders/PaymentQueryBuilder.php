@@ -1,6 +1,6 @@
 <?php
 namespace App\Builders;
-
+use App\Builders\Interfaces\PaymentQueryBuilderInterface;
 use App\Models\Payment;
 
 
