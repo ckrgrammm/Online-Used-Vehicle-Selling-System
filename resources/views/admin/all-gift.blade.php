@@ -32,7 +32,7 @@
                 <td>{{ $freeGift['giftDesc'] }}</td>
                 <td>{{ $freeGift['giftRequiredPrice'] }}</td>
                 <td>{{ $freeGift['qty'] }}</td>
-                <td>{{ $freeGift['image'] }}</td>
+                <td><img src="{{ asset('user/img/gift/' . $freeGift['image']) }}"></td>
                 <td>
                     <a href="{{ route('freegifts.edit', $freeGift['id']) }}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
                     <a href="/deleteGift/{{ $freeGift['id'] }}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>

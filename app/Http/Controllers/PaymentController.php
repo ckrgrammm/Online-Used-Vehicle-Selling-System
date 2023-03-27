@@ -241,7 +241,7 @@ class PaymentController extends Controller
         return redirect('payments')->with('success', 'Payment information has been deleted');
     }
 
-    public function displayPayment()
+    public function displayPayment($id)
     {
 
         $user_id = Session::get('user')['id'];

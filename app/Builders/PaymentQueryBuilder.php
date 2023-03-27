@@ -4,7 +4,7 @@ namespace App\Builders;
 use App\Models\Payment;
 
 
-class PaymentQueryBuilder
+class PaymentQueryBuilder implements PaymentQueryBuilderInterface
 {
     private $query;
 
