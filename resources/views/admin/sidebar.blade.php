@@ -15,6 +15,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="/admin_portal">
+          <span class="menu-title">Dashboard</span>
+          <i class="mdi mdi-home menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="{{route('customers.index')}}">
           <span class="menu-title">Customer</span>
           <i class="mdi mdi-account menu-icon"></i>

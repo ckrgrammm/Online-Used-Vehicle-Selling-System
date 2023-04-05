@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\ReviewRepositoryInterface;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class ReviewRepository implements ReviewRepositoryInterface
 {
@@ -16,6 +17,32 @@ class ReviewRepository implements ReviewRepositoryInterface
                     ->select('comments.*', 'users.name as user_name', 'users.email as user_email', 'users.image as user_image')
                     ->orderByDesc('comments.created_at')
                     ->get();
+    }
+
+    public function weeklyReview($weeksAgo = 0)
+    {
+        $weeklyReviewCount = Comment::where('comments.deleted', 0)
+        ->whereBetween('comments.created_at', [Carbon::now()->subWeeks($weeksAgo)->startOfWeek(), Carbon::now()->subWeeks($weeksAgo)->endOfWeek()])
+        ->count();
+
+        return $weeklyReviewCount;
+    }
+
+    public function weeklyReviewPercentageChange()
+    {
+        // Get the current week's review count
+        $currentWeekCount = $this->weeklyReview();
+
+        // Get the previous week's review count
+        $previousWeekCount = $this->weeklyReview(1);
+
+        // Calculate the percentage change in review count
+        $percentageChange = 0;
+        if ($previousWeekCount > 0) {
+            $percentageChange = (($currentWeekCount - $previousWeekCount) / $previousWeekCount) * 100;
+        }
+
+        return round($percentageChange, 2);
     }
 
     public function storeReview($data)

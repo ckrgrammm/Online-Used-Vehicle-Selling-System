@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Helpers\UserSystemInfoHelper;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
+use App\Repositories\Interfaces\VisitorRepositoryInterface;
 
 
 class VisitorController extends Controller
 {
-    private $client;
+    private $visitorRepository;
 
-    public function __construct()
+    public function __construct(VisitorRepositoryInterface $visitorRepository)
     {
+        $this->visitorRepository = $visitorRepository;
         $this->client = new Client();
     }
 
@@ -62,12 +65,28 @@ class VisitorController extends Controller
             'getdevice' => UserSystemInfoHelper::get_device(),
             'getos' => UserSystemInfoHelper::get_os(),
             'getcurrentLocation' => $current_location,
-            'visit_time' => now()
+            'visit_time' => Carbon::now()
         ];
-        $result = $this->client->post('http://127.0.0.1:9000/api/visitor', [
-            'json' => $data
-        ]);
-        $visitor = json_decode($result->getBody()->getContents(), true);
+
+        $userIP = $this->visitorRepository->findVisitorIP($data['getip']);
+        if($userIP){
+            $data = [
+                'ip_address' => $data['getip'],
+                'visit_time' => $data['visit_time']
+            ];
+            $visitor = $this->visitorRepository->updateVisitor($data);
+        } else {
+            $data = [
+                'ip_address' => $data['getip'],
+                'browser' => $data['getbrowser'],
+                'device' => $data['getdevice'],
+                'os' => $data['getos'],
+                'current_location' => $data['getcurrentLocation'],
+                'visit_time' => $data['visit_time']
+            ];
+            $visitor = $this->visitorRepository->storeVisitor($data);
+        }
+       
         return view('user/index');
     }
 

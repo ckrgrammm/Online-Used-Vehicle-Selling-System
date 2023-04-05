@@ -11,6 +11,7 @@ use App\Http\Controllers\FreeGiftController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GiftRecordController;
 use App\Http\Controllers\VisitorController;
+use App\Http\Controllers\DashboardController;
 
 
 
@@ -46,11 +47,15 @@ Route::get('logout', function () {
 // });
 
 Route::get('/', [VisitorController::class, 'store']);
+Route::get('visitor/weeklyVisitor', [VisitorController::class, 'weeklyVisitor']);
+Route::get('visitor/weeklyVisitorPercentageChange', [VisitorController::class, 'weeklyVisitorPercentageChange']);
+Route::resource('visitor', VisitorController::class);
 
+Route::get('/admin_portal', [DashboardController::class, 'index']);
 
-Route::get('/admin_portal', function () {
-    return view('admin/admin-index');
-});
+// Route::get('/admin_portal', function () {
+//     return view('admin/admin-index');
+// });
 
 
 // Route::get('/customer', [UserController::class, 'index']);

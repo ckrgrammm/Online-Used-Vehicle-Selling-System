@@ -13,4 +13,9 @@ interface PaymentBuilderInterface
     public function update($id, $data);
     
     public function delete($id);
+
+    public function weeklySales($weeksAgo);
+
+    public function weeklySalesPercentageChange();
+
 }

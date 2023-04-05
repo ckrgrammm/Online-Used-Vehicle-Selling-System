@@ -9,6 +9,8 @@ use App\Repositories\Interfaces\ReviewRepositoryInterface;
 use App\Repositories\UserRepository;
 use App\Repositories\ReviewRepository;
 use App\Observers\UserFormSubmissionObserver;
+use App\Repositories\Interfaces\VisitorRepositoryInterface;
+use App\Repositories\VisitorRepository;
 
 use App\Models\User;
 
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(ReviewRepositoryInterface::class, ReviewRepository::class);
+        $this->app->bind(VisitorRepositoryInterface::class, VisitorRepository::class);
+
     }
 
     /**

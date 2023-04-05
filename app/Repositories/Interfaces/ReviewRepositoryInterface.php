@@ -4,6 +4,8 @@ namespace App\Repositories\Interfaces;
 Interface ReviewRepositoryInterface{
     
     public function allReview();
+    public function weeklyReview();
+    public function weeklyReviewPercentageChange();
     public function storeReview($data);
     public function findReview($id);
     public function updateReview($data, $id); 
