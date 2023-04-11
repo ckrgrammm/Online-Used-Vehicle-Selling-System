@@ -134,11 +134,11 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
 
 
 });
-    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.delete');
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    // Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    // Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/destroyProduct/{id}', [ProductController::class, 'destroyProduct']);
+    // Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/product_details/{id}', [ProductController::class, 'details'])->name('products.details');
     Route::get('/cart/{id}', [ProductController::class, 'cart'])->name('products.cart');
 

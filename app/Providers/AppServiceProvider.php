@@ -8,7 +8,6 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\ReviewRepositoryInterface;
 use App\Repositories\UserRepository;
 use App\Repositories\ReviewRepository;
-use App\Observers\UserFormSubmissionObserver;
 use App\Repositories\Interfaces\VisitorRepositoryInterface;
 use App\Repositories\VisitorRepository;
 
@@ -34,8 +33,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        User::observe(UserFormSubmissionObserver::class);
-        //Admin::observe(AdminFormSubmissionObserver::class);
+
     }
     
 }

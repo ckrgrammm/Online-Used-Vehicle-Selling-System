@@ -1,19 +1,62 @@
 <?php
-
-/*
 namespace App\Observers;
 
 use App\Models\Product;
 
-class ProductObserver
-{
-    public function created(Product $product)
-    {
-        $adminEmail = 'ckrgrammm@gmail.com'; // Replace with the email address of the admin
+/* 
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
+ */
 
-        Mail::to($adminEmail)->send(new ProductCreated($product));
+class ProductObserver implements Observer{
+    public function all(){
+        return Product::where('deleted', 0)->get();
     }
-}
 
-*/
-?>
+    public function store(Subject $subject){
+        Product::create([
+            'user_id' => $subject->getUserId(),
+            'make' => $subject->getMake(),
+            'model' => $subject->getModel(),
+            'year' => $subject->getYear(),
+            'mileage' => $subject->getMileage(),
+            'color' => $subject->getColor(),
+            'transmission' => $subject->getTransmission(),
+            'product_description' => $subject->getProductDescription(),
+            'price' => $subject->getPrice(),
+            'product_image' => $subject->getProductImage(),
+            'deleted' => false,
+        ]);
+    }
+
+    public function find(Subject $subject){
+        return Product::find($subject->getProductId());
+    }
+
+    public function update(Subject $subject){
+
+    }
+
+    public function updateAll(Subject $subject){
+        $product = Product::find($subject->getProductId());
+        $product->make = $subject->getMake();
+        $product->model = $subject->getModel();
+        $product->year = $subject->getYear();
+        $product->mileage = $subject->getMileage();
+        $product->color = $subject->getColor();
+        $product->transmission = $subject->getTransmission();
+        $product->product_description = $subject->getProductDescription();
+        $product->price = $subject->getPrice();
+        $product->product_image = $subject->getProductImage();
+        $product->save();
+    }
+
+
+    public function delete(Subject $subject){
+        $product = Product::find($subject->getProductId());
+        $product->deleted = 1;
+        $product->save();
+    }
+
+    
+}

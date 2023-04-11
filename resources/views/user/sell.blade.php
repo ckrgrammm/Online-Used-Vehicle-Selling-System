@@ -583,11 +583,4 @@ const inputElement = document.querySelector('input[type="file"]');
     });
 </script>
 
-<script>
-    $(function() {
-
-        $('.input-images-1').imageUploader();
-
-    });
-</script>
 @endsection
