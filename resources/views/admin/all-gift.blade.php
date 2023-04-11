@@ -13,7 +13,7 @@
             <thead>
                 <tr>
                     <th>
-                    <a href="{{ route('freegifts.create') }}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
+                    <!-- <a href="{{ route('freegifts.create') }}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a> -->
                     </th>
                 </tr>
                 <tr>
@@ -35,7 +35,7 @@
                 <td><img src="{{ asset('user/img/gift/' . $freeGift['image']) }}"></td>
                 <td>
                     <a href="{{ route('freegifts.edit', $freeGift['id']) }}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
-                    <a href="/deleteGift/{{ $freeGift['id'] }}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
+                    <!-- <a href="/deleteGift/{{ $freeGift['id'] }}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a> -->
                 </td>
 
                 </tr>

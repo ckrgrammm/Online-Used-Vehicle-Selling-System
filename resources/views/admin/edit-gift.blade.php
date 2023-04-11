@@ -265,21 +265,11 @@
           <input type="hidden" name="_method" value="PATCH"> 
                 <div class="form-group">
                     <label for="giftName">Gift Name</label>
-                    <input type="text" class="form-control" name="giftName" id="giftName" value="{{old('giftName', $freegift['giftName'])}}">
-                    @error($errors->has('giftName'))
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                    @enderror
+                    <input type="text" class="form-control" name="giftName" id="giftName" value="{{old('giftName', $freegift['giftName'])}}" disabled>
                 </div>
                 <div class="form-group">
                     <label for="giftDesc">Gift Description</label>
-                    <input type="text" class="form-control" name="giftDesc" id="giftDesc" maxlength="255" value="{{old('giftDesc', $freegift['giftDesc'])}}">
-                    @error($errors->has('giftDesc'))
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                    @enderror
+                    <input type="text" class="form-control" name="giftDesc" id="giftDesc" maxlength="255" value="{{old('giftDesc', $freegift['giftDesc'])}}" disabled>
                 </div>
                 <div class="form-group">
                     <label for="giftRequiredPrice">Gift Required Price (RM)</label>

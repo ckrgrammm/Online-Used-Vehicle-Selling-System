@@ -97,8 +97,6 @@ class FreeGiftController extends Controller
     public function update($id,Request $req)
     {
         $req->validate([
-            'giftName' => 'required|string|regex:/^.{0,255}$/',
-            'giftDesc' => 'required|string|regex:/^.{0,255}$/',
             'giftRequiredPrice' => 'required|string|regex:/^\d{0,255}$/',
             'qty' => 'required|int'
         ]);
@@ -114,20 +112,14 @@ class FreeGiftController extends Controller
         }
         if($gift_img != null){
             $data = [
-            'giftName' => $req->giftName,
-            'giftDesc' => $req->giftDesc,
             'giftRequiredPrice' => $req->giftRequiredPrice,
             'qty' => $req->qty,
-            'giftImages' => $gift_img,
-            'deleted' => 0
+            'giftImages' => $gift_img
             ];
         }else{
             $data = [
-            'giftName' => $req->giftName,
-            'giftDesc' => $req->giftDesc,
             'giftRequiredPrice' => $req->giftRequiredPrice,
-            'qty' => $req->qty,
-            'deleted' => 0
+            'qty' => $req->qty
             ];
         }
         $response = $this->client->put('http://127.0.0.1:9000/api/free-gifts/'.$id, [

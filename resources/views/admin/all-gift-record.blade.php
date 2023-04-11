@@ -13,7 +13,7 @@
             <thead>
                 <tr>
                     <th>
-                    <a href="{{ route('giftRecords.create') }}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
+                    <!-- <a href="{{ route('giftRecords.create') }}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a> -->
                     </th>
                 </tr>
                 <tr>
