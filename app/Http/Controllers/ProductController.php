@@ -12,6 +12,7 @@ use ReCaptcha\ReCaptcha;
 use App\Observers\ProductData;
 use App\Observers\ProductObserver;
 use App\Observers\Subject;
+use Illuminate\Support\Facades\URL;
 
 class ProductController extends Controller
 {
@@ -41,6 +42,17 @@ class ProductController extends Controller
         $products = $product->retrieveAll();
 
         return view('admin/all-product', compact('products'));
+    }
+
+    public function myCarsOnBid() 
+    {
+        $product = new ProductData();
+        $observer = new ProductObserver($product);
+        $product->attach($observer);
+        $products = $product->findMyCars(auth()->user()->id);
+        $productsOnBid = $product->findMyCarsOnBid(auth()->user()->id);
+
+        return view('user/myCarsOnBid', compact('products', 'productsOnBid'));
     }
 
     public function details($id)
@@ -117,20 +129,28 @@ class ProductController extends Controller
         $product->attach($observer);
         $product->storeAll($data);
 
-        if (auth()->user()->role == "admin" || auth()->user()->role == "staff") {
-            return redirect()->route('products.admin')->with('success', 'Information has been added');
-        } else {
+        // if (auth()->user()->role == "admin" || auth()->user()->role == "staff") {
+        //     return redirect()->route('products.admin')->with('success', 'Information has been added');
+        // } else {
             return redirect()->route('products.index')->with('success', 'Information has been added');
-        }
+        // }
     }
 
     public function edit($id)
     {
+        $routeName = '';
+        $previousUrl = URL::previous();
+        $lastSegment = basename(parse_url($previousUrl, PHP_URL_PATH));
+
         $product = new ProductData();
         $observer = new ProductObserver($product);
         $product->attach($observer);
         $product = $product->find($id);
-        return view('admin/edit-product', compact('product'));
+
+        if($lastSegment == "myCarsOnBid"){
+            return view('user/edit-product', compact('product','lastSegment'));
+        }
+        return view('admin/edit-product', compact('product','lastSegment'));
     }
 
     /**
@@ -203,16 +223,26 @@ class ProductController extends Controller
         $product->attach($observer);
         $product->updateAll($data);
 
+        if($request->input('previousRouteName') == "myCarsOnBid"){
+            return redirect('/myCarsOnBid')->with('success', 'Product updated successfully.');
+        }
         return redirect()->route('products.admin')->with('success', 'Product updated successfully.');
     }
 
     public function destroyProduct(Request $request, $id)
     {
+        $routeName = '';
+        $previousUrl = URL::previous();
+        $lastSegment = basename(parse_url($previousUrl, PHP_URL_PATH));
+
         $product = new ProductData();
         $observer = new ProductObserver($product);
         $product->attach($observer);
         $product->delete($id);
 
+        if($lastSegment == "myCarsOnBid"){
+            return redirect('/myCarsOnBid')->with('success', 'Product deleted successfully');
+        }
         return redirect()->route('products.admin')->with('success', 'Product deleted successfully');
     }
 

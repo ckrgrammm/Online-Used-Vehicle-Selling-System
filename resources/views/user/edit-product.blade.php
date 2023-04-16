@@ -1,5 +1,6 @@
-@extends('admin/master')
+@extends('user/master')
 @section('content')
+
 <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
 <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.min.css">
 <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
@@ -9,64 +10,83 @@
 <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
 
 <style> 
+.btn{
+    padding: 0.375rem 1.75rem !important;
+}
+
+.form-control:focus{
+    border-color: #198ae3;
+}
+
+.btn-gradient-primary{
+    color: #fff;
+    background-color: #ff3368;
+}
+
+.btn-gradient-primary:hover {
+  color: #fff;
+  background-color: #ff1a57;
+  border-color: #ff1a57;
+}
+
 .filepond--credits{
-        display: none;
-    }
-        /**
-        * FilePond Custom Styles
-        */
-    .filepond--drop-label {
-        color: #4c4e53;
-    }
-    
-    .filepond--label-action {
-        text-decoration-color: #babdc0;
-    }
-    
-    .filepond--panel-root {
-        border-radius: 2em;
-        background-color: #edf0f4;
-        height: 1em;
-    }
-    
-    .filepond--item-panel {
-        background-color: #595e68;
-    }
-    
-    .filepond--drip-blob {
-        background-color: #7f8a9a;
-    }
-    
+    display: none;
+}
+/**
+* FilePond Custom Styles
+*/
+.filepond--drop-label {
+    color: #4c4e53;
+}
+
+.filepond--label-action {
+    text-decoration-color: #babdc0;
+}
+
+.filepond--panel-root {
+    border-radius: 2em;
+    background-color: #edf0f4;
+    height: 1em;
+}
+
+.filepond--item-panel {
+    background-color: #595e68;
+}
+
+.filepond--drip-blob {
+    background-color: #7f8a9a;
+}
+
+.filepond--item {
+    width: calc(50% - 0.5em);
+}
+
+@media (min-width: 30em) {
     .filepond--item {
         width: calc(50% - 0.5em);
     }
-    
-    @media (min-width: 30em) {
-        .filepond--item {
-            width: calc(50% - 0.5em);
-        }
-    }
-    
-    @media (min-width: 50em) {
-        .filepond--item {
-            width: calc(33.33% - 0.5em);
-        }
-    }
+}
 
-    .filepond--root {
-        max-height: 100em;
+@media (min-width: 50em) {
+    .filepond--item {
+        width: calc(33.33% - 0.5em);
     }
+}
 
-    .filepond--root .filepond--drop-label {
-        cursor: pointer;
-    }
+.filepond--root {
+    max-height: 100em;
+}
 
-    .filepond--drop-label.filepond--drop-label label {
-        cursor: pointer;
-    }
+.filepond--root .filepond--drop-label {
+    cursor: pointer;
+}
+
+.filepond--drop-label.filepond--drop-label label {
+    cursor: pointer;
+}
 </style>
 
-<div class="col-12 grid-margin stretch-card">
+<div class="container grid-margin stretch-card" style="margin-top: 10rem">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Edit Products</h4>
@@ -76,7 +96,6 @@
                 @csrf
                 <input type="hidden" name="_method" value="PATCH"> 
                 <input type="hidden" name="previousRouteName" value="{{$lastSegment}}">
-
                 <div class="form-group">
                     <label for="exampleInputName1">Make</label>
                     <input type="text" class="form-control" name="make" id="make" value="{{$product->make}}" placeholder="Tesla Model 3 Year 2023">
@@ -142,7 +161,7 @@
                 </div>
                 <div class="form-group">
                     <label>Product Image Upload</label>
-                    <input type="file" class="filepond form-control" name="filepond[]" multiple data-max-file-size="3MB" data-max-files="9" />
+                    <input type="file" class="filepond" name="filepond[]" multiple data-max-file-size="3MB" data-max-files="9" />
                     @error('images')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -170,7 +189,7 @@
                 @endif
 
                 <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                <button class="btn btn-light" onclick="history.back()">Cancel</button>
+                <a href="/myCarsOnBid" class="btn btn-light">Cancel</a>
             </form>
         </div>
     </div>

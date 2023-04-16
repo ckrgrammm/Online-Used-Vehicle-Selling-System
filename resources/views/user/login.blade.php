@@ -59,13 +59,16 @@
                                         <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                 </div>
                                 <div class="col-md-12 form-group">
-                                    <div class="creat_account d-flex align-items-center">
+                                    {{-- <div class="creat_account d-flex align-items-center">
                                         <a href="/auth/google">Sign in with your gmail account</a>
-                                    </div>
+                                    </div> --}}
                                     <button type="submit" value="submit" class="btn_3">
                                         log in
                                     </button>
                                     <a class="lost_pass" href="/forget_password">forget password?</a>
+                                </div>
+                                <div class="col-md-12 form-group mt-3">
+                                    <a href="/auth/google" class="btn btn-block btn-outline-dark"> <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" /> Sign in with Google</a>
                                 </div>
                             </form>
                             @if(\Session::has('error'))

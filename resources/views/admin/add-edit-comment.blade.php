@@ -39,7 +39,7 @@
             <textarea name="comment" class="form-control" id="exampleInputComment" cols="30" rows="10">{{$comment->comment}}</textarea>
           </div>
           <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-          <button type="button" class="btn btn-light" onclick="history.back()">Cancel</button>
+          <a href="{{route('comments.index')}}" class="btn btn-light">Cancel</a>
         </form>
       </div>
     </div>

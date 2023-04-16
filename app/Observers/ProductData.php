@@ -170,6 +170,18 @@ class ProductData extends Subject
         return $this->notifyFind();
     }
 
+    public function findMyCars($user_id)
+    {
+        $this->user_id = $user_id;
+        return $this->notifyFindMyCars();
+    }
+
+    public function findMyCarsOnBid($user_id)
+    {
+        $this->user_id = $user_id;
+        return $this->notifyFindMyCarsOnBid();
+    }
+
     public function updateAll($data): void
     {
         $this->id  = $data['id'];

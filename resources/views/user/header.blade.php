@@ -1,8 +1,16 @@
 <!--::header part start::-->
 <?php
 use App\Models\User;
-
 ?>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js" ></script>
+<style>
+    .typeahead.dropdown-menu{
+        width: 100% !important;
+        left: 0px !important;
+    }
+</style>
+
 <header class="main_menu home_menu">
     <div class="container">
         <div class="row align-items-center">
@@ -41,6 +49,7 @@ use App\Models\User;
                               @endif
                               <a class="dropdown-item" href="/user/edit-profile">Edit Profile</a>
                               <a class="dropdown-item" href="/user/changePassword">Change Password</a>
+                              <a class="dropdown-item" href="/myCarsOnBid">My Cars on Bid</a>
                               <a class="dropdown-item" href="/logout">Log Out</a>
                             </div>
                           </li>   
@@ -123,12 +132,23 @@ use App\Models\User;
     </div>
     <div class="search_input" id="search_input_box">
         <div class="container ">
-            <form class="d-flex justify-content-between search-inner">
-                <input type="text" class="form-control" id="search_input" placeholder="Search Here">
+            <form class="d-flex justify-content-between search-inner" method="POST" action="/">
+                <input type="text" class="form-control" id="search_input" name="search_input" placeholder="Search Product Here">
                 <button type="submit" class="btn"></button>
                 <span class="ti-close" id="close_search" title="Close Search"></span>
             </form>
         </div>
     </div>
 </header>
+
+<script>
+var path = "{{ url('search') }}";
+$('#search_input').typeahead({
+    source: function(query, process){
+        return $.get(path, {query:query}, function(data){
+            return process(data);
+        });
+    }
+});
+</script>
 <!-- Header part end-->

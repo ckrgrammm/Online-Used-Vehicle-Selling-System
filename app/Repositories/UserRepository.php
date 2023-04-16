@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Models\User;
+use App\Models\Product;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserRepositoryInterface
@@ -27,6 +28,15 @@ class UserRepository implements UserRepositoryInterface
     public function findUserByEmail($email)
     {
         return User::where(['email'=>$email])->first();
+    }
+
+    public function search($query)
+    {
+        return Product::select('make', 'model')
+        ->where('make', 'LIKE', '%'.$query.'%')
+        ->orWhere('model', 'LIKE', '%'.$query.'%')
+        ->distinct()
+        ->get();
     }
 
     public function updateUser($data, $id)

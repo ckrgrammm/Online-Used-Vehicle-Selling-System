@@ -1,13 +1,42 @@
+<link rel="stylesheet" href="{{ asset('user/css/price_rangs.css') }}">
 @extends('user/master')
 @section('content')
+<script src="{{ asset('user/js/price_rangs.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.js"></script>
 <style>
-    .product-card:hover {
-        box-shadow: 0px 0px 5px #ccc;
-        transform: translateY(-50px);
-        transition: all 0.5s ease;
+    .simple-pagination ul {
+        margin: 0 0 20px;
+        padding: 0;
+        list-style: none;
+        text-align: center;
+    }
+
+    .simple-pagination li {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .simple-pagination li a,
+    .simple-pagination li span {
+        color: #666;
+        padding: 5px 10px;
+        text-decoration: none;
+        border: 1px solid #EEE;
+        background-color: #FFF;
+        box-shadow: 0px 0px 10px 0px #EEE;
+    }
+
+    .simple-pagination .current {
+        color: #FFF;
+        background-color: #FF7182;
+        border-color: #FF7182;
+    }
+
+    .simple-pagination .prev.current,
+    .simple-pagination .next.current {
+        background: #e04e60;
     }
 </style>
-
 <!--================Home Banner Area =================-->
 <!-- breadcrumb start-->
 <section class="breadcrumb breadcrumb_bg">
@@ -34,19 +63,12 @@
                 <div class="left_sidebar_area">
                     <aside class="left_widgets p_filter_widgets">
                         <div class="l_w_title">
-                            <h3>Browse Categories</h3>
-                        </div>
-                    </aside>
-
-                    <aside class="left_widgets p_filter_widgets">
-                        <div class="l_w_title">
                             <h3>Product filters</h3>
                         </div>
                         <div class="widgets_inner">
                             <ul class="list">
-                            <ul id="product-list">
                                 @foreach($products->unique('make') as $product)
-                                <li data-make="{{ $product->make }}" data-model="{{ $product->model }}" data-price="{{ $product->price }}">{{ $product->make }}</li>
+                                    <li><a href="" data-make="{{ $product->make }}" data-model="{{ $product->model }}" data-price="{{ $product->price }}">{{ $product->make }}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -58,11 +80,9 @@
                         </div>
                         <div class="widgets_inner">
                             <ul class="list">
-                            <li>
-                                    @foreach($products->pluck('color')->unique() as $color)
-                                <li>{{ $color }}</li>
+                                @foreach($products->pluck('color')->unique() as $color)
+                                    <li><a href="">{{ $color }}</a></li>
                                 @endforeach
-                                </li>
                             </ul>
                         </div>
                     </aside>
@@ -95,12 +115,12 @@
                     <div class="col-lg-12">
                         <div class="product_top_bar d-flex justify-content-between align-items-center">
                             <div class="single_product_menu">
-                                <p><span>10000 </span> Prodict Found</p>
+                                <p><span>{{count($products)}} </span> Product Found</p>
                             </div>
                             <div class="single_product_menu d-flex">
                                 <h5>short by : </h5>
                                 <select>
-                                    <option data-display="Select">name</option>
+                                    <option value="name">name</option>
                                     <option value="1">price</option>
                                     <option value="2">product</option>
                                 </select>
@@ -127,62 +147,28 @@
                     </div>
                 </div>
 
-
-                <div class="row">
+                <div class="row align-items-center latest_product_inner list-wrapper">
                     @foreach($products as $product)
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                        <div class="card h-100 product-card">
-                            <div id="carousel-{{ $product->id }}" class="carousel slide" data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    @php
+                        <div class="col-lg-4 col-sm-6 list-item">
+                            <div class="single_product_item">
+                                @php
                                     $images = explode('|', $product->product_image);
-                                    @endphp
-                                    <img src="{{ asset('user/img/product/'.$images[0]) }}" width="300" height="175" class="d-block w-100" alt="">
+                                @endphp
+                                <img src="{{ asset('user/img/product/'.$images[0]) }}" alt="" width="270" height="275">
+                                <div class="single_product_text">
+                                    <h4>{{ $product->make .' '. $product->model }}</h4>
+                                    <h3>RM {{ $product->price }}</h3>
+                                    <a href="{{ route('products.details',$product->id) }}" class="add_cart">View More</a>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $product->make }}</h5>
-                                <p class="card-text">{{ $product->model }}</p>
-                                <p class="card-text">RM {{ $product->price }}</p>
-                                <a href="{{ route('products.details',$product->id)}}" class="btn btn-primary">View More</a>
-                            </div>
                         </div>
-                    </div>
                     @endforeach
-
-                </div>
-
-
-
-
-                <div class="col-lg-12">
-                    <div class="pageination">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <i class="ti-angle-double-left"></i>
-                                    </a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <i class="ti-angle-double-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                    <div class="col-lg-12">
+                        <div id="pagination-container"></div>
                     </div>
                 </div>
             </div>
-
         </div>
-    </div>
     </div>
 </section>
 
@@ -223,24 +209,26 @@
     </div>
 </section>
 <!-- product_list part end-->
-@endsection
 
 <script>
-    $(document).ready(function() {
-        $('.slideshow').slick({
-            infinite: true,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            autoplay: true,
-            autoplaySpeed: 2000,
-            dots: true,
-            responsive: [{
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }]
-        });
+    // jQuery Plugin: http://flaviusmatis.github.io/simplePagination.js/
+
+    var items = $(".list-wrapper .list-item");
+    var numItems = items.length;
+    var perPage = 9;
+
+    items.slice(perPage).hide();
+
+    $('#pagination-container').pagination({
+        items: numItems,
+        itemsOnPage: perPage,
+        prevText: "&laquo;",
+        nextText: "&raquo;",
+        onPageClick: function (pageNumber) {
+            var showFrom = perPage * (pageNumber - 1);
+            var showTo = showFrom + perPage;
+            items.hide().slice(showFrom, showTo).show();
+        }
     });
 </script>
+@endsection

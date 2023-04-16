@@ -39,8 +39,10 @@ class UserController extends Controller
         $req->validate([
             'name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|regex:/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{}:"<>?;\',.\/\\`~])[A-Za-z0-9!@#$%^&*()_+\-=\[\]{}:"<>?;\',.\/\\`~]{8,16}$/',
             'gender' => 'required|in:male,female'
+        ], [
+            'password.regex' => 'The password must be 8-16 characters long and contain at least one letter, one number, and one special character.'
         ]);
 
         $data = [
@@ -112,7 +114,9 @@ class UserController extends Controller
             }
         } else {
             $req->validate([
-                'password' => 'required|string|min:6|confirmed',
+                'password' => 'required|string|regex:/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{}:"<>?;\',.\/\\`~])[A-Za-z0-9!@#$%^&*()_+\-=\[\]{}:"<>?;\',.\/\\`~]{8,16}$/|confirmed',
+            ], [
+                'password.regex' => 'The password must be 8-16 characters long and contain at least one letter, one number, and one special character.'
             ]);
             $this->userRepository->edit_password($req, $id);
             return back()->with('success', 'Password changed successfully');
@@ -150,8 +154,10 @@ class UserController extends Controller
         $req->validate([
             'name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|regex:/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{}:"<>?;\',.\/\\`~])[A-Za-z0-9!@#$%^&*()_+\-=\[\]{}:"<>?;\',.\/\\`~]{8,16}$/|confirmed',
             'password_confirmation' => 'required'
+        ], [
+            'password.regex' => 'The password must be 8-16 characters long and contain at least one letter, one number, and one special character.'
         ]);
 
         $data = [
@@ -210,10 +216,12 @@ class UserController extends Controller
    {
        $request->validate([
            'email' => 'required|email|exists:users',
-           'password' => 'required|string|min:6|confirmed',
+           'password' => 'required|string|regex:/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{}:"<>?;\',.\/\\`~])[A-Za-z0-9!@#$%^&*()_+\-=\[\]{}:"<>?;\',.\/\\`~]{8,16}$/|confirmed',
            'password_confirmation' => 'required'
 
-       ]);
+       ], [
+            'password.regex' => 'The password must be 8-16 characters long and contain at least one letter, one number, and one special character.'
+        ]);
 
        $updatePassword = DB::table('password_reset_tokens')
                            ->where([
@@ -341,6 +349,20 @@ class UserController extends Controller
             $response = array('message' => 'false');
         }
         return json_encode($response);
+    }
+
+    function search(Request $request){
+        $data = $request->all();
+
+        $query = $data['query'];
+
+        $filter_data = $this->userRepository->search($query);
+        $data=[];
+        foreach($filter_data as $product)
+        {
+            $data[]=$product->make.' '.$product->model;
+        }
+        return response()->json($data);
     }
    
 }

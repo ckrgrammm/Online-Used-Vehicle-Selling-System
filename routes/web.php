@@ -83,7 +83,7 @@ Route::get('/all-product', function () {
     return view('user/all-product');
 });
 
-
+Route::get('/search', [UserController::class, 'search']);
 
 
 
@@ -103,6 +103,8 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::get('/changePassword', [UserController::class, 'changePassword']);
     
 });
+
+Route::get('/myCarsOnBid', [ProductController::class, 'myCarsOnBid']);
 
 Route::get('/auth/google', [UserController::class, 'redirectToGoogle']);
 Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);

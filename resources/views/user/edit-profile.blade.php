@@ -268,6 +268,10 @@ input[type=number]::-webkit-outer-spin-button {
 .footer_part{
   display: none;
 }
+
+.pic.bs-md{
+  cursor: pointer;
+}
 </style>
 <main class="has-dflex-center">
     <section>

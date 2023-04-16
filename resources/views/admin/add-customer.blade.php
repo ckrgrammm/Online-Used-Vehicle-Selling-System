@@ -43,7 +43,7 @@
             @endif
           </div>
           <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-          <button type="button" class="btn btn-light" onclick="history.back()">Cancel</button>
+          <a href="{{route('customers.index')}}" class="btn btn-light">Cancel</a>
         </form>
       </div>
     </div>

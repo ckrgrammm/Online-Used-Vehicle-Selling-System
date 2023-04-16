@@ -46,6 +46,20 @@ abstract class Subject
         }
     }
 
+    public function notifyFindMyCars()
+    {
+        foreach ($this->observers as $observer) {
+            return $observer->findMyCars($this);
+        }
+    }
+
+    public function notifyFindMyCarsOnBid()
+    {
+        foreach ($this->observers as $observer) {
+            return $observer->findMyCarsOnBid($this);
+        }
+    }
+
     public function notifyUpdate()
     {
         foreach ($this->observers as $observer) {

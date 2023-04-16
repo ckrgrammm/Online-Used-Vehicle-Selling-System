@@ -1,5 +1,39 @@
 @extends('admin/master')
 @section('content')
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+
+<style>
+.swiper {
+    width: 180px;
+    height: 40%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    /* background: #fff; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100px !important;
+    height: 100px !important;
+    object-fit: cover;
+    border-radius: unset !important;
+}
+
+.swiper {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+</style>
 
 @if(\Session::has('success'))
 <div class="alert alert-success">
@@ -38,7 +72,26 @@
             <td>{{ $product->color }}</td>
             <td>{{ $product->transmission }}</td>
             <td>{{ $product->product_description }}</td>
-            <td><img src="{{asset('user/img/product/'.$product->product_image)}}"></td>
+            <td>
+                @if($product->product_image != NULL)
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        @foreach (explode('|', $product->product_image) as $image)
+                            <div class="swiper-slide">
+                                <a href="{{asset('user/img/product/'.$image)}}" class="image-link">
+                                    <img src="{{asset('user/img/product/'.$image)}}" class="img-fluid">
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                @else
+                    <p style="text-align: center">No Image</p>   
+                @endif
+            </td>
             <td>{{ $product->price }}</td>
            
                 <td> 
@@ -70,6 +123,11 @@
                     }
                 },
             ],
+            "drawCallback": function() {
+                $('.image-link').magnificPopup({
+                    type: 'image'
+                });
+            }
         });
     });
 </script>
@@ -90,6 +148,26 @@
             }
         });
     });
+</script>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    loop: true,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  });
 </script>
 
 @endsection

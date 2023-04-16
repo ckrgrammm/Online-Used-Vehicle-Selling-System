@@ -33,6 +33,21 @@ class ProductObserver implements Observer{
         return Product::find($subject->getProductId());
     }
 
+    public function findMyCars(Subject $subject){
+        return Product::where('products.user_id', $subject->getUserId())
+        ->where('products.deleted', 0)
+        ->get();
+    }
+
+    public function findMyCarsOnBid(Subject $subject){
+        return Product::where('products.user_id', $subject->getUserId())
+        ->where('products.deleted', 0)
+        ->join('orders', 'products.id', '=', 'orders.product_id')
+        ->join('users', 'orders.user_id', '=', 'users.id')
+        ->select('products.*', 'orders.status as order_status', 'users.name as bidderName', 'users.email as bidderEmail', 'users.phoneNum as bidderPhoneNum')
+        ->get();
+    }
+
     public function update(Subject $subject){
 
     }
