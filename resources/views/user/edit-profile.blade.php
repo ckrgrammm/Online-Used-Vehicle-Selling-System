@@ -272,7 +272,38 @@ input[type=number]::-webkit-outer-spin-button {
 .pic.bs-md{
   cursor: pointer;
 }
+
+.membership-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.gold {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.silver {
+  background-color: #c4c4c4;
+  color: #fff;
+}
+
+.bronze {
+  background-color: #cd7f32;
+  color: #fff;
+}
+
+.platinum {
+  background-color: #e5e4e2;
+  color: #0c0c0c;
+  border: 2px solid #c0c0c0;
+}
 </style>
+
 <main class="has-dflex-center">
     <section>
       <div class="lx-container-70">
@@ -302,7 +333,11 @@ input[type=number]::-webkit-outer-spin-button {
                 <input id='selectedFile' class="disp-none" style="display: none" type='file' accept="image/*">
                 <input type="hidden" name="changed-profile-image" class="changed-profile-image" id="changed-profile-image" value="">
               <div class="fieldset">
-                <label for="user-name">Name</label>
+                <label for="user-name">Name 
+                  @if($data->currentMembershipLevel)
+                    &nbsp;&nbsp;&nbsp;<span class="membership-badge {{$data->currentMembershipLevel}}" data-toggle="tooltip" data-placement="right" title="Membership Level">{{$data->currentMembershipLevel}}</span>
+                  @endif
+                </label>
                 <div class="input-wrapper">
                   <span class="icon"><i class="fas fa-user"></i></span>
                   <input type="text" id="user-name" name="user-name" value="{{$data->name}}" autocomplete="username" required>
@@ -407,6 +442,12 @@ input[type=number]::-webkit-outer-spin-button {
         </div>
       </div>
     </div>
+
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
 
   <script>
     // Get the input element

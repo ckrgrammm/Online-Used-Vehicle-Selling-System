@@ -16,14 +16,17 @@ use App\Builders\PaymentQueryBuilder;
 use App\Models\Payment;
 use App\Models\Order;
 use App\Models\Product;
+use GuzzleHttp\Client;
 
 class PaymentController extends Controller
 {
     protected $paymentBuilder;
+    private $client;
 
     public function __construct(PaymentBuilder $paymentBuilder)
     {
         $this->paymentBuilder = $paymentBuilder;
+        $this->client = new Client();
     }
 
     public function index()
@@ -53,7 +56,7 @@ class PaymentController extends Controller
                 'string',
                 'regex:/^[0-9]{1,4}$/',
                 Rule::exists('orders', 'id')->where(function ($query) {
-                    $query->where('status', 'Available');
+                    $query->where('status', 'available');
                 })
             ],
             'total_charge' => 'required|int|regex:/^[0-9]{0,10}$/',
@@ -96,8 +99,8 @@ class PaymentController extends Controller
         }
         //update order status to Paid
         $order = Order::find($req->order_id);
-        if ($order && $order->status === 'Available') {
-            $order->status = 'Paid';
+        if ($order && $order->status === 'available') {
+            $order->status = 'paid';
             $order->save();
         }
         $product_id = $order->product_id;
@@ -106,8 +109,8 @@ class PaymentController extends Controller
 
         //update order status same product id to Sold
         foreach ($orders as $order) {
-            if ($order->status === 'Available') {
-                $order->status = 'Sold';
+            if ($order->status === 'available') {
+                $order->status = 'sold';
                 $order->save();
             }
         }
@@ -128,7 +131,7 @@ class PaymentController extends Controller
                 'string',
                 'regex:/^[0-9]{1,4}$/',
                 Rule::exists('orders', 'id')->where(function ($query) {
-                    $query->where('status', 'Paid');
+                    $query->where('status', 'paid');
                 })
             ]]);
         }else{
@@ -138,7 +141,7 @@ class PaymentController extends Controller
                 'string',
                 'regex:/^[0-9]{1,4}$/',
                 Rule::exists('orders', 'id')->where(function ($query) {
-                    $query->where('status', 'Available');
+                    $query->where('status', 'available');
                 })
             ]]);
         }
@@ -200,14 +203,14 @@ class PaymentController extends Controller
 
         //update order status to Paid
         $order = Order::find($req->order_id);
-        if ($order && $order->status === 'Available') {
-            $order->status = 'Paid';
+        if ($order && $order->status === 'available') {
+            $order->status = 'paid';
             $order->save();
         }
         //update old order status
         $old_order = Order::find($req->old_order_id);
-        if ($order && ($order->status === 'Paid'||$order->status === 'Sold')) {
-            $order->status = 'Available';
+        if ($order && ($order->status === 'paid'||$order->status === 'sold')) {
+            $order->status = 'available';
             $order->save();
         }
         $old_product_id = $old_order->product_id;
@@ -218,8 +221,8 @@ class PaymentController extends Controller
 
         //update order status same product id to Sold
         foreach ($orders as $order) {
-            if ($order->status === 'Available') {
-                $order->status = 'Sold';
+            if ($order->status === 'available') {
+                $order->status = 'sold';
                 $order->save();
             }
         }
@@ -241,34 +244,62 @@ class PaymentController extends Controller
         return redirect('payments')->with('success', 'Payment information has been deleted');
     }
 
-    public function displayPayment($id)
+    public function displayPayment($selectedOrderIds)
     {
 
         $user_id = Session::get('user')['id'];
 
         $freeGiftController = new FreeGiftController();
         $freeGifts = $freeGiftController->get();
-        $request = app('request');
-        $orderId = $request->query('orderId');
-
-        $productDetailQuery = DB::table('users')
-                    ->where('users.id' , $user_id)
-                    ->join('orders','orders.user_id','=','users.id')
-                    ->join('products','products.id','=','orders.product_id')
-                    ->where('orders.id',$orderId)
-                    ->where('orders.status','Available')
-                    ->where('orders.deleted',0)
-                    ->where('products.deleted',0)
-                    ->select('*', 'orders.id AS order_id');
-    
-        $productDetail = $productDetailQuery->first();
-        $productPrice = $productDetail->price;
+        $orderId = explode(',', base64_decode($selectedOrderIds));
         
+        $productDetail;
+        if(count($orderId) == 1) {
+            $productDetail = DB::table('users')
+                            ->where('users.id' , $user_id)
+                            ->join('orders','orders.user_id','=','users.id')
+                            ->join('products','products.id','=','orders.product_id')
+                            ->where('orders.id',$orderId[0])
+                            ->where('orders.status','available')
+                            ->where('orders.deleted',0)
+                            ->where('products.deleted',0)
+                            ->select('*', 'orders.id AS order_id')
+                            ->get();
+        } else {
+            $productDetail = DB::table('users')
+                            ->where('users.id' , $user_id)
+                            ->join('orders','orders.user_id','=','users.id')
+                            ->join('products','products.id','=','orders.product_id')
+                            ->whereIn('orders.id',$orderId)
+                            ->where('orders.status','available')
+                            ->where('orders.deleted',0)
+                            ->where('products.deleted',0)
+                            ->select('*', 'orders.id AS order_id')
+                            ->get();
+        }
 
+        $totalPrice = 0;
+        foreach($productDetail as $product){
+            $totalPrice += $product->price;
+        }
+
+        //check whether user has membershp
+        // Load the existing customers XML file
+        $customersXml = simplexml_load_file('../database/xml/customers.xml');
+        // Find the customer element for the current user
+        $customerXml = $customersXml->xpath("/customers/customer[@id='$user_id']");
+        // Check if the customer already has a membership
+        $membership = [];
+        if (!empty($customerXml)) {
+            $membership['level'] = $customerXml[0]->{'membership-level'};
+            $membership['discount'] = $customerXml[0]->discount;
+            $membership['discountPrice'] = $totalPrice * ($membership['discount'] / 100);;
+        }
+        
         $count=0;
         $freeGiftName="";
         foreach ($freeGifts['freeGifts'] as $item) {
-            if (intval($item['giftRequiredPrice']) <= $productPrice && $item['qty'] > 0 && $item['deleted'] == 0) {
+            if (intval($item['giftRequiredPrice']) <= $totalPrice && $item['qty'] > 0 && $item['deleted'] == 0) {
                 $count++;
                 $freeGiftName .= $item['giftName'];
                 $freeGiftName .= ',';
@@ -277,7 +308,7 @@ class PaymentController extends Controller
         $gift = rtrim($freeGiftName, ",");
         
 
-        $tax = $productPrice * 0.1;
+        $tax = $totalPrice * 0.1;
                     $shippingMethods = [
                         [
                             'id' => 'gls',
@@ -304,15 +335,16 @@ class PaymentController extends Controller
                     return view('user/payment', [
                         'shippingMethods' => $shippingMethods,
                         'productDetail' => $productDetail,
-                        'productPrice' => $productPrice,
+                        'totalPrice' => $totalPrice,
                         'tax' => $tax,
                         'gift' => $gift,
                         'count'=>$count,
-                        'orderId'=>$orderId
+                        'orderId'=>base64_decode($selectedOrderIds),
+                        'membership'=>$membership
                     ]);
     }
 
-       public function createPayment(Request $req)
+    public function createPayment(Request $req)
     {
         $req->validate([
             'name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
@@ -378,25 +410,52 @@ class PaymentController extends Controller
                 $giftRecordController->storeFromPayment($recordData);
             }
             //update order status to Paid
-            $order = Order::find($req->order_id_hidden);
-            if ($order && $order->status === 'Available') {
-                $order->status = 'Paid';
-                $order->save();
-            }
-            $product_id = $order->product_id;
-    
-            $orders = Order::where('product_id', $product_id)->get();
-    
-            //update order status same product id to Sold
-            foreach ($orders as $order) {
-                if ($order->status === 'Available') {
-                    $order->status = 'Sold';
+            $orderId = explode(',', $req->order_id_hidden);
+            $order;
+            if (count($orderId) > 1) {
+                // $orderId has more than one element
+                // Handle the multiple order IDs here
+                foreach ($orderId as $id) {
+                    $order = Order::find($id);
+                    if ($order && $order->status === 'available') {
+                        $order->status = 'paid';
+                        $order->save();
+                    }
+                    $product_id = $order->product_id;
+                    $orders = Order::where('product_id', $product_id)->get();
+                    //update order status same product id to Sold
+                    foreach ($orders as $order) {
+                        if ($order->status === 'available') {
+                            $order->status = 'sold';
+                            $order->save();
+                        }
+                    }
+                    //set product deleted to 1
+                    $productController = new ProductController();
+                    $products = $productController->setDeleted($product_id);
+                }
+            } else {
+                // $orderId has only one element
+                // Proceed with updating the single order status here
+                $order = Order::find($orderId)->first();
+                if ($order && $order->status === 'available') {
+                    $order->status = 'paid';
                     $order->save();
                 }
+                $product_id = $order->product_id;
+                $orders = Order::where('product_id', $product_id)->get();
+        
+                //update order status same product id to Sold
+                foreach ($orders as $order) {
+                    if ($order->status === 'available') {
+                        $order->status = 'sold';
+                        $order->save();
+                    }
+                }
+                //set product deleted to 1
+                $productController = new ProductController();
+                $products = $productController->setDeleted($product_id);
             }
-            //set product deleted to 1
-        $productController = new ProductController();
-        $products = $productController->setDeleted($product_id);
 
         return redirect('/payment-history')->with('success', 'Payment successful! Thank you for your purchase.');
     }
@@ -406,23 +465,113 @@ class PaymentController extends Controller
 
         $user_id = Session::get('user')['id'];
 
-        $productDetailQuery = DB::table('users')
-                    ->where('users.id' , $user_id)
-                    ->join('orders','orders.user_id','=','users.id')
-                    ->join('products','products.id','=','orders.product_id')
-                    ->join('payments','payments.order_id','=','orders.id')
-                    ->where('orders.status','Paid')
-                    ->where('orders.deleted',0)
-                    ->where('products.deleted',1)
-                    ->select('*');
-    
-        $productDetail = $productDetailQuery->get();
-        $count = $productDetailQuery->count();
-        
+        $response = $this->client->request('GET', 'http://127.0.0.1:9000/api/memberships');
+        $memberships = json_decode($response->getBody()->getContents(), true);
 
-                    return view('user/payment-history', [
-                        'productDetail' => $productDetail,
-                        'count'=>$count,
-                    ]);
-       }
+        $productDetailQuery = DB::table('users')
+                        ->where('users.id' , $user_id)
+                        ->join('orders','orders.user_id','=','users.id')
+                        ->join('products','products.id','=','orders.product_id')
+                        ->where('orders.status','paid')
+                        ->where('orders.deleted',0)
+                        ->where('products.deleted',1)
+                        ->select('*', 'orders.id AS order_id');
+            
+
+        $productDetail = $productDetailQuery->get();
+        
+        $totalSpent = 0;
+        $name = '';
+        $email = '';
+        $phoneNum = '';
+        $previousPaymentId = '';
+        $payments = [];
+        $count = 0;
+        foreach($productDetail as $customer){
+            $payment = DB::table('payments')
+            ->whereRaw("FIND_IN_SET(?, payments.order_id)", [$customer->order_id])
+            ->get();
+            if($payment[0]->id != $previousPaymentId){
+                $totalSpent += $payment[0]->total_charge;
+                $count += 1; 
+            }
+            $payments[] = $payment[0];
+            $previousPaymentId = $payment[0]->id;
+            $name = $customer->name;
+            $email = $customer->email;
+            $phoneNum = $customer->phoneNum;
+        }
+
+        // Load the existing customers XML file
+        $customersXml = simplexml_load_file('../database/xml/customers.xml');
+
+        // Find the customer element for the current user
+        $customerXml = $customersXml->xpath("/customers/customer[@id='$user_id']");
+
+        // Check if the customer already has a membership
+        if (!empty($customerXml)) {
+            $currentMembershipLevel = $customerXml[0]->{'membership-level'};
+            $currentMembershipDiscount = (float) $customerXml[0]->discount;
+
+            // Find the next membership level and discount
+            $nextMembershipLevel = '';
+            $nextMembershipDiscount = 0;
+            foreach ($memberships['memberships'] as $membership) {
+                if ($membership['level'] == $currentMembershipLevel) {
+                    continue;
+                }
+                if ($totalSpent >= $membership['totalAmount_spent']) {
+                    $nextMembershipLevel = $membership['level'];
+                    $nextMembershipDiscount = $membership['discount'];
+                    break;
+                } 
+            }
+
+            // Check if the user's total spent qualifies for an upgrade
+            if ($nextMembershipLevel != '' && $nextMembershipDiscount > $currentMembershipDiscount) {
+                $customerXml[0]->{'membership-level'} = $nextMembershipLevel;
+                $customerXml[0]->discount = $nextMembershipDiscount;
+                // Save the updated XML file
+                $customersXml->asXML('../database/xml/customers.xml');
+
+                // Add a flash message
+                Session::flash('membership_upgrade_message', 'Congratulations, you have been upgraded to '.$nextMembershipLevel.' membership level!');
+            }
+        } else {
+            // Create a new customer element for the current user
+            $newCustomer = $customersXml->addChild('customer');
+            $newCustomer->addAttribute('id', $user_id);
+
+            $newCustomer->addChild('name', $name);
+            $newCustomer->addChild('email', $email);
+            $newCustomer->addChild('phone', $phoneNum);
+            $newCustomer->addChild('total-spent', $totalSpent);
+
+            // Determine the membership level based on the total spent
+            $membershipLevel = '';
+            $membershipDiscount = 0;
+            foreach ($memberships['memberships'] as $membership) {
+                if ($totalSpent >= $membership['totalAmount_spent']) {
+                    $membershipLevel = $membership['level'];
+                    $membershipDiscount = $membership['discount'];
+                    break;
+                } 
+            }
+            $newCustomer->addChild('membership-level', $membershipLevel);
+            $newCustomer->addChild('discount', $membershipDiscount);
+
+            // Save the updated XML file
+            $customersXml->asXML('../database/xml/customers.xml');
+
+            // Add a flash message
+            Session::flash('membership_upgrade_message', 'Congratulations, you have been awarded '.$membershipLevel.' membership level!');
+        }
+
+
+        return view('user/payment-history', [
+            'productDetail' => $productDetail,
+            'count'=>$count,
+            'payments' => $payments
+        ]);
+    }
 }

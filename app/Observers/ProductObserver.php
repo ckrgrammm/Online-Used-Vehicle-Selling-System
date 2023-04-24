@@ -2,6 +2,7 @@
 namespace App\Observers;
 
 use App\Models\Product;
+use App\Models\Order;
 
 /* 
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -48,6 +49,14 @@ class ProductObserver implements Observer{
         ->get();
     }
 
+    public function findOrder(Subject $subject){
+        return Order::join('products', 'orders.product_id', '=', 'products.id')
+                    ->where('orders.user_id', $subject->getUserId())
+                    ->whereIn('orders.status', ['available', 'sold'])
+                    ->select('products.*', 'orders.status', 'orders.id as orderId')
+                    ->get();
+    }
+
     public function update(Subject $subject){
 
     }
@@ -66,6 +75,43 @@ class ProductObserver implements Observer{
         $product->save();
     }
 
+    public function addToCart(Subject $subject){
+        // Check if an order already exists for the user_id and product_id
+        $order = Order::where('user_id', $subject->getUserId())
+                        ->where('product_id', $subject->getProductId())
+                        ->first();
+
+        if (!$order) {
+            // If no order exists, create a new one with status 'available'
+            Order::create([
+                'user_id' => $subject->getUserId(),
+                'product_id' => $subject->getProductId(),
+                'status' => 'available',
+            ]);
+            return true;
+        } 
+        // else if ($order->status === 'deleted') {
+        //     // If an order exists but its status is 'deleted', update its status to 'available'
+        //     $order->update(['status' => 'available']);
+        //     return true;
+        // }
+        return false;
+    }
+    
+    public function deleteCart(Subject $subject){
+        // Check if an order already exists for the user_id and product_id
+        $order = Order::where('user_id', $subject->getUserId())
+        ->where('product_id', $subject->getProductId())
+        ->first();
+
+        if ($order) {
+            // Update the order status to "deleted"
+            $order->status = 'deleted';
+            $order->save();
+            return true;
+        }
+        return false;
+    }
 
     public function delete(Subject $subject){
         $product = Product::find($subject->getProductId());

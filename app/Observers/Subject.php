@@ -60,6 +60,13 @@ abstract class Subject
         }
     }
 
+    public function notifyFindOrder()
+    {
+        foreach ($this->observers as $observer) {
+            return $observer->findOrder($this);
+        }
+    }
+
     public function notifyUpdate()
     {
         foreach ($this->observers as $observer) {
@@ -71,6 +78,20 @@ abstract class Subject
     {
         foreach ($this->observers as $observer) {
             $observer->updateAll($this);
+        }
+    }
+
+    public function notifyAddToCart()
+    {
+        foreach ($this->observers as $observer) {
+            return $observer->addToCart($this);
+        }
+    }
+
+    public function notifyDeleteCart()
+    {
+        foreach ($this->observers as $observer) {
+            return $observer->deleteCart($this);
         }
     }
 

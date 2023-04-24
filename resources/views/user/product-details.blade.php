@@ -1,8 +1,28 @@
 @extends('user/master')
 @section('content')
 
+<style>
+  .lSGallery img {
+    width: 100% !important;
+    height: 100% !important;
+    /* object-fit: cover !important; */
+  }
 
-<body>
+  .lslide.active img{
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .lSSlideOuter .lSSlideWrapper .lSSlide img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  #prevBtn, #nextBtn {
+    cursor: pointer;
+  }
+</style>
+
   <!-- breadcrumb start-->
   <section class="breadcrumb breadcrumb_bg">
     <div class="container">
@@ -31,35 +51,30 @@
             $images = explode('|', $product->product_image);
             @endphp
             <div id="vertical">
-    @foreach ($images as $image)
-      <div data-thumb="{{ asset('user/img/product/'.$image) }}">
-        <img src="{{ asset('user/img/product/'.$image) }}" width="1000" height="500" />
-      </div>
-    @endforeach
-  </div>
+              @foreach ($images as $image)
+                <div data-thumb="{{ asset('user/img/product/'.$image) }}">
+                  <img src="{{ asset('user/img/product/'.$image) }}" />
+                </div>
+              @endforeach
+            </div>
           </div>
         </div>
         <div class="col-lg-5 col-xl-4">
           <div class="s_product_text">
-            <h5>previous <span>|</span> next</h5>
+            <h5><a id="prevBtn">previous</a> <span>|</span> <a id="nextBtn">next</a></h5>
+
             <h3>{{ $product->make }} &nbsp;{{ $product->model }}</h3>
             <h2>RM {{ $product->price }}</h2>
             <ul class="list">
-              <a href="#"> <span>Availibility</span> : In Stock</a>
+              <li>
+                <a href="#"> <span>Availibility</span> : In Stock</a>
               </li>
             </ul>
             <p>
-              First replenish living. Creepeth image image. Creeping can't, won't called.
-              Two fruitful let days signs sea together all land fly subdue
+              {{$product->product_description}}
             </p>
             <div class="card_area d-flex justify-content-between align-items-center">
-              <div class="product_count">
-                <span class="inumber-decrement"> <i class="ti-minus"></i></span>
-                <input class="input-number" type="text" value="1" min="0" max="10">
-                <span class="number-increment"> <i class="ti-plus"></i></span>
-              </div>
-              <a href="{{ route('products.cart',$product->id)}}" class="btn_3">add to cart</a>
-              <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
+              <a href="" class="btn_3 add-to-cart" id="{{$product->id}}">add to cart</a>
             </div>
           </div>
         </div>
@@ -130,58 +145,62 @@
 
         <!--================End Product Description Area =================-->
 
-        <!-- product_list part start
-  <section class="product_list best_seller">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-12">
-          <div class="section_tittle text-center">
-            <h2>Best Sellers <span>shop</span></h2>
-          </div>
-        </div>
-      </div>
-      <div class="row align-items-center justify-content-between">
-        <div class="col-lg-12">
-          <div class="best_product_slider owl-carousel">
-            <div class="single_product_item">
-              <img src="img/product/product_1.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-            <div class="single_product_item">
-              <img src="img/product/product_2.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-            <div class="single_product_item">
-              <img src="img/product/product_3.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-            <div class="single_product_item">
-              <img src="img/product/product_4.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-            <div class="single_product_item">
-              <img src="img/product/product_5.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <br><br><br><br><br><br><br>
-  </section>
- product_list part end-->
+  <script>
+// Add click events to the previous and next buttons
+  $('#prevBtn, #nextBtn').on('click', function(e) {
+    e.preventDefault(); // prevent default link behavior
+    if ($(this).attr('id') == "prevBtn") {
+      $('.lSPrev').click();
+    } else if ($(this).attr('id') == "nextBtn") {
+      $('.lSNext').click();
+    }
+  });
+
+  </script>
+
+<script>
+  const addToCartBtn = document.querySelector('.add-to-cart');
+  
+  // add a click event listener to each addToCart button
+  addToCartBtn.addEventListener('click', function(event) {
+      event.preventDefault();
+      const productId = $(this).attr('id');
+      // send an AJAX request to the server to update the likes count
+      fetch('/addToCart/'+productId)
+          .then(response => response.json())
+          .then(data => {
+              if(data.message === 'success'){
+                swal({
+                    title: "Item Added to Cart!",
+                    text: "Your item has been successfully added to your cart.",
+                    icon: "success",
+                    timer: 2000, // Display duration in milliseconds
+                    buttons: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    animation: {
+                        showClass: "animate__animated animate__fadeIn",
+                        hideClass: "animate__animated animate__fadeOut"
+                    }
+                });
+              } else {
+                swal({
+                    title: "Add to Cart Failed",
+                    text: "This item is already in your cart.",
+                    icon: "error",
+                    timer: 2000, // Display duration in milliseconds
+                    buttons: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    animation: {
+                        showClass: "animate__animated animate__fadeIn",
+                        hideClass: "animate__animated animate__fadeOut"
+                    }
+                });
+              }
+          });
+    });
+  </script>
+
+@endsection
+        

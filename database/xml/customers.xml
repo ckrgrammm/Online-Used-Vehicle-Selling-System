@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE customers SYSTEM "customers.dtd">
+<customers>
+    <!-- <customer id="1">
+        <name>John Smith</name>
+        <email>john.smith@example.com</email>
+        <phone>123-456-7890</phone>
+        <total-spent>1200000</total-spent>
+        <membership-level>silver</membership-level>
+        <discount>4.0</discount>
+    </customer>
+    <customer id="2">
+        <name>Jane Doe</name>
+        <email>jane.doe@example.com</email>
+        <phone>234-567-8901</phone>
+        <total-spent>2800000</total-spent>
+        <membership-level>gold</membership-level>
+        <discount>6.0</discount>
+    </customer>
+    <customer id="3">
+        <name>Bob Johnson</name>
+        <email>bob.johnson@example.com</email>
+        <phone>345-678-9012</phone>
+        <total-spent>5000000</total-spent>
+        <membership-level>platinum</membership-level>
+        <discount>8.0</discount>
+    </customer> -->
+<customer id="18"><name>chye wenn han</name><email>wennhan@gmail.com</email><phone>121212</phone><total-spent>2226100</total-spent><membership-level>gold</membership-level><discount>6.0</discount></customer></customers>

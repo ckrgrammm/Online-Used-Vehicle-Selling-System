@@ -84,6 +84,7 @@ Route::get('/all-product', function () {
 });
 
 Route::get('/search', [UserController::class, 'search']);
+Route::get('/addToCart/{id}', [ProductController::class, 'addToCart']);
 
 
 
@@ -142,7 +143,8 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     Route::get('/destroyProduct/{id}', [ProductController::class, 'destroyProduct']);
     // Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/product_details/{id}', [ProductController::class, 'details'])->name('products.details');
-    Route::get('/cart/{id}', [ProductController::class, 'cart'])->name('products.cart');
+    Route::get('/cart', [ProductController::class, 'cart'])->name('products.cart');
+    Route::get('/deleteCart/{id}', [ProductController::class, 'deleteCart'])->name('products.deleteCart');
 
     Route::get('/admin/all-product', [ProductController::class, 'admin'])->name('products.admin');
     Route::get('/filter', [ProductController::class, 'filterByMake'])->name('filterByMake');
@@ -150,7 +152,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     Route::resource('payments', PaymentController::class);
     Route::get('/deletePayment/{id}', [PaymentController::class, 'destroyPayment']);
     Route::view('/temp','user/temp');
-    Route::get('/payment', [PaymentController::class, 'displayPayment'])->name('payment.display');
+    Route::get('/checkout/{selectedOrderIds}', [PaymentController::class, 'displayPayment'])->name('payment.display');
     Route::post('/payment', [PaymentController::class, 'createPayment'])->name('payment.create');
     Route::get('/payment-history', [PaymentController::class, 'displayPaymentHistory'])->name('payment.displayHistory');
     

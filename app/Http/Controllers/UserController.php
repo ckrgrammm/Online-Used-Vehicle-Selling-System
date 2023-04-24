@@ -248,6 +248,16 @@ class UserController extends Controller
    public function edit_profile(){
         $user_id = Session::get('user')['id'];
         $data = $this->userRepository->findUser($user_id);
+    
+        // Load the existing customers XML file
+        $customersXml = simplexml_load_file('../database/xml/customers.xml');
+        // Find the customer element for the current user
+        $customerXml = $customersXml->xpath("/customers/customer[@id='$user_id']");
+        // Check if the customer already has a membership
+        if (!empty($customerXml)) {
+            $data->currentMembershipLevel = $customerXml[0]->{'membership-level'};
+        }
+        
         return view('user/edit-profile', compact('data'));
    }
 

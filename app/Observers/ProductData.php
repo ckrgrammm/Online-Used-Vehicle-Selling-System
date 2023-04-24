@@ -182,6 +182,12 @@ class ProductData extends Subject
         return $this->notifyFindMyCarsOnBid();
     }
 
+    public function findOrder($user_id)
+    {
+        $this->user_id = $user_id;
+        return $this->notifyFindOrder();
+    }
+
     public function updateAll($data): void
     {
         $this->id  = $data['id'];
@@ -195,6 +201,20 @@ class ProductData extends Subject
         $this->price = $data['price'];
         $this->product_image = $data['product_image'];
         $this->notifyUpdateAll();
+    }
+
+    public function addToCart($data)
+    {
+        $this->id  = $data['product_id'];
+        $this->user_id  = $data['user_id'];
+        return $this->notifyAddToCart();
+    }
+
+    public function deleteCart($data)
+    {
+        $this->id  = $data['product_id'];
+        $this->user_id  = $data['user_id'];
+        return $this->notifyDeleteCart();
     }
 
     public function delete($id)

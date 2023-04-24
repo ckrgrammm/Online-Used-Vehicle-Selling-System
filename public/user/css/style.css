@@ -2258,6 +2258,7 @@ ul {
   line-height: 15px;
   font-size: 10px;
   color: #fff;
+  display: none;
 }
 
 /* line 151, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */

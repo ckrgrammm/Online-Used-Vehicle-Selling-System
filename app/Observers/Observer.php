@@ -9,7 +9,10 @@ interface observer
     public function find(Subject $subject);
     public function findMyCars(Subject $subject);
     public function findMyCarsOnBid(Subject $subject);
+    public function findOrder(Subject $subject);
     public function update(Subject $subject);
     public function updateAll(Subject $subject);
+    public function addToCart(Subject $subject);
+    public function deleteCart(Subject $subject);
     public function delete(Subject $subject);
 }

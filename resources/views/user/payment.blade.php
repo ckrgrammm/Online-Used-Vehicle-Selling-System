@@ -1,20 +1,46 @@
 @extends('user/master')
 @section('content')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<link rel="icon" href="../images/logo.png"/>
-<title>Check Out</title>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="https://getbootstrap.com/docs/4.1/examples/checkout/form-validation.css" rel="stylesheet">
-</head>
-<body>
-<div class="container" style="margin-top:50px">
+
+{{-- <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+<!-- Custom styles for this template -->
+{{-- <link href="https://getbootstrap.com/docs/4.1/examples/checkout/form-validation.css" rel="stylesheet"> --}}
+<style>
+  .nice-select {
+    display: none !important;
+  }
+
+  .membership-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.gold {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.silver {
+  background-color: #c4c4c4;
+  color: #fff;
+}
+
+.bronze {
+  background-color: #cd7f32;
+  color: #fff;
+}
+
+.platinum {
+  background-color: #e5e4e2;
+  color: #0c0c0c;
+  border: 2px solid #c0c0c0;
+}
+</style>
+
+    <div class="container" style="margin-top:50px">
       <div class="py-5 text-center">
       </div>
 
@@ -24,13 +50,15 @@
             <span class="text-muted">Your order</span>
           </h4>
           <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">{{ $productDetail->make }} {{ $productDetail->model }}</h6>
-                <small class="text-muted">{{ $productDetail->product_description }}</small>
-              </div>
-              <span class="text-muted">RM{{ $productDetail->price }}</span>
-            </li>
+            @foreach ($productDetail as $product)
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                  <div>
+                    <h6 class="my-0">{{ $product->make }} {{ $product->model }}</h6>
+                    <small class="text-muted">{{ $product->product_description }}</small>
+                  </div>
+                  <span class="text-muted">RM{{ $product->price }}</span>
+                </li>
+            @endforeach
             <li class="list-group-item d-flex justify-content-between lh-condensed" style="color:red !important">
               <div>
                 <h6 class="my-0">Service Tax</h6>
@@ -59,6 +87,18 @@
               
               <span class="text-success">{{ $count }} item</span>
             </li>
+
+            @if(!empty($membership))
+              <li class="list-group-item d-flex justify-content-between bg-light">
+                <div class="text-success">
+                  <h6 class="my-0">Member
+                    <span class="membership-badge {{$membership['level']}}">{{$membership['level']}}</span>
+                  </h6>
+                  <small>Discount {{$membership['discount']}}%</small><br>
+                </div>
+                <span class="text-success">-RM{{$membership['discountPrice']}}</span>
+              </li>
+            @endif
             
             <li class="list-group-item d-flex justify-content-between">
               <span>Total (MYR)</span>
@@ -78,7 +118,7 @@
         
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Billing & Shipping address</h4>
-          <form class="needs-validation" novalidate method="post" action="payment">
+          <form class="needs-validation" novalidate method="post" action="{{route('payment.create')}}">
           
             @csrf
             
@@ -113,7 +153,7 @@
               <div class="col-md-5 mb-3">
                 <label for="country">Country</label>
                 <select class="custom-select d-block w-100" id="country" name="country" required="">
-                  <option value="1">Choose...</option>
+                  <option value="">Choose...</option>
                   <option value="Malaysia">Malaysia</option>
                 </select>
                 <div class="invalid-feedback" id="showHideMsg">
@@ -123,8 +163,19 @@
               <div class="col-md-4 mb-3">
                 <label for="state">State</label>
                 <select class="custom-select d-block w-100" id="state" name="state" required="">
-                  <option value="1">Choose...</option>
-                  <option>California</option>
+                  <option value="">Choose...</option>
+                  <option value="Johor">Johor</option>
+                  <option value="KL">Kuala Lumpur</option>
+                  <option value="Selangor">Selangor</option>
+                  <option value="Kelantan">Kelantan</option>
+                  <option value="Sembilan">Negeri Sembilan</option>
+                  <option value="Perak">Perak</option>
+                  <option value="Kedah">Kedah</option>
+                  <option value="Pahang">Pahang</option>
+                  <option value="Perlis">Perlis</option>
+                  <option value="Terengganu">Terengganu</option>
+                  <option value="Malacca">Malacca</option>
+                  <option value="Penang">Penang</option>
                 </select>
                 <div class="invalid-feedback">
                   Please provide a valid state.
@@ -202,7 +253,7 @@
             
             <input type="hidden" name="grand_total_hidden" id="grand_total_hidden">
             <input type="hidden" name="order_id_hidden" id="order_id_hidden" value="{{$orderId}}">
-            <input type="hidden" name="product_price" id="product_price" value="{{$productPrice}}">
+            <input type="hidden" name="product_price" id="product_price" value="{{$totalPrice}}">
           </form>
         </div>
       </div>
@@ -221,18 +272,15 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
 
 
-
-</body>
-
 <script>
   
 
     $(document).ready(function() {
-    $('#country').niceSelect(); 
-    $('#country').niceSelect('destroy');
-    $('#state').niceSelect(); 
-    $('#state').niceSelect('destroy');
-});
+      $('#country').niceSelect(); 
+      $('#country').niceSelect('destroy');
+      $('#state').niceSelect(); 
+      $('#state').niceSelect('destroy');
+  });
     var voucherApply = false;
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       (function() {
@@ -260,7 +308,10 @@ var grandTotal = 0;
 function updateShippingPrice(name,price){
   document.getElementById("updateDesc").innerHTML = " - "+ name;
   document.getElementById("showShippingPrice").innerHTML = "RM" + price;
-  grandTotal = parseInt(price) + parseInt({{$tax}}) + parseInt({{$productPrice}});
+  grandTotal = parseInt(price) + parseInt({{$tax}}) + parseInt({{$totalPrice}});
+  @if(!empty($membership))
+      grandTotal -= parseInt({{$membership['discountPrice']}});
+  @endif
   document.getElementById("showTotalPrice").innerHTML ="RM "+grandTotal;
   document.getElementById("grand_total_hidden").value = grandTotal;
   document.getElementById("totalPrice").value = grandTotal;
@@ -269,5 +320,4 @@ function updateShippingPrice(name,price){
 
 
 </script>
-</html>
-
+@endsection

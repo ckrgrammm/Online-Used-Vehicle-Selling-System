@@ -1,6 +1,7 @@
 <!--::header part start::-->
 <?php
 use App\Models\User;
+use App\Models\Order;
 ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js" ></script>
@@ -113,12 +114,32 @@ use App\Models\User;
                     <div class="hearer_icon d-flex">
                         <a id="search_1" href="javascript:void(0)"><i class="ti-search"></i></a>
                         @if (Session::has('user'))
-                        <a href=""><i class="ti-heart"></i></a>
+                        {{-- <a href=""><i class="ti-heart"></i></a> --}}
+                        <?php
+                            $totalCount = Order::where('user_id', auth()->user()->id)
+                                                ->whereIn('status', ['available', 'sold'])
+                                                ->count();
+
+                            if($totalCount > 0){
+                        ?>
+                        <style>
+                            .main_menu .cart i:after {
+                                content: "<?php echo $totalCount; ?>";
+                                display: block;
+                            }
+                        </style>
+                        <?php
+                            }
+                        ?>
+                        
                         <div class="dropdown cart">
-                            <a class="dropdown-toggle" href="#" id="navbarDropdown3" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a href="/cart">
                                 <i class="fas fa-cart-plus"></i>
                             </a>
+                            {{-- <a class="dropdown-toggle" href="/cart" id="navbarDropdown3" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-cart-plus"></i>
+                            </a> --}}
                             <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <div class="single_product">
                                 </div>

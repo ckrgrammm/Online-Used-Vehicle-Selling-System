@@ -65,15 +65,49 @@ class ProductController extends Controller
         return view('user/product-details', compact('product'));
     }
 
-    public function cart($id)
+    public function cart()
     {
         $product = new ProductData();
         $observer = new ProductObserver($product);
         $product->attach($observer);
-        $product = $product->find($id);
-        $products = [$product]; // create an array of products with a single product
+        $orders = $product->findOrder(auth()->user()->id);
 
-        return view('user/cart', compact('products'));
+        return view('user/cart', compact('orders'));
+    }
+
+    public function addToCart($id)
+    {
+        $data = [
+            'user_id'       => auth()->user()->id,
+            'product_id'    => $id
+        ];
+        $product = new ProductData();
+        $observer = new ProductObserver($product);
+        $product->attach($observer);
+        if($product->addToCart($data)){
+            $response = array('message' => 'success');
+            return json_encode($response);
+        }
+        $response = array('message' => 'fail');
+        return json_encode($response);
+        
+    }
+
+    public function deleteCart($id)
+    {
+        $data = [
+            'user_id'       => auth()->user()->id,
+            'product_id'    => $id
+        ];
+        $product = new ProductData();
+        $observer = new ProductObserver($product);
+        $product->attach($observer);
+        if($product->deleteCart($data)){
+            $response = array('message' => 'success');
+            return json_encode($response);
+        }
+        $response = array('message' => 'fail');
+        return json_encode($response);
     }
 
     public function create()
@@ -244,6 +278,14 @@ class ProductController extends Controller
             return redirect('/myCarsOnBid')->with('success', 'Product deleted successfully');
         }
         return redirect()->route('products.admin')->with('success', 'Product deleted successfully');
+    }
+
+    public function setDeleted($id)
+    {
+        $product = new ProductData();
+        $observer = new ProductObserver($product);
+        $product->attach($observer);
+        $product->delete($id);
     }
 
 }
