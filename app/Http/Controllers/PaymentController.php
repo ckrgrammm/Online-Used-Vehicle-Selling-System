@@ -289,9 +289,10 @@ class PaymentController extends Controller
                         $sold_order->status = 'available';
                         $sold_order->save();
                     }
+                    $productController = new ProductController();
+                    $old_products = $productController->setNoDeleted($product_id);
                 }
-                $productController = new ProductController();
-                // $old_products = $productController->setNoDeleted($old_product_id);
+                
             }
             
             //update order status to Paid
