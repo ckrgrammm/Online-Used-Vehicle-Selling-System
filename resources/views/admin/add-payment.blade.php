@@ -12,7 +12,7 @@
                 @csrf
                 <div class="form-group">
                     <label for="order_id">Order ID</label>
-                    <input type="text" class="form-control" name="order_id" id="order_id" placeholder="123" maxlength="4">
+                    <input type="text" class="form-control" name="order_id" id="order_id" placeholder="123" maxlength="255">
                     @error($errors->has('order_id'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

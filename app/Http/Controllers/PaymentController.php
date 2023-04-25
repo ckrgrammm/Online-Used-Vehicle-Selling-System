@@ -52,13 +52,32 @@ class PaymentController extends Controller
     public function store(Request $req){
         $req->validate([
             'order_id' => [
-                'required',
-                'string',
-                'regex:/^[0-9]{1,4}$/',
-                Rule::exists('orders', 'id')->where(function ($query) {
-                    $query->where('status', 'available');
-                })
-            ],
+                'required', 'string', 'regex:/^[0-9][0-9,]{0,254}$/',
+                function ($attribute, $value, $fail) use (&$iString) {
+                    $i = array();
+                    $order_ids = explode(',', $value);
+                    foreach ($order_ids as $index => $order_id) {
+                        foreach ($order_ids as $prevIndex => $prevOrderId) {
+                            if ($index !== $prevIndex && $order_id === $prevOrderId) {
+                                $fail('The '.$attribute.' cannot contain duplicate order id.');
+                                return;
+                            }
+                        }
+                        if($order_id){
+                            $exists = DB::table('orders')
+                                ->where('id', $order_id)
+                                ->where('status', 'available')
+                                ->exists();
+                            if (!$exists) {
+                                $fail("The {$attribute} must contain valid order IDs with a status of 'available'.");
+                                return;
+                            }
+                            $i[] = $order_id;
+                        }
+                    }
+                    $iString = implode(',', $i);
+                },
+            ],            
             'total_charge' => 'required|int|regex:/^[0-9]{0,10}$/',
             'date' => 'required|date',
             'method' => 'required',
@@ -67,7 +86,7 @@ class PaymentController extends Controller
         $date_string = $req->input('date');
         $payment_date = DateTime::createFromFormat('Y-m-d', $date_string);
         $data = [
-            'order_id' => $req->order_id,
+            'order_id' => $iString,
             'total_charge' => $req->total_charge,
             'payment_date' => $payment_date,
             'payment_method' => $req->method,
@@ -88,6 +107,7 @@ class PaymentController extends Controller
             }
         }
         $giftIdsString = implode(',', $giftIds);
+        $i = array();
         if($giftIdsString){
             //update giftRecord
             $giftRecordController = new GiftRecordController();
@@ -97,8 +117,12 @@ class PaymentController extends Controller
             ]);
             $giftRecordController->storeFromPayment($recordData);
         }
+
         //update order status to Paid
-        $order = Order::find($req->order_id);
+        $order_id_array = explode(',', $iString);
+
+        foreach ($order_id_array  as $order_ids) {
+            $order = Order::find($order_ids);
         if ($order && $order->status === 'available') {
             $order->status = 'paid';
             $order->save();
@@ -117,6 +141,9 @@ class PaymentController extends Controller
         //set product deleted to 1
         $productController = new ProductController();
         $products = $productController->setDeleted($product_id);
+        }
+
+        
 
         return redirect('payments')->with('success', 'Successfully added a payment');
 
@@ -124,27 +151,71 @@ class PaymentController extends Controller
 
     public function update(Request $req, $id)
     {
+        $allIString = $req->order_id;
+        $previousIString = $req->old_order_id;
+        $previousArray = explode(",", $previousIString);
+        if($allIString == ''){
+            $allIString = $previousIString;
+        }
+
+
+        $newArray = explode(",", $allIString);
+
+        $missingIds = array_diff($previousArray, $newArray);
+
         if($req->old_order_id==$req->order_id){
             $req->validate([
                 'order_id' => [
                 'required',
                 'string',
-                'regex:/^[0-9]{1,4}$/',
-                Rule::exists('orders', 'id')->where(function ($query) {
-                    $query->where('status', 'paid');
-                })
+                'regex:/^[0-9][0-9,]{0,254}$/'
             ]]);
         }else{
             $req->validate([
                 'order_id' => [
-                'required',
-                'string',
-                'regex:/^[0-9]{1,4}$/',
-                Rule::exists('orders', 'id')->where(function ($query) {
-                    $query->where('status', 'available');
-                })
-            ]]);
+                    'required', 'string', 'regex:/^[0-9][0-9,]{0,254}$/',
+                    function ($attribute, $value, $fail) use (&$newIString,&$oldIString, $req) {
+                        $i = array();
+                        $j = array();
+                        $order_ids = explode(',', $value);
+                        $old_order_id = $req->old_order_id;
+                        $old_order_ids = explode(',', $old_order_id);
+                        foreach ($order_ids as $index => $order_id) {
+                            foreach ($order_ids as $prevIndex => $prevOrderId) {
+                                if ($index !== $prevIndex && $order_id === $prevOrderId) {
+                                    $fail('The '.$attribute.' cannot contain duplicate order id.');
+                                    return;
+                                }
+                            }
+                            if ($order_id) {
+                                $order = DB::table('orders')->where('id', $order_id)->first();
+                                if (!$order || !in_array($order->status, ['available', 'paid'])) {
+                                    $fail("The {$attribute} must contain valid order IDs with a status of 'available' or 'paid'.");
+                                    return;
+                                }
+                                
+                                if ($order->status == 'paid') {
+                                    foreach ($old_order_ids as $old_order_id) {
+                                        if ($order_id == $old_order_id && $order->status == 'paid') {
+                                            $i[] = $order_id;
+                                            break; // exit the loop once a match is found
+                                        }
+                                    }
+                                } else if ($order->status == 'available') {
+                                    $j[] = $order_id;
+                                } else {
+                                    $fail("The {$attribute} must contain valid order IDs.");
+                                    return;
+                                }
+                            }
+                        }
+                        $oldIString = implode(',', $i);
+                        $newIString = implode(',', $j);
+                    },
+                ]
+            ]);
         }
+
         $req->validate([
             'total_charge' => 'required|int|regex:/^[0-9]{0,10}$/',
             'date' => 'required|date',
@@ -152,11 +223,10 @@ class PaymentController extends Controller
             'address' => 'required|string'
         ]);
 
-
         $date_string = $req->input('date');
         $payment_date = DateTime::createFromFormat('Y-m-d', $date_string);
         $data = [
-            'order_id' => $req->order_id,
+            'order_id' => $allIString,
             'total_charge' => $req->total_charge,
             'payment_date' => $payment_date,
             'payment_method' => $req->method,
@@ -201,37 +271,53 @@ class PaymentController extends Controller
             $giftRecordController->storeFromPayment($recordData);
         }
 
-        //update order status to Paid
-        $order = Order::find($req->order_id);
-        if ($order && $order->status === 'available') {
-            $order->status = 'paid';
-            $order->save();
-        }
-        //update old order status
-        $old_order = Order::find($req->old_order_id);
-        if ($order && ($order->status === 'paid'||$order->status === 'sold')) {
-            $order->status = 'available';
-            $order->save();
-        }
-        $old_product_id = $old_order->product_id;
-        $product_id = $order->product_id;
+        if($allIString != $req->old_order_id){
 
-        $old_order = Order::where('product_id', $old_product_id)->get();
-        $orders = Order::where('product_id', $product_id)->get();
-
-        //update order status same product id to Sold
-        foreach ($orders as $order) {
-            if ($order->status === 'available') {
-                $order->status = 'sold';
-                $order->save();
+            //update old order status change to unused
+            foreach ($missingIds as $missingId) {
+                $old_order = Order::find($missingId);
+                if ($old_order && $old_order->status === 'paid') {
+                    $old_order->status = 'available';
+                    $old_order->save();
+            
+                    // find sold orders for the same product and update status to available
+                    $product_id = $old_order->product_id;
+                    $sold_orders = Order::where('product_id', $product_id)
+                                        ->where('status', 'sold')
+                                        ->get();
+                    foreach ($sold_orders as $sold_order) {
+                        $sold_order->status = 'available';
+                        $sold_order->save();
+                    }
+                }
+                $productController = new ProductController();
+                // $old_products = $productController->setNoDeleted($old_product_id);
             }
+            
+            //update order status to Paid
+            $order_ids = explode(',', $newIString);
+            foreach ($order_ids as $order_id) {
+                $order = Order::find($order_id);
+                if ($order && $order->status === 'available') {
+                    $order->update(['status' => 'paid']);
+                }
+                $product_id = $order->product_id;
+                $orders = Order::where('product_id', $product_id)->get();
+                //update order status same product id to Sold
+                foreach ($orders as $order) {
+                    if ($order->status === 'available') {
+                        $order->status = 'sold';
+                        $order->save();
+                    }
+                }
+                //set product deleted to 1
+                $productController = new ProductController();
+                $products = $productController->setDeleted($product_id);
+            }
+
+            
+            
         }
-
-        //set product deleted to 1
-        $productController = new ProductController();
-        $products = $productController->setDeleted($product_id);
-        $old_products = $productController->setNoDeleted($old_product_id);
-
 
         return redirect('payments')->with('success', 'Payment information has been updated');
 
