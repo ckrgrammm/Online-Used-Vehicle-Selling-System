@@ -282,10 +282,22 @@ class ProductController extends Controller
 
     public function setDeleted($id)
     {
-        $product = new ProductData();
-        $observer = new ProductObserver($product);
-        $product->attach($observer);
-        $product->delete($id);
+        $product = Product::find($id);
+
+        $product->deleted = 1;
+        $product->save();
+
+        return response()->json(['message' => 'Product set deleted to 1 successfully'], 200);
+    }
+
+    public function setNoDeleted($id)
+    {
+        $product = Product::find($id);
+
+        $product->deleted = 0;
+        $product->save();
+
+        return response()->json(['message' => 'Product set deleted to 0 successfully'], 200);
     }
 
 }

@@ -22,7 +22,7 @@
 
   <br>
 
-<div class="card mx-auto" style="width: 1000px;margin-top:100px;">
+<div class="card mx-auto" style="width: 1200px;margin-top:100px;">
     <div class="card-header">
         <h2 class="card-header-text default">Payment History</h2>
     </div>

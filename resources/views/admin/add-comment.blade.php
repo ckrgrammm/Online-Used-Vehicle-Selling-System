@@ -443,8 +443,6 @@ h2 {
     }
 
     .filepond--root .filepond--drop-label {
-        border: 1px solid #ff5a49;
-        background-color: #fff;
         cursor: pointer;
     }
 
