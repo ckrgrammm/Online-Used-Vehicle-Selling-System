@@ -179,13 +179,16 @@ h2 {
 }
 
 .feedback-tags .tag {
-  border: 1px solid #ff5a49;
   border-radius: 5px;
-  color: #ff5a49;
+  color: #4c4e53;
   cursor: pointer;
   margin-bottom: 10px;
-  /* margin-left: 10px; */
   padding: 10px;
+  background-color: #f0f0f5;
+}
+
+.feedback-tags .tag::placeholder {
+  color: #4c4e53;
 }
 
 .feedback-tags .tag.choosed {
@@ -521,7 +524,7 @@ h2 {
                         </div>
                         
                         <div class="tags-box">
-                          <input type="text" class="tag form-control" name="review" id="inlineFormInputName" placeholder="please enter your review">
+                          <input type="text" class="tag form-control" name="review" id="inlineFormInputName" placeholder="Please enter your review">
                           <input type="hidden" name="product_id" value="" />
                         </div>
 

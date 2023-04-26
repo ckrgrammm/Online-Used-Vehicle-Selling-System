@@ -59,13 +59,14 @@ class ReviewController extends Controller
         }
 
         $data = [
-            'user_id' => 2,
+            'user_id' => auth()->user()->id,
+            'payment_id' => $req->payment_id,
             'rating' => $req->rate_value,
             'review' => $req->review,
             'image' => $review_img
         ];
         $this->reviewRepository->storeReview($data);
-        return redirect('comments')->with('success', 'Information has been added');
+        return redirect('/payment-history')->with('add_review_message', 'Review and Rating has been added');
     }
 
     /**

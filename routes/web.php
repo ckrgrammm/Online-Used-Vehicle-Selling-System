@@ -83,7 +83,8 @@ Route::get('/all-product', function () {
     return view('user/all-product');
 });
 
-Route::get('/search', [UserController::class, 'search']);
+Route::get('/searchKeyword', [UserController::class, 'searchKeyword']);
+Route::post('/searchProduct', [UserController::class, 'searchProduct']);
 Route::get('/addToCart/{id}', [ProductController::class, 'addToCart']);
 
 

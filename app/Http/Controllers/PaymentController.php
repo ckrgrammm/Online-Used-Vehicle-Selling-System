@@ -562,9 +562,12 @@ class PaymentController extends Controller
                         ->where('orders.deleted',0)
                         ->where('products.deleted',1)
                         ->select('*', 'orders.id AS order_id');
-            
 
         $productDetail = $productDetailQuery->get();
+
+        $comments = DB::table('comments')
+                ->where('deleted' , 0)
+                ->get();
         
         $totalSpent = 0;
         $name = '';
@@ -624,15 +627,6 @@ class PaymentController extends Controller
                 Session::flash('membership_upgrade_message', 'Congratulations, you have been upgraded to '.$nextMembershipLevel.' membership level!');
             }
         } else {
-            // Create a new customer element for the current user
-            $newCustomer = $customersXml->addChild('customer');
-            $newCustomer->addAttribute('id', $user_id);
-
-            $newCustomer->addChild('name', $name);
-            $newCustomer->addChild('email', $email);
-            $newCustomer->addChild('phone', $phoneNum);
-            $newCustomer->addChild('total-spent', $totalSpent);
-
             // Determine the membership level based on the total spent
             $membershipLevel = '';
             $membershipDiscount = 0;
@@ -643,21 +637,32 @@ class PaymentController extends Controller
                     break;
                 } 
             }
-            $newCustomer->addChild('membership-level', $membershipLevel);
-            $newCustomer->addChild('discount', $membershipDiscount);
 
-            // Save the updated XML file
-            $customersXml->asXML('../database/xml/customers.xml');
+            if(!empty($membershipLevel)){
+                // Create a new customer element for the current user
+                $newCustomer = $customersXml->addChild('customer');
+                $newCustomer->addAttribute('id', $user_id);
+                $newCustomer->addChild('name', $name);
+                $newCustomer->addChild('email', $email);
+                $newCustomer->addChild('phone', $phoneNum);
+                $newCustomer->addChild('total-spent', $totalSpent);
+                $newCustomer->addChild('membership-level', $membershipLevel);
+                $newCustomer->addChild('discount', $membershipDiscount);
+                
+                // Save the updated XML file
+                $customersXml->asXML('../database/xml/customers.xml');
 
-            // Add a flash message
-            Session::flash('membership_upgrade_message', 'Congratulations, you have been awarded '.$membershipLevel.' membership level!');
+                // Add a flash message
+                Session::flash('membership_upgrade_message', 'Congratulations, you have been awarded '.$membershipLevel.' membership level!');
+            }
+
         }
-
 
         return view('user/payment-history', [
             'productDetail' => $productDetail,
             'count'=>$count,
-            'payments' => $payments
+            'payments' => $payments,
+            'comments' => $comments
         ]);
     }
 }

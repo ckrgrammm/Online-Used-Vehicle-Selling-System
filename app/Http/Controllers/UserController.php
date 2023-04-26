@@ -361,18 +361,24 @@ class UserController extends Controller
         return json_encode($response);
     }
 
-    function search(Request $request){
+    function searchKeyword(Request $request){
         $data = $request->all();
 
         $query = $data['query'];
 
-        $filter_data = $this->userRepository->search($query);
+        $filter_data = $this->userRepository->searchKeyword($query);
         $data=[];
         foreach($filter_data as $product)
         {
             $data[]=$product->make.' '.$product->model;
         }
         return response()->json($data);
+    }
+
+    function searchProduct(Request $request){
+        $product = $request->post("search_input");
+        $products = $this->userRepository->searchProduct($product);
+        return view('user/all-product', compact('products'));
     }
    
 }

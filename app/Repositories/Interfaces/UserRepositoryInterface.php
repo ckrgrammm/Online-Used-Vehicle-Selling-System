@@ -7,7 +7,8 @@ Interface UserRepositoryInterface{
     public function storeUser($data);
     public function findUser($id);
     public function findUserByEmail($email);
-    public function search($query);
+    public function searchKeyword($query);
+    public function searchProduct($data);
     public function updateUser($data, $id); 
     public function edit_password($data, $id); 
     public function password_reset($data); 

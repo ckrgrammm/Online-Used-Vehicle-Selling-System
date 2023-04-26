@@ -30,12 +30,23 @@ class UserRepository implements UserRepositoryInterface
         return User::where(['email'=>$email])->first();
     }
 
-    public function search($query)
+    public function searchKeyword($query)
     {
         return Product::select('make', 'model')
-        ->where('make', 'LIKE', '%'.$query.'%')
-        ->orWhere('model', 'LIKE', '%'.$query.'%')
+        ->where(function($q) use ($query) {
+            $q->where('make', 'LIKE', '%'.$query.'%')
+                ->orWhere('model', 'LIKE', '%'.$query.'%');
+        })
+        ->where('deleted', 0)
         ->distinct()
+        ->get();
+    }
+
+    public function searchProduct($data)
+    {
+        return Product::select('*')
+        ->where('deleted', 0)
+        ->whereRaw("CONCAT(make, ' ', model) = ?", [$data])
         ->get();
     }
 
