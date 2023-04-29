@@ -12,6 +12,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\GiftRecordController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MembershipController;
 
 
 
@@ -86,11 +87,15 @@ Route::get('/all-product', function () {
 Route::get('/searchKeyword', [UserController::class, 'searchKeyword']);
 Route::post('/searchProduct', [UserController::class, 'searchProduct']);
 Route::get('/addToCart/{id}', [ProductController::class, 'addToCart']);
+Route::post('/verify_card_info', [PaymentController::class, 'verify_card_info']);
+Route::get('/membershipDetails/{level}', [MembershipController::class, 'membershipDetails'])->name('membershipDetails');
+Route::get('/membershipAllDetails', [MembershipController::class, 'membershipAllDetails'])->name('membershipAllDetails');
+Route::get('/allStaffs', [UserController::class, 'indexStaff'])->name('staffs.all');
 
 
 
 
-Route::get('/reviews', [ReviewController::class, 'review_page']);
+Route::get('/reviews', [ReviewController::class, 'review_page'])->name('reviews');
 
 
 
@@ -122,6 +127,8 @@ Route::post('/sell', [UserController::class, 'sell']);
 Route::resource('products', ProductController::class);
 Route::resource('comments', ReviewController::class);
 Route::resource('customers', UserController::class);
+Route::resource('staffs', UserController::class);
+Route::resource('memberships', MembershipController::class);
 Route::post('/edit_password/{id}', [UserController::class, 'edit_password']);
 Route::get('/deleteUser/{id}', [UserController::class, 'destroyUser']);
 Route::get('/deleteReview/{id}', [ReviewController::class, 'destroyReview']);

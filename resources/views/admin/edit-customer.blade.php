@@ -70,16 +70,20 @@
                 <span class="text-danger" style="font-size: 14px">{{ $errors->first('email') }}</span>
             @endif
           </div>
-          <div class="form-group">
-            <label for="exampleSelectGender">Gender</label>
-            <select class="form-control" id="exampleSelectGender" name="gender">
-              <option value="">Choose a gender</option>
-              <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
-              <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
-            </select>
-            @if ($errors->has('gender'))
-                <span class="text-danger" style="font-size: 14px">{{ $errors->first('gender') }}</span>
-            @endif
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Role</label>
+            <div class="col-sm-4">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="roleRadios" id="roleRadios1" value="user" checked> User </label>
+              </div>
+            </div>
+            <div class="col-sm-5">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="roleRadios" id="roleRadios2" value="staff"> Staff </label>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label for="exampleInputAddress">Address</label>
@@ -94,6 +98,21 @@
             @if ($errors->has('phoneNum'))
               <span class="text-danger" style="font-size: 14px">{{ $errors->first('phoneNum') }}</span>
             @endif
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Gender</label>
+            <div class="col-sm-4">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="genderRadios" id="genderRadios1" value="male" {{ old('gender', $user->gender) == 'male' ? 'checked' : '' }}> Male </label>
+              </div>
+            </div>
+            <div class="col-sm-5">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="genderRadios" id="genderRadios2" value="female" {{ old('gender', $user->gender) == 'female' ? 'checked' : '' }}> Female </label>
+              </div>
+            </div>
           </div>
           <input id='selectedFile' class="disp-none" style="display: none" type='file' accept="image/*">
           <input type="hidden" name="changed-profile-image" class="changed-profile-image" id="changed-profile-image" value="">
@@ -111,7 +130,7 @@
     </div>
   </div>
 
-  <div class="col-12 grid-margin stretch-card">
+  {{-- <div class="col-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Password</h4>
@@ -156,15 +175,14 @@
         </form>
       </div>
     </div>
-  </div>
+  </div> --}}
 
   <div class="modal fade" id="imageModalContainer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered">
       <div class="modal-content modal-content1 modal-content1">
         <div class="modal-header">
           <h5 class="modal-title" id="imageModal">Crop Image</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           </button>
         </div>
         <div class="modal-body modal-body1">

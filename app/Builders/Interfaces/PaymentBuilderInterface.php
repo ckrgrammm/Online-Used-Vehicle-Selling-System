@@ -18,4 +18,8 @@ interface PaymentBuilderInterface
 
     public function weeklySalesPercentageChange();
 
+    public function weeklySalesChart();
+
+    public function popularCarMakeChart();
+
 }

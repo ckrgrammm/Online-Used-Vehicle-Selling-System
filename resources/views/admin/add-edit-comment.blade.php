@@ -36,7 +36,7 @@
           </div>
           <div class="form-group">
             <label for="exampleInputComment">Comment</label>
-            <textarea name="comment" class="form-control" id="exampleInputComment" cols="30" rows="10">{{$comment->comment}}</textarea>
+            <textarea name="comment" class="form-control" id="exampleInputComment" cols="30" rows="10" maxlength="254">{{$comment->comment}}</textarea>
           </div>
           <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
           <a href="{{route('comments.index')}}" class="btn btn-light">Cancel</a>

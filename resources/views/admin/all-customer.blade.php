@@ -25,6 +25,7 @@
 
 </style>
 
+<h2>Customer Page</h2><br>
 @if(\Session::has('success'))
     <div class="alert alert-success">
         <p>{{ \Session::get('success') }}</p>
@@ -33,11 +34,11 @@
 
 <table id="example" class="table table-hover" style="width:100%">
     <thead>
-        <tr>
+        {{-- <tr>
             <th>
                 <a href="{{route('customers.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
             </th>
-        </tr>
+        </tr> --}}
         <tr>
             <th>Name</th>
             <th>Gender</th>
@@ -60,9 +61,27 @@
                   </div>
                 </div>
             </td>
-            <td>{{$user->gender}}</td>
-            <td>{{$user->address}}</td>
-            <td>{{$user->phoneNum}}</td>
+            <td>
+                @if($user->gender)
+                {{$user->gender}}
+                @else
+                -
+                @endif
+            </td>
+            <td>
+                @if($user->address)
+                {{$user->address}}
+                @else
+                -
+                @endif
+            </td>
+            <td>
+                @if($user->phoneNum)
+                {{$user->phoneNum}}
+                @else
+                -
+                @endif
+            </td>
             <td>{{$user->role}}</td>
             <td> 
                 <a href="{{route('customers.edit', $user->id)}}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>

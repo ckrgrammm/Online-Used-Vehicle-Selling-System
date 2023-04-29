@@ -16,6 +16,8 @@ use App\Mail\SendMail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\URL;
+
 
 class UserController extends Controller
 {
@@ -31,8 +33,14 @@ class UserController extends Controller
         return view('admin/all-customer', compact('users'));
     }
 
+    public function indexStaff()
+    {
+        $staffs = $this->userRepository->allStaff();
+        return view('admin/all-staff', compact('staffs'));
+    }
+
     public function create(){
-        return view('admin/add-customer');
+        return view('admin/add-staff');
     }
 
     public function store(Request $req){
@@ -50,16 +58,20 @@ class UserController extends Controller
             'email' => $req->email,
             'password' => Hash::make($req->password),
             'image' => 'unknown_profile.png',
-            'gender' => $req->gender
+            'gender' => $req->gender,
+            'role' => 'staff'
         ];
         $this->userRepository->storeUser($data);
-        return redirect('customers')->with('success', 'Successfully added a customer');
+        return redirect()->route('staffs.all')->with('success', 'Successfully added a staff');
 
     }
 
     public function edit($id){
         $user = $this->userRepository->findUser($id);
-        return view('admin/edit-customer', compact('user'));
+        if ($user->role == 'user'){
+            return view('admin/edit-customer', compact('user'));
+        }
+        return view('admin/edit-staff', compact('user'));
 
     }
 
@@ -68,6 +80,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
             'email' => 'required|email',
+            'genderRadios' => 'required'
         ]);
 
         $changed_profile_image = $request->post('changed-profile-image');
@@ -84,21 +97,28 @@ class UserController extends Controller
         $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'gender' => $request->gender,
+            'gender' => $request->genderRadios,
             'address' => $request->address,
             'image' => $image_name,
+            'role'  =>  $request->roleRadios,
             'phoneNum' => $request->phoneNum,
         ];
         $this->userRepository->updateUser($data, $id);
 
-        return redirect('customers')->with('success', 'Information has been updated');
+        if($request->roleRadios == 'user'){
+            return redirect('customers')->with('success', 'Information has been updated');
+        }
+        return redirect()->route('staffs.all')->with('success', 'Information has been updated');
     }
 
     public function destroyUser(string $id)
     {
         $this->userRepository->destroyUser($id);
-
-        return redirect('customers')->with('success', 'Information has been deleted');
+        $user = $this->userRepository->findUser($id);
+        if ($user->role == 'user'){
+            return redirect('customers')->with('success', 'Information has been deleted');
+        }
+        return redirect()->route('staffs.all')->with('success', 'Information has been deleted');
     }
 
     public function edit_password(Request $req, $id){

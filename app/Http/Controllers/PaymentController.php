@@ -666,4 +666,19 @@ class PaymentController extends Controller
             'comments' => $comments
         ]);
     }
+
+    public function verify_card_info(Request $req)
+    {
+        $response = $this->client->request('GET', 'http://127.0.0.1:9000/api/card_info');
+        $card_infos = json_decode($response->getBody()->getContents(), true);
+        foreach ($card_infos['card_infos'] as $card_info) {
+            if($card_info['card_number'] == $req->post('number') && $card_info['expiration_date'] == $req->post('expDate') && $card_info['cardholder_name'] == $req->post('name') && $card_info['cvv'] == $req->post('cvv') && $card_info['payment_method'] == $req->post('payMethod'))
+            {
+                $response = array('message' => true);
+                return json_encode($response);
+            }
+        }
+        $response = array('message' => false);
+        return json_encode($response);
+    }
 }

@@ -1,5 +1,7 @@
 @extends('admin/master')
 @section('content')
+<h2>Free Gift Page</h2><br>
+
 @if(\Session::has('success'))
     <div class="alert alert-success">
         <p>{{ \Session::get('success') }}</p>
@@ -7,7 +9,6 @@
 @endif
 
 <div class="container-fluid">
-    <h2>Free Gift Page</h2><br>
     <div class="table-responsive">
         <table id="example" class="table table-hover" style="width:100%">
             <thead>

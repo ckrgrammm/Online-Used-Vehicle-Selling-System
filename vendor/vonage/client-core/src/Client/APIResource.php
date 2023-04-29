@@ -112,11 +112,12 @@ class APIResource implements ClientAwareInterface
             $headers
         );
 
+        $request->getBody()->write(json_encode($body));
+
         if ($this->getAuthHandler()) {
             $request = $this->addAuth($request);
         }
 
-        $request->getBody()->write(json_encode($body));
         $this->lastRequest = $request;
 
         $response = $this->getClient()->send($request);
@@ -187,7 +188,7 @@ class APIResource implements ClientAwareInterface
      * @throws ClientExceptionInterface
      * @throws Exception\Exception
      */
-    public function get($id, array $query = [], array $headers = [])
+    public function get($id, array $query = [], array $headers = [], bool $jsonResponse = true)
     {
         $uri = $this->getBaseUrl() . $this->baseUri . '/' . $id;
 
@@ -224,6 +225,10 @@ class APIResource implements ClientAwareInterface
             $e->setEntity($id);
 
             throw $e;
+        }
+
+        if (!$jsonResponse) {
+            return $response->getBody();
         }
 
         return json_decode($response->getBody()->getContents(), true);

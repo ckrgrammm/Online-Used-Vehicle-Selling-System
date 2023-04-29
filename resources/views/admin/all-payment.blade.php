@@ -1,12 +1,15 @@
 @extends('admin/master')
 @section('content')
+
+<h2>Payment Page</h2><br>
+
 @if(\Session::has('success'))
     <div class="alert alert-success">
         <p>{{ \Session::get('success') }}</p>
     </div><br>
 @endif
+
 <div class="container-fluid">
-    <h2>Payment Page</h2><br>
     <div class="table-responsive">
         <table id="example" class="table table-hover" style="width:100%">
             <thead>
@@ -63,7 +66,24 @@
     </script>
     <script>
         $(document).ready(function () {
-            $('#example').DataTable();
+            $('#example').DataTable({
+                "lengthMenu": [5, 10, 20, 50],
+                "dom": 'ZBfrltip',
+                "buttons": [
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4, 5 ]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4, 5 ]
+                        }
+                    },
+                ],
+            });
         });
     </script>
 

@@ -1,5 +1,6 @@
 @extends('user/master')
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 {{-- <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 <!-- Custom styles for this template -->
@@ -254,6 +255,7 @@
             <input type="hidden" name="grand_total_hidden" id="grand_total_hidden">
             <input type="hidden" name="order_id_hidden" id="order_id_hidden" value="{{$orderId}}">
             <input type="hidden" name="product_price" id="product_price" value="{{$totalPrice}}">
+            <input id="card-type" name="cardType" type="hidden" value="credit card">
           </form>
         </div>
       </div>
@@ -269,19 +271,29 @@
     <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script> --}}
 
 
 <script>
-  
-
     $(document).ready(function() {
       $('#country').niceSelect(); 
       $('#country').niceSelect('destroy');
       $('#state').niceSelect(); 
       $('#state').niceSelect('destroy');
-  });
+    });
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var voucherApply = false;
+
+    $('input[type=radio][name=paymentMethod]').change(function() {
+      if (this.value === 'credit card') {
+        $('#card-type').val('credit card');
+      }
+      else if (this.value === 'debit card') {
+        $('#card-type').val('debit card');
+      }
+    });
+
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       (function() {
         'use strict';
@@ -297,6 +309,43 @@
                 event.preventDefault();
                 event.stopPropagation();
               }
+
+              // send an AJAX request
+              const data = {
+                payMethod: $('input[name="cardType"]').val(),
+                name: $('input[name="cc-name"]').val(),
+                number: $('input[name="cc-number"]').val(),
+                expDate: $('input[name="cc-expiration"]').val(),
+                cvv: $('input[name="cc-cvv"]').val(),
+              };
+
+              fetch('/verify_card_info', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify(data)
+              })
+              .then(response => response.json())
+              .then(data => {
+                if(data.message === false){
+                  swal({
+                      title: "Error!",
+                      text: "Invalid card infos",
+                      icon: "error",
+                      button: "OK",
+                  });
+
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+
+
               form.classList.add('was-validated');
             }, false);
           });

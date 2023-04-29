@@ -12,7 +12,16 @@ class UserRepository implements UserRepositoryInterface
 
     public function allUser()
     {
-        return User::where('deleted', 0)->get();
+        return User::where('deleted', 0)
+        ->where('role', 'user')
+        ->get();
+    }
+
+    public function allStaff()
+    {
+        return User::where('deleted', 0)
+        ->where('role', 'staff')
+        ->get();
     }
 
     public function storeUser($data)
@@ -57,6 +66,7 @@ class UserRepository implements UserRepositoryInterface
         $user->email = $data['email'];
         $user->gender = $data['gender'];
         $user->address = $data['address'];
+        $user->role = $data['role'];
         if($data['image'] != ''){
             $user->image = $data['image'];
         }

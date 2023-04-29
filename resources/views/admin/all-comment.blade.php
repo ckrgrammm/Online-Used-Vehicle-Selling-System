@@ -54,7 +54,12 @@
     margin-right: auto;
 }
 
+td.comment {
+    white-space: pre-wrap;  
+}
 </style>
+
+<h2>Review and Rating Page</h2><br>
 
 @if(\Session::has('success'))
     <div class="alert alert-success">
@@ -64,11 +69,11 @@
 
 <table id="example" class="table table-hover" style="width:100%">
     <thead>
-        <tr>
+        {{-- <tr>
             <th>
                 <a href="{{route('comments.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
             </th>
-        </tr>
+        </tr> --}}
         <tr>
             <th>Name</th>
             <th>Rating</th>
@@ -115,7 +120,7 @@
                 @endif
             </td>
             <td>{{$comment->created_at}}</td>
-            <td>{{$comment->comment}}</td>
+            <td class="comment">{{$comment->comment}}</td>
             <td> 
                 <a href="{{route('comments.edit', $comment->id)}}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
                 <a href="/deleteReview/{{$comment->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>

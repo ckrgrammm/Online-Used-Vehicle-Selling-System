@@ -32,7 +32,7 @@ use Twilio\Deserialize;
  * @property string|null $domainName
  * @property string|null $certificateSid
  * @property string|null $url
- * @property bool|null $validated
+ * @property array|null $certInValidation
  */
 class DomainCertsInstance extends InstanceResource
 {
@@ -56,7 +56,7 @@ class DomainCertsInstance extends InstanceResource
             'domainName' => Values::array_get($payload, 'domain_name'),
             'certificateSid' => Values::array_get($payload, 'certificate_sid'),
             'url' => Values::array_get($payload, 'url'),
-            'validated' => Values::array_get($payload, 'validated'),
+            'certInValidation' => Values::array_get($payload, 'cert_in_validation'),
         ];
 
         $this->solution = ['domainSid' => $domainSid ?: $this->properties['domainSid'], ];

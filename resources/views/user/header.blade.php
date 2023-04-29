@@ -51,6 +51,7 @@ use App\Models\Order;
                               <a class="dropdown-item" href="/user/edit-profile">Edit Profile</a>
                               <a class="dropdown-item" href="/user/changePassword">Change Password</a>
                               <a class="dropdown-item" href="/myCarsOnBid">My Cars on Bid</a>
+                              <a class="dropdown-item" href="{{route('payment.displayHistory')}}">Payments</a>
                               <a class="dropdown-item" href="/logout">Log Out</a>
                             </div>
                           </li>   
@@ -70,7 +71,10 @@ use App\Models\Order;
                             <li class="nav-item">
                                 <a class="nav-link" href="{{route('products.index')}}">Find</a>
                             </li>
-                            <li class="nav-item dropdown">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('reviews')}}">Comments</a>
+                            </li>
+                            {{-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_1"
                                     role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Shop
@@ -94,7 +98,7 @@ use App\Models\Order;
                                     <a class="dropdown-item" href="/payment-history">Payment History</a>
                                     <a class="dropdown-item" href="elements.html">elements</a>
                                 </div>
-                            </li>
+                            </li> --}}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_2"
                                     role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

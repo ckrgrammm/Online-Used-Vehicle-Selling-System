@@ -27,7 +27,13 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/icons/mdi.html">
+        <a class="nav-link" href="{{route('memberships.index')}}">
+          <span class="menu-title">Membership</span>
+          <i class="mdi mdi-account-card-details menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{route('staffs.all')}}">
           <span class="menu-title">Staff</span>
           <i class="mdi mdi-account-tie menu-icon"></i>
         </a>

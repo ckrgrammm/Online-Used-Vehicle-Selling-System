@@ -11,5 +11,6 @@ Interface VisitorRepositoryInterface{
     public function destroyVisitor($id);
     public function weeklyVisitor($weeksAgo);
     public function weeklyVisitorPercentageChange();
+    public function weeklyVisitChart();
 
 }

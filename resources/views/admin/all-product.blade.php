@@ -35,20 +35,22 @@
 
 </style>
 
+<h2>Product Page</h2><br>
+
 @if(\Session::has('success'))
 <div class="alert alert-success">
     <p>{{ \Session::get('success') }}</p>
 </div><br>
 @endif
 
-<h2>Product Page</h2><br>
+
 <table id="example" class="table table-hover" style="width:100%">
     <thead>
-        <tr>
+        {{-- <tr>
             <th>
                 <a href="{{route('products.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
             </th>
-        </tr>
+        </tr> --}}
         <tr>
             <th>Make</th>
             <th>Model</th>
@@ -95,7 +97,7 @@
             <td>{{ $product->price }}</td>
            
                 <td> 
-                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
+                {{-- <a href="{{ route('products.edit', $product->id) }}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a> --}}
                 <a href="/destroyProduct/{{$product->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
             </td>
 

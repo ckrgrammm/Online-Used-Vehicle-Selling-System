@@ -6,6 +6,7 @@ use App\Repositories\Interfaces\ReviewRepositoryInterface;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReviewRepository implements ReviewRepositoryInterface
 {
@@ -43,6 +44,21 @@ class ReviewRepository implements ReviewRepositoryInterface
         }
 
         return round($percentageChange, 2);
+    }
+
+    public function weeklyReviewChart()
+    {
+        // Get the start and end dates of the current week (Monday to Sunday)
+        $startDate = Carbon::now()->startOfWeek()->format('Y-m-d H:i:s');
+        $endDate = Carbon::now()->endOfWeek()->format('Y-m-d H:i:s');
+
+        // Get the comments for the current week and group them by the day of the week
+        $comments = Comment::select(DB::raw("DATE_FORMAT(created_at,'%W') as dayOfWeek"), DB::raw('count(*) as count'))
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->groupBy('dayOfWeek')
+                    ->get();
+                            
+        return $comments;
     }
 
     public function storeReview($data)

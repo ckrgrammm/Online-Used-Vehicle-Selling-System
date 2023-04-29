@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\VisitorRepositoryInterface;
 use App\Models\Visitor;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class VisitorRepository implements VisitorRepositoryInterface
 {
@@ -67,4 +68,20 @@ class VisitorRepository implements VisitorRepositoryInterface
 
         return round($percentageChange, 2);
     }
+
+    public function weeklyVisitChart()
+    {
+        // Get the start and end dates of the current week (Monday to Sunday)
+        $startDate = Carbon::now()->startOfWeek()->format('Y-m-d H:i:s');
+        $endDate = Carbon::now()->endOfWeek()->format('Y-m-d H:i:s');
+
+        // Get the comments for the current week and group them by the day of the week
+        $visits = Visitor::select(DB::raw("DATE_FORMAT(updated_at,'%W') as dayOfWeek"), DB::raw('count(*) as count'))
+                    ->whereBetween('updated_at', [$startDate, $endDate])
+                    ->groupBy('dayOfWeek')
+                    ->get();
+                            
+        return $visits;
+    }
+
 }

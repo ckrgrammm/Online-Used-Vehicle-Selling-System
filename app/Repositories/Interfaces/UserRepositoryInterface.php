@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 Interface UserRepositoryInterface{
     
     public function allUser();
+    public function allStaff();
     public function storeUser($data);
     public function findUser($id);
     public function findUserByEmail($email);
