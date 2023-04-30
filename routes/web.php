@@ -117,9 +117,11 @@ Route::prefix('admin')->middleware(['auth', 'isStafforAdmin'])->group(function()
 
 });
 
+Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
+    Route::get('/allStaffs', [UserController::class, 'indexStaff'])->name('staffs.all');
+    Route::resource('staffs', UserController::class);
 
-// Route::resource('visitor', VisitorController::class);
-// Route::post('/sell', [UserController::class, 'sell']);
-// Route::view('/temp','user/temp');
+});
+
 
     
