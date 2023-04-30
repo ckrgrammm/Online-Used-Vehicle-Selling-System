@@ -46,11 +46,11 @@ use App\Models\Order;
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                               @if($data->role != 'user')
-                                <a class="dropdown-item" href="#">Dashboard</a>
+                                <a class="dropdown-item" href="/admin/admin_portal">Dashboard</a>
                               @endif
                               <a class="dropdown-item" href="/user/edit-profile">Edit Profile</a>
                               <a class="dropdown-item" href="/user/changePassword">Change Password</a>
-                              <a class="dropdown-item" href="/myCarsOnBid">My Cars on Bid</a>
+                              <a class="dropdown-item" href="/user/myCarsOnBid">My Cars on Bid</a>
                               <a class="dropdown-item" href="{{route('payment.displayHistory')}}">Payments</a>
                               <a class="dropdown-item" href="/logout">Log Out</a>
                             </div>
@@ -99,20 +99,6 @@ use App\Models\Order;
                                     <a class="dropdown-item" href="elements.html">elements</a>
                                 </div>
                             </li> --}}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_2"
-                                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    blog
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
-                                    <a class="dropdown-item" href="blog.html"> blog</a>
-                                    <a class="dropdown-item" href="single-blog.html">Single blog</a>
-                                </div>
-                            </li>
-                            
-                            <li class="nav-item">
-                                <a class="nav-link" href="contact.html">Contact</a>
-                            </li>
                         </ul>
                     </div>
                     <div class="hearer_icon d-flex">
@@ -137,7 +123,7 @@ use App\Models\Order;
                         ?>
                         
                         <div class="dropdown cart">
-                            <a href="/cart">
+                            <a href="/user/cart">
                                 <i class="fas fa-cart-plus"></i>
                             </a>
                             {{-- <a class="dropdown-toggle" href="/cart" id="navbarDropdown3" role="button"

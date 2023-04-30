@@ -67,7 +67,7 @@ class ReviewController extends Controller
             'image' => $review_img
         ];
         $this->reviewRepository->storeReview($data);
-        return redirect('/payment-history')->with('add_review_message', 'Review and Rating has been added');
+        return redirect('user/payment-history')->with('add_review_message', 'Review and Rating has been added');
     }
 
     /**

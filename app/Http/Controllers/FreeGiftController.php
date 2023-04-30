@@ -90,7 +90,7 @@ class FreeGiftController extends Controller
                 'json' => $data
             ]);
             $freeGifts = json_decode($response->getBody()->getContents(), true);
-            return redirect('freegifts')->with('success', 'Successfully added a gift');
+            return redirect('admin/freegifts')->with('success', 'Successfully added a gift');
         
     }
 
@@ -126,7 +126,7 @@ class FreeGiftController extends Controller
                     'json' => $data
                 ]);
             $freeGifts = json_decode($response->getBody()->getContents(), true);
-            return redirect('freegifts')->with('success', 'Successfully edit a gift');
+            return redirect('admin/freegifts')->with('success', 'Successfully edit a gift');
     }
 
 
@@ -136,7 +136,7 @@ class FreeGiftController extends Controller
 
         $freeGifts = json_decode($response->getBody()->getContents(), true);
 
-        return redirect('freegifts')->with('success', 'Successfully deleted a gift');
+        return redirect('admin/freegifts')->with('success', 'Successfully deleted a gift');
     }
     
 

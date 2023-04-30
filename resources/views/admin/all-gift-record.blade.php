@@ -33,7 +33,7 @@
                     <td>{{ $giftRecord['giftId'] }}</td>
                     <td>
                         <a href="{{ route('giftRecords.edit', $giftRecord['id']) }}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
-                        <a href="/deleteGiftRecords/{{ $giftRecord['id'] }}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
+                        <a href="/admin/deleteGiftRecords/{{ $giftRecord['id'] }}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
                     </td>
 
                 </tr>

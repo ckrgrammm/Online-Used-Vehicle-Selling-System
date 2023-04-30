@@ -322,7 +322,7 @@ class PaymentController extends Controller
             
         }
 
-        return redirect('payments')->with('success', 'Payment information has been updated');
+        return redirect('admin/payments')->with('success', 'Payment information has been updated');
 
     }
 
@@ -330,7 +330,7 @@ class PaymentController extends Controller
     {
         $this->paymentBuilder->delete($id);
 
-        return redirect('payments')->with('success', 'Payment information has been deleted');
+        return redirect('admin/payments')->with('success', 'Payment information has been deleted');
     }
 
     public function displayPayment($selectedOrderIds)
@@ -789,10 +789,10 @@ class PaymentController extends Controller
         if (!empty($delivery)) {
             $delivery[0]->delivery_status = $request->delivery_status;
             $deliveryXml->asXML('../database/xml/delivery.xml');
-            return redirect('/delivery')->with('success', 'Delivery status updated successfully');
+            return redirect('admin/delivery')->with('success', 'Delivery status updated successfully');
         }
         
-        return redirect('/delivery')->with('failed', 'Delivery status updated failed');
+        return redirect('admin/delivery')->with('failed', 'Delivery status updated failed');
     }
 
     public function monthlySales_report()

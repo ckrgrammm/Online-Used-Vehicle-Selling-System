@@ -198,40 +198,6 @@
 
 <!--================End Category Product Area =================-->
 
-<!-- product_list part start-->
-<section class="product_list best_seller">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-12">
-                <div class="section_tittle text-center">
-                    <h2>Best Sellers <span>shop</span></h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="row align-items-center justify-content-between">
-            <div class="col-lg-12">
-                <div class="best_product_slider owl-carousel">
-                    @foreach($products as $product)
-
-                    <div class="single_product_item">
-                        @php
-                        $images = explode('|', $product->product_image);
-                        @endphp
-                        <img src="{{ asset('user/img/product/'.$images[0]) }}" width="300" height="175" class="d-block w-100" alt="">
-                        <div class="single_product_text">
-                            <h4>{{ $product->make }}</h4>
-                            <span>{{ $product->model }}</span>
-                            <h3>{{ $product->price }}</h3>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- product_list part end-->
 
 <script>
     // Wait for the DOM to be ready

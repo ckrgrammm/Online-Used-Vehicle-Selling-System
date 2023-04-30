@@ -85,7 +85,7 @@
             <td>{{$staff->role}}</td>
             <td> 
                 <a href="{{route('staffs.edit', $staff->id)}}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
-                <a href="/deleteUser/{{$staff->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
+                <a href="/admin/deleteUser/{{$staff->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
             </td>
         </tr>
         @endforeach

@@ -72,7 +72,7 @@
                 </div>
                 @endif
                 <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                <a href="/payments" class="btn btn-light">Cancel</a>
+                <a href="/admin/payments" class="btn btn-light">Cancel</a>
             </form>
         </div>
     </div>

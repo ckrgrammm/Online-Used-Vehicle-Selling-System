@@ -27,9 +27,7 @@ use App\Http\Controllers\MembershipController;
 |
 */
 
-// Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
-
-// });
+Route::get('/', [VisitorController::class, 'store']);
 
 Route::get('/login', function () {
     return view('user/login');
@@ -37,75 +35,32 @@ Route::get('/login', function () {
 
 Route::get('logout', function () {
     Session::forget('user');
+    session()->flush();
     return redirect('/login');
-});
-
-
-// Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
-//     Route::get('/admin_portal', function () {
-//         return view('admin/admin-index');
-//     });
-// });
-
-Route::get('/', [VisitorController::class, 'store']);
-Route::get('visitor/weeklyVisitor', [VisitorController::class, 'weeklyVisitor']);
-Route::get('visitor/weeklyVisitorPercentageChange', [VisitorController::class, 'weeklyVisitorPercentageChange']);
-Route::resource('visitor', VisitorController::class);
-
-Route::get('/admin_portal', [DashboardController::class, 'index']);
-
-// Route::get('/admin_portal', function () {
-//     return view('admin/admin-index');
-// });
-
-
-// Route::get('/customer', [UserController::class, 'index']);
-
-// Route::get('/comment', function () {
-//     return view('admin/all-comment');
-// });
-
-// Route::get('/add-customer', function () {
-//     return view('admin/add-customer');
-// });
-
-// Route::get('/edit-customer/{id}', [UserController::class, 'find']);
-
-Route::get('/sell', function () {
-    return view('user/sell');
 });
 
 Route::get('/forget_password', function () {
     return view('user/forgetPassword');
 });
 
-
-Route::get('/all-product', function () {
-    return view('user/all-product');
-});
-
+Route::view('/register','user/register');
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/register', [UserController::class, 'register']);
 Route::get('/searchKeyword', [UserController::class, 'searchKeyword']);
 Route::post('/searchProduct', [UserController::class, 'searchProduct']);
-Route::get('/addToCart/{id}', [ProductController::class, 'addToCart']);
-Route::post('/verify_card_info', [PaymentController::class, 'verify_card_info']);
-Route::get('/membershipDetails/{level}', [MembershipController::class, 'membershipDetails'])->name('membershipDetails');
-Route::get('/membershipAllDetails', [MembershipController::class, 'membershipAllDetails'])->name('membershipAllDetails');
-Route::get('/allStaffs', [UserController::class, 'indexStaff'])->name('staffs.all');
-Route::get('/delivery', [PaymentController::class, 'delivery']);
-Route::get('/delivery/{id}', [PaymentController::class, 'edit_delivery'])->name('delivery.edit');
-Route::post('/delivery/{id}', [PaymentController::class, 'update_delivery'])->name('delivery.update');
-
-
-Route::get('/monthlySales', [PaymentController::class, 'monthlySales_report'])->name('monthlySales');
-Route::get('/userDemographic', [UserController::class, 'userDemographic_report'])->name('userDemographic');
-Route::get('/commentAnalysis', [ReviewController::class, 'commentAnalysis_report'])->name('commentAnalysis');
-
-
 Route::get('/reviews', [ReviewController::class, 'review_page'])->name('reviews');
-
-
-
+Route::post('/forget_password', [UserController::class, 'forgetPassword']);
+Route::post('/submitResetPasswordForm', [UserController::class, 'submitResetPasswordForm']);
 Route::get('user/reset_password/{token}/{email}', [UserController::class, 'verify_reset_password'])->name('reset_password');
+Route::get('/auth/google', [UserController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
+Route::resource('products', ProductController::class);
+Route::get('/product_details/{id}', [ProductController::class, 'details'])->name('products.details');
+Route::get('/filter', [ProductController::class, 'filterByMake'])->name('filterByMake');
+Route::get('/addToCart/{id}', [ProductController::class, 'addToCart']);
+Route::resource('comments', ReviewController::class);
+
+
 Route::prefix('user')->middleware(['auth'])->group(function () {
     // Only authenticated users can access this route
     Route::get('/edit-profile', [UserController::class, 'edit_profile']);
@@ -114,62 +69,41 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
         return view('user/sell');
     });
     Route::get('/changePassword', [UserController::class, 'changePassword']);
-    
-});
-
-Route::get('/myCarsOnBid', [ProductController::class, 'myCarsOnBid']);
-
-Route::get('/auth/google', [UserController::class, 'redirectToGoogle']);
-Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
-Route::get('/sendOTP/{phoneNumber}', [UserController::class, 'sendOTP']);
-Route::get('/validateOTP/{otp}', [UserController::class, 'validateOTP']);
-
-Route::view('/register','user/register');
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/forget_password', [UserController::class, 'forgetPassword']);
-Route::post('/submitResetPasswordForm', [UserController::class, 'submitResetPasswordForm']);
-Route::post('/sell', [UserController::class, 'sell']);
-Route::resource('products', ProductController::class);
-Route::resource('comments', ReviewController::class);
-Route::resource('customers', UserController::class);
-Route::resource('staffs', UserController::class);
-Route::resource('memberships', MembershipController::class);
-Route::post('/edit_password/{id}', [UserController::class, 'edit_password']);
-Route::get('/deleteUser/{id}', [UserController::class, 'destroyUser']);
-Route::get('/deleteReview/{id}', [ReviewController::class, 'destroyReview']);
-
-Route::get('/reviews/{reviewId}/like', [ReviewController::class, 'like']);
-
-
-
-
-Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
-    Route::get('/add-product', function () {
-        return view('admin/add-product');
-    });
-
-
-});
-    // Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-    // Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/destroyProduct/{id}', [ProductController::class, 'destroyProduct']);
-    // Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-    Route::get('/product_details/{id}', [ProductController::class, 'details'])->name('products.details');
+    Route::post('/verify_card_info', [PaymentController::class, 'verify_card_info']);
+    Route::get('/myCarsOnBid', [ProductController::class, 'myCarsOnBid']);
+    Route::get('/sendOTP/{phoneNumber}', [UserController::class, 'sendOTP']);
+    Route::get('/validateOTP/{otp}', [UserController::class, 'validateOTP']);
+    Route::post('/edit_password/{id}', [UserController::class, 'edit_password']);
+    Route::get('/reviews/{reviewId}/like', [ReviewController::class, 'like']);
     Route::get('/cart', [ProductController::class, 'cart'])->name('products.cart');
     Route::get('/deleteCart/{id}', [ProductController::class, 'deleteCart'])->name('products.deleteCart');
-
-    Route::get('/admin/all-product', [ProductController::class, 'admin'])->name('products.admin');
-    Route::get('/filter', [ProductController::class, 'filterByMake'])->name('filterByMake');
-
-    Route::resource('payments', PaymentController::class);
-    Route::get('/deletePayment/{id}', [PaymentController::class, 'destroyPayment']);
-    Route::view('/temp','user/temp');
     Route::get('/checkout/{selectedOrderIds}', [PaymentController::class, 'displayPayment'])->name('payment.display');
     Route::post('/payment', [PaymentController::class, 'createPayment'])->name('payment.create');
     Route::get('/payment-history', [PaymentController::class, 'displayPaymentHistory'])->name('payment.displayHistory');
     
+});
+
+Route::prefix('admin')->middleware(['auth', 'isStafforAdmin'])->group(function(){
+    //only admin can do
+    Route::get('/allStaffs', [UserController::class, 'indexStaff'])->name('staffs.all');
+    Route::get('/admin_portal', [DashboardController::class, 'index']);
+    Route::get('/membershipDetails/{level}', [MembershipController::class, 'membershipDetails'])->name('membershipDetails');
+    Route::get('/membershipAllDetails', [MembershipController::class, 'membershipAllDetails'])->name('membershipAllDetails');
+    Route::get('/delivery', [PaymentController::class, 'delivery']);
+    Route::get('/delivery/{id}', [PaymentController::class, 'edit_delivery'])->name('delivery.edit');
+    Route::post('/delivery/{id}', [PaymentController::class, 'update_delivery'])->name('delivery.update');
+    Route::get('/monthlySales', [PaymentController::class, 'monthlySales_report'])->name('monthlySales');
+    Route::get('/userDemographic', [UserController::class, 'userDemographic_report'])->name('userDemographic');
+    Route::get('/commentAnalysis', [ReviewController::class, 'commentAnalysis_report'])->name('commentAnalysis');
+    Route::resource('customers', UserController::class);
+    Route::resource('staffs', UserController::class);
+    Route::resource('memberships', MembershipController::class);
+    Route::get('/deleteUser/{id}', [UserController::class, 'destroyUser']);
+    Route::get('/deleteReview/{id}', [ReviewController::class, 'destroyReview']);
+    Route::get('/destroyProduct/{id}', [ProductController::class, 'destroyProduct']);
+    Route::get('/admin/all-product', [ProductController::class, 'admin'])->name('products.admin');
+    Route::resource('payments', PaymentController::class);
+    Route::get('/deletePayment/{id}', [PaymentController::class, 'destroyPayment']);
     
     Route::apiResource('freegifts', FreeGiftController::class, ['names' => 'freegifts']);
     Route::get('/freegifts/create/new', [FreeGiftController::class, 'create'])->name('freegifts.create');//to fix create modify to show by using /new
@@ -180,4 +114,12 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     Route::get('/gift-records/create/new', [GiftRecordController::class, 'create'])->name('giftRecords.create');//to fix create modify to show by using /new
     Route::get('/gift-records/edit/{id}', [GiftRecordController::class, 'edit'])->name('giftRecords.edit');
     Route::get('/deleteGiftRecords/{id}', [GiftRecordController::class, 'destroyGiftRecord']);
+
+});
+
+
+// Route::resource('visitor', VisitorController::class);
+// Route::post('/sell', [UserController::class, 'sell']);
+// Route::view('/temp','user/temp');
+
     

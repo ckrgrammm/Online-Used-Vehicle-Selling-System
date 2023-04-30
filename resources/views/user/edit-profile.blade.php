@@ -494,7 +494,7 @@ input[type=number]::-webkit-outer-spin-button {
       countdown = setInterval(function() {
         updateButton();
       }, 1000);
-      fetch('/sendOTP/'+inputValue)
+      fetch('/user/sendOTP/'+inputValue)
         .then(response => response.json())
         .then(data => {
           $("input[name='phone-number']").val("");
@@ -513,7 +513,7 @@ input[type=number]::-webkit-outer-spin-button {
       var input6Value = document.getElementById("sixth").value;
       var concatenatedString = input1Value + input2Value + input3Value + input4Value + input5Value + input6Value;
 
-      fetch('/validateOTP/'+concatenatedString)
+      fetch('/user/validateOTP/'+concatenatedString)
         .then(response => response.json())
         .then(data => {
             if(data.message == 'true'){

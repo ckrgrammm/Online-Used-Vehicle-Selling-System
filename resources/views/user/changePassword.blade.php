@@ -26,7 +26,7 @@
                             <p>{{ \Session::get('success') }}</p>
                         </div><br>
                     @endif
-                      <form action="/edit_password/{{$data->id}}" method="POST">
+                      <form action="/user/edit_password/{{$data->id}}" method="POST">
                           @csrf
                           @if(!(\Session::has('appendFields')) && !$errors->has("password"))
                           <div class="form-group row">

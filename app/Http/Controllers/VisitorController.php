@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Helpers\UserSystemInfoHelper;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\Interfaces\VisitorRepositoryInterface;
 
 
@@ -86,8 +88,26 @@ class VisitorController extends Controller
             ];
             $visitor = $this->visitorRepository->storeVisitor($data);
         }
-       
-        return view('user/index');
+
+        $products = Product::take(4)
+        ->where('deleted', 0)
+        ->get();
+
+        $products_list1 = DB::table('products')
+        ->where('deleted', 0)
+        ->inRandomOrder()
+        ->limit(4)
+        ->get();
+
+
+        $products_list2 = DB::table('products')
+        ->where('deleted', 0)
+        ->inRandomOrder()
+        ->limit(4)
+        ->get();
+
+
+        return view('user/index', compact('products', 'products_list1', 'products_list2'));
     }
 
     /**

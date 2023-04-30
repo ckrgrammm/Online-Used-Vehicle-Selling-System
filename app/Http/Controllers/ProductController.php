@@ -92,6 +92,10 @@ class ProductController extends Controller
 
     public function addToCart($id)
     {
+        if(!auth()->user()){
+            $response = array('message' => 'no login');
+            return json_encode($response);
+        }
         $data = [
             'user_id'       => auth()->user()->id,
             'product_id'    => $id
@@ -273,7 +277,7 @@ class ProductController extends Controller
         $product->updateAll($data);
 
         if($request->input('previousRouteName') == "myCarsOnBid"){
-            return redirect('/myCarsOnBid')->with('success', 'Product updated successfully.');
+            return redirect('user/myCarsOnBid')->with('success', 'Product updated successfully.');
         }
         return redirect()->route('products.admin')->with('success', 'Product updated successfully.');
     }

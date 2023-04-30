@@ -104,7 +104,7 @@ class GiftRecordController extends Controller
                 'json' => $data
             ]);
             $giftRecords = json_decode($response->getBody()->getContents(), true);
-            return redirect('gift-records')->with('success', 'Successfully added a gift record');
+            return redirect('admin/gift-records')->with('success', 'Successfully added a gift record');
         
     }
 
@@ -175,7 +175,7 @@ class GiftRecordController extends Controller
                     'json' => $data
                 ]);
             $giftRecords = json_decode($response->getBody()->getContents(), true);
-            return redirect('gift-records')->with('success', 'Successfully edit a gift record');
+            return redirect('admin/gift-records')->with('success', 'Successfully edit a gift record');
     }
 
 
@@ -185,7 +185,7 @@ class GiftRecordController extends Controller
 
         $giftRecords = json_decode($response->getBody()->getContents(), true);
 
-        return redirect('gift-records')->with('success', 'Successfully deleted a gift record');
+        return redirect('admin/gift-records')->with('success', 'Successfully deleted a gift record');
     }
 
     public function edit($id)
@@ -244,6 +244,6 @@ class GiftRecordController extends Controller
                     'json' => $data
                 ]);
             $giftRecords = json_decode($response->getBody()->getContents(), true);
-            return redirect('gift-records')->with('success', 'Successfully edit a gift record');
+            return redirect('admin/gift-records')->with('success', 'Successfully edit a gift record');
     }
 }

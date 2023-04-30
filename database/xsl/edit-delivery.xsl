@@ -114,6 +114,6 @@
             </div>
         </div>
         <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-        <a href="/delivery" class="btn btn-light">Cancel</a>
+        <a href="/admin/delivery" class="btn btn-light">Cancel</a>
   </xsl:template>
 </xsl:stylesheet>

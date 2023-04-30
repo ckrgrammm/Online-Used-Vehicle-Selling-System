@@ -180,8 +180,8 @@
                                 ticks: {
                                     display: false,
                                     min: 0,
-                                    stepSize: 20,
-                                    max: 80
+                                    stepSize: 5,
+                                    max: 30
                                 },
                                 gridLines: {
                                     drawBorder: false,
@@ -204,7 +204,7 @@
                                 categoryPercentage: 0.5,
                                 barPercentage: 0.5
                             }]
-                            }
+                        }
                     },
                     elements: {
                         point: {

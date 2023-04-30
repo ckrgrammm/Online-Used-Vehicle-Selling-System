@@ -17,7 +17,7 @@
                     <td><xsl:value-of select="delivery_date"/></td>
                     <td><xsl:value-of select="delivery_status"/></td>
                     <td> 
-                        <a href="{concat('/delivery/', payment_id)}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
+                        <a href="{concat('/admin/delivery/', payment_id)}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
                     </td>
                 </tr>
             </xsl:for-each>

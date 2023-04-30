@@ -1,6 +1,10 @@
+<?php
+use Illuminate\Foundation\Auth;
+?>
+
 <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-      <a class="navbar-brand brand-logo" href="/admin_portal">Respectism</a>
+      <a class="navbar-brand brand-logo" href="/admin/admin_portal">Respectism</a>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-stretch">
       <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -10,9 +14,9 @@
         <form class="d-flex align-items-center h-100" action="#">
           <div class="input-group">
             <div class="input-group-prepend bg-transparent">
-              <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              {{-- <i class="input-group-text border-0 mdi mdi-magnify"></i> --}}
             </div>
-            <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+            {{-- <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects"> --}}
           </div>
         </form>
       </div>
@@ -20,18 +24,18 @@
         <li class="nav-item nav-profile dropdown">
           <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="nav-profile-img">
-              <img src="{{asset('admin/assets/images/faces/face1.jpg')}}" alt="image">
+              <img src="{{asset('user/img/profile/'.auth()->user()->image)}}" alt="image">
               <span class="availability-status online"></span>
             </div>
             <div class="nav-profile-text">
-              <p class="mb-1 text-black">David Greymaax</p>
+              <p class="mb-1 text-black">{{auth()->user()->name}}</p>
             </div>
           </a>
           <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-            <a class="dropdown-item" href="#">
-              <i class="mdi mdi-cached me-2 text-success"></i> Activity Log </a>
+            <a class="dropdown-item" href="/">
+              <i class="mdi mdi-cached me-2 text-success"></i> Back to Website </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="/logout">
               <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
           </div>
         </li>
@@ -40,7 +44,7 @@
             <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
           </a>
         </li>
-        <li class="nav-item dropdown">
+        {{-- <li class="nav-item dropdown">
           <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="mdi mdi-email-outline"></i>
             <span class="count-symbol bg-warning"></span>
@@ -80,8 +84,8 @@
             <div class="dropdown-divider"></div>
             <h6 class="p-3 mb-0 text-center">4 new messages</h6>
           </div>
-        </li>
-        <li class="nav-item dropdown">
+        </li> --}}
+        {{-- <li class="nav-item dropdown">
           <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
             <i class="mdi mdi-bell-outline"></i>
             <span class="count-symbol bg-danger"></span>
@@ -127,17 +131,17 @@
             <div class="dropdown-divider"></div>
             <h6 class="p-3 mb-0 text-center">See all notifications</h6>
           </div>
-        </li>
+        </li> --}}
         <li class="nav-item nav-logout d-none d-lg-block">
           <a class="nav-link" href="#">
             <i class="mdi mdi-power"></i>
           </a>
         </li>
-        <li class="nav-item nav-settings d-none d-lg-block">
+        {{-- <li class="nav-item nav-settings d-none d-lg-block">
           <a class="nav-link" href="#">
             <i class="mdi mdi-format-line-spacing"></i>
           </a>
-        </li>
+        </li> --}}
       </ul>
       <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
         <span class="mdi mdi-menu"></span>

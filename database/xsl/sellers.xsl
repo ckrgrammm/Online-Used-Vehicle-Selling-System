@@ -30,8 +30,8 @@
                     <td><xsl:value-of select="transmission"/></td>
                     <td><xsl:value-of select="description"/></td>
                     <td>
-                        <a href="{concat('user/img/product/', image)}" class="image-link">
-                            <img src="{concat('user/img/product/', image)}" class="img-fluid"/>
+                        <a href="{concat('http://127.0.0.1:8000/user/img/product/', image)}" class="image-link">
+                            <img src="{concat('http://127.0.0.1:8000/user/img/product/', image)}" class="img-fluid"/>
                         </a>
                     </td>
                     <td><xsl:value-of select="price"/></td>

@@ -189,7 +189,7 @@
                 @endif
 
                 <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                <a href="/myCarsOnBid" class="btn btn-light">Cancel</a>
+                <a href="/user/myCarsOnBid" class="btn btn-light">Cancel</a>
             </form>
         </div>
     </div>

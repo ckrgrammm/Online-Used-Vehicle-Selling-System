@@ -1,21 +1,25 @@
+<?php
+use Illuminate\Foundation\Auth;
+?>
+
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
       <li class="nav-item nav-profile">
         <a href="#" class="nav-link">
           <div class="nav-profile-image">
-            <img src="{{asset('admin/assets/images/faces/face1.jpg')}}" alt="profile">
+            <img src="{{asset('user/img/profile/'.auth()->user()->image)}}" alt="profile">
             <span class="login-status online"></span>
             <!--change to offline or busy as needed-->
           </div>
           <div class="nav-profile-text d-flex flex-column">
-            <span class="font-weight-bold mb-2">David Grey. H</span>
-            <span class="text-secondary text-small">Project Manager</span>
+            <span class="font-weight-bold mb-2">{{auth()->user()->name}}</span>
+            <span class="text-secondary text-small">{{auth()->user()->role}}</span>
           </div>
           <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/admin_portal">
+        <a class="nav-link" href="/admin/admin_portal">
           <span class="menu-title">Dashboard</span>
           <i class="mdi mdi-home menu-icon"></i>
         </a>
@@ -45,13 +49,13 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/payments">
+        <a class="nav-link" href="/admin/payments">
           <span class="menu-title">Payment</span>
           <i class="mdi mdi-coin menu-icon"></i>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/delivery">
+        <a class="nav-link" href="/admin/delivery">
           <span class="menu-title">Delivery</span>
           <i class="mdi mdi-truck-fast menu-icon"></i>
         </a>
@@ -63,13 +67,13 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/freegifts">
+        <a class="nav-link" href="/admin/freegifts">
           <span class="menu-title">Free Gift</span>
           <i class="mdi mdi-gift menu-icon"></i>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/gift-records">
+        <a class="nav-link" href="/admin/gift-records">
           <span class="menu-title">Gift Record</span>
           <i class="mdi mdi-label menu-icon"></i>
         </a>

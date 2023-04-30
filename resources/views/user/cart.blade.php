@@ -39,6 +39,24 @@ tr.sold td::before {
     font-weight: bold;
 }
 
+tr.deleted {
+    position: relative;
+}
+
+tr.deleted td:not(:last-child) {
+  opacity: 0.5;
+}
+
+tr.deleted td::before {
+    content: "DELETED"; /* add the "SOLD" text */
+    font-size: 72px;
+    color: #ff3368;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+}
 </style>
 
 <!--================Home Banner Area =================-->
@@ -82,10 +100,10 @@ tr.sold td::before {
                     </thead>
                     <tbody>
                         @foreach($orders as $order)
-                        <tr class="{{ $order->status === 'sold' ? 'sold' : '' }}">
+                        <tr class="{{ $order->status === 'sold' ? 'sold' : ($order->deleted === 1 ? 'deleted' : '') }}">
                             <td>
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input select-checkbox" id="select-{{ $order->id }}" value="{{ $order->orderId }}" {{ $order->status === 'sold' ? 'disabled' : '' }}>
+                                    <input type="checkbox" class="custom-control-input select-checkbox" id="select-{{ $order->id }}" value="{{ $order->orderId }}" {{ $order->status === 'sold' ? 'disabled' : ($order->deleted === 1 ? 'disabled' : '') }}>
                                     <label class="custom-control-label" for="select-{{ $order->id }}"></label>
                                 </div>
                             </td>
@@ -224,7 +242,7 @@ tr.sold td::before {
                 if (willDelete) {
                     const productId = $(this).data('order-id');
                     // send an AJAX request to the server to update the likes count
-                    fetch('/deleteCart/'+productId)
+                    fetch('/user/deleteCart/'+productId)
                         .then(response => response.json())
                         .then(data => {
                             if(data.message === 'success'){

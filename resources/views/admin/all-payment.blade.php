@@ -39,7 +39,7 @@
                 <td>{{$payment->billing_address}}</td>
                 <td> 
                     <a href="{{route('payments.edit', $payment->id)}}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
-                    <a href="/deletePayment/{{$payment->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
+                    <a href="/admin/deletePayment/{{$payment->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
                 </td>
             </tr>
             @endforeach

@@ -17,8 +17,8 @@
                 <div class="col-lg-8">
                     <div class="breadcrumb_iner">
                         <div class="breadcrumb_iner_item">
-                            <h2>Tracking Order</h2>
-                            <p>Home <span>-</span> Tracking Order</p>
+                            <h2>Register Account</h2>
+                            <p>Home <span>-</span> Register Account </p>
                         </div>
                     </div>
                 </div>
@@ -35,8 +35,7 @@
                     <div class="login_part_text text-center">
                         <div class="login_part_text_iner">
                             <h2>Already have account?</h2>
-                            <p>There are advances being made in science and technology
-                                everyday, and a good example of this is the</p>
+                            <p>There are always new and exciting things happening on the internet, and our website is no exception. We are constantly updating our content and adding new features to improve your experience.</p>
                             <a href="/login" class="btn_3">Login Account</a>
                         </div>
                     </div>

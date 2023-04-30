@@ -319,7 +319,7 @@
                 cvv: $('input[name="cc-cvv"]').val(),
               };
 
-              fetch('/verify_card_info', {
+              fetch('/user/verify_card_info', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

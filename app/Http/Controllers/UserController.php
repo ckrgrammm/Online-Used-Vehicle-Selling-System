@@ -106,7 +106,7 @@ class UserController extends Controller
         $this->userRepository->updateUser($data, $id);
 
         if($request->roleRadios == 'user'){
-            return redirect('customers')->with('success', 'Information has been updated');
+            return redirect('admin/customers')->with('success', 'Information has been updated');
         }
         return redirect()->route('staffs.all')->with('success', 'Information has been updated');
     }
@@ -116,7 +116,7 @@ class UserController extends Controller
         $this->userRepository->destroyUser($id);
         $user = $this->userRepository->findUser($id);
         if ($user->role == 'user'){
-            return redirect('customers')->with('success', 'Information has been deleted');
+            return redirect('admin/customers')->with('success', 'Information has been deleted');
         }
         return redirect()->route('staffs.all')->with('success', 'Information has been deleted');
     }
@@ -304,7 +304,8 @@ class UserController extends Controller
             'gender' => $request->post('gender'),
             'address' => $request->post('address'),
             'phoneNum' => $request->post('phone-number'),
-            'image' => $image_name
+            'image' => $image_name,
+            'role' => auth()->user()->role,
         ];
         $this->userRepository->updateUser($data, $id);
 

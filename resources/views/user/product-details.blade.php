@@ -183,7 +183,7 @@
                         hideClass: "animate__animated animate__fadeOut"
                     }
                 });
-              } else {
+              } else if(data.message === 'fail') {
                 swal({
                     title: "Add to Cart Failed",
                     text: "This item is already in your cart.",
@@ -197,6 +197,8 @@
                         hideClass: "animate__animated animate__fadeOut"
                     }
                 });
+              } else if(data.message === 'no login') {
+                window.location.href = '/login';
               }
           });
     });

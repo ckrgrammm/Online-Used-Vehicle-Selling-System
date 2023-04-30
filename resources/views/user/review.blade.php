@@ -264,7 +264,7 @@ likeButtons.forEach(likeButton => {
     event.preventDefault();
     const likeButtonId = $(this).attr('id');
     // send an AJAX request to the server to update the likes count
-    fetch('/reviews/'+likeButtonId+'/like')
+    fetch('/user/reviews/'+likeButtonId+'/like')
         .then(response => response.json())
         .then(data => {
             // get the parent container of the like button
