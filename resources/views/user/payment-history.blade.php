@@ -531,7 +531,7 @@ h2 {
                         <td>{{ $payments[$index]->payment_method }}</td>
                         <td>{{ date('Y-m-d', strtotime($payments[$index]->payment_date)) }}</td>
                         <td style="white-space: pre-wrap;">{{ $payments[$index]->billing_address }}</td>
-                        <td>{{ $productDetails->status }}</td>
+                        <td>{{ $payments[$index]->delivery_status }}</td>
                         <td class="text-center">
                             @foreach($comments as $comm)
                                 @if($comm->payment_id == $payments[$index]->id)

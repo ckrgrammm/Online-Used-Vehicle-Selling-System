@@ -91,8 +91,14 @@ Route::post('/verify_card_info', [PaymentController::class, 'verify_card_info'])
 Route::get('/membershipDetails/{level}', [MembershipController::class, 'membershipDetails'])->name('membershipDetails');
 Route::get('/membershipAllDetails', [MembershipController::class, 'membershipAllDetails'])->name('membershipAllDetails');
 Route::get('/allStaffs', [UserController::class, 'indexStaff'])->name('staffs.all');
+Route::get('/delivery', [PaymentController::class, 'delivery']);
+Route::get('/delivery/{id}', [PaymentController::class, 'edit_delivery'])->name('delivery.edit');
+Route::post('/delivery/{id}', [PaymentController::class, 'update_delivery'])->name('delivery.update');
 
 
+Route::get('/monthlySales', [PaymentController::class, 'monthlySales_report'])->name('monthlySales');
+Route::get('/userDemographic', [UserController::class, 'userDemographic_report'])->name('userDemographic');
+Route::get('/commentAnalysis', [ReviewController::class, 'commentAnalysis_report'])->name('commentAnalysis');
 
 
 Route::get('/reviews', [ReviewController::class, 'review_page'])->name('reviews');

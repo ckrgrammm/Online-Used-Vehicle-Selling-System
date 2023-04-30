@@ -336,15 +336,17 @@
                       icon: "error",
                       button: "OK",
                   });
-
-                  event.preventDefault();
-                  event.stopPropagation();
+                  return false;
+                } else {
+                  form.submit();
                 }
               })
               .catch(error => {
                 console.error('Error:', error);
               });
 
+              event.preventDefault();
+              event.stopPropagation();
 
               form.classList.add('was-validated');
             }, false);

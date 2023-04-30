@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sellers SYSTEM "sellers.dtd">
+<sellers>
+  <seller>
+    <seller_id>001</seller_id>
+    <car>
+      <make>Toyota</make>
+      <model>Camry</model>
+      <year>2018</year>
+      <mileage>35000</mileage>
+      <color>White</color>
+      <transmission>Automatic</transmission>
+      <description>This car is in excellent condition, with low mileage and a clean interior.</description>
+      <image>https://example.com/car1_1.jpg</image>
+      <price>15000</price>
+      <buyer>
+        <name>John Doe</name>
+        <email>john.doe@example.com</email>
+      </buyer>
+    </car>
+  </seller>
+  
+  <seller>
+    <seller_id>002</seller_id>
+    <car>
+      <make>Ford</make>
+      <model>Mustang</model>
+      <year>2020</year>
+      <mileage>2000</mileage>
+      <color>Red</color>
+      <transmission>Manual</transmission>
+      <description>This car is like new, with very low mileage and a powerful engine.</description>
+      <image>https://example.com/car1_1.jpg</image>
+      <price>35000</price>
+      <buyer>
+        <name>Jane Smith</name>
+        <email>jane.smith@example.com</email>
+      </buyer>
+    </car>
+  </seller>
+  
+  <seller>
+    <seller_id>003</seller_id>
+    <car>
+      <make>BMW</make>
+      <model>X5</model>
+      <year>2019</year>
+      <mileage>25000</mileage>
+      <color>Black</color>
+      <transmission>Automatic</transmission>
+      <description>This SUV is in great condition, with a spacious interior and plenty of features.</description>
+      <image>https://example.com/car1_1.jpg</image>
+      <price>45000</price>
+      <buyer>
+        <name>Bob Johnson</name>
+        <email>bob.johnson@example.com</email>
+      </buyer>
+    </car>
+  </seller>
+<seller><seller_id>18</seller_id><car><make>Mercedes</make><model>AMG G63</model><year>2015</year><mileage>250</mileage><color>black</color><transmission>auto</transmission><description>hello</description><image>42841883644cbb0464746.png</image><price>88000</price><buyer><name>LIM ER HAO</name><email>limeh-wm20@student.tarc.edu.my</email></buyer></car></seller><seller><seller_id>18</seller_id><car><make>Audi</make><model>RS7</model><year>2018</year><mileage>100</mileage><color>red</color><transmission>auto</transmission><description>auto</description><image>536286554644cd1a117c05.png</image><price>100000</price><buyer><name>LIM ER HAO</name><email>limeh-wm20@student.tarc.edu.my</email></buyer></car></seller><seller><seller_id>18</seller_id><car><make>Audi</make><model>RS7</model><year>2019</year><mileage>123</mileage><color>black</color><transmission>auto</transmission><description>hey</description><image>1287669779644cdc389b1a3.png</image><price>123000</price><buyer><name>LIM ER HAO</name><email>limeh-wm20@student.tarc.edu.my</email></buyer></car></seller><seller><seller_id>18</seller_id><car><make>Audi</make><model>RS7</model><year>2019</year><mileage>123</mileage><color>black</color><transmission>auto</transmission><description>hey</description><image>1287669779644cdc389b1a3.png</image><price>123000</price><buyer><name>LIM ER HAO</name><email>limeh-wm20@student.tarc.edu.my</email></buyer></car></seller><seller><seller_id>18</seller_id><car><make>Proton</make><model>Axia</model><year>2018</year><mileage>111</mileage><color>yellow</color><transmission>auto</transmission><description>yes</description><image>14132673644dc4d01203c.png</image><price>44000</price><buyer><name>LIM ER HAO</name><email>limeh-wm20@student.tarc.edu.my</email></buyer></car></seller><seller><seller_id>18</seller_id><car><make>Proton</make><model>Axia</model><year>2018</year><mileage>111</mileage><color>yellow</color><transmission>auto</transmission><description>yes</description><image>14132673644dc4d01203c.png</image><price>44000</price><buyer><name>LIM ER HAO</name><email>limeh-wm20@student.tarc.edu.my</email></buyer></car></seller></sellers>

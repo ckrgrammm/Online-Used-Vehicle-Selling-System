@@ -17,6 +17,8 @@ use App\Models\Payment;
 use App\Models\Order;
 use App\Models\Product;
 use GuzzleHttp\Client;
+use \DOMDocument;
+use \XSLTProcessor;
 
 class PaymentController extends Controller
 {
@@ -544,6 +546,53 @@ class PaymentController extends Controller
                 $products = $productController->setDeleted($product_id);
             }
 
+            // Load the existing sellers XML file
+            $sellersXml = simplexml_load_file('../database/xml/sellers.xml');
+
+            $order_ids = explode(',', $payment->order_id);
+            foreach ($order_ids as $order_id) {
+                $order = Order::where('id', $order_id)->first();
+                if ($order) {
+                    $product = Product::where('id', $order->product_id)->first();
+                    if ($product) {
+                        // Create a new seller element
+                        $newSeller = $sellersXml->addChild('seller');
+                        $newSeller->addChild('seller_id', $product->user_id);
+
+                        // Create a new car element
+                        $newCar = $newSeller->addChild('car');
+                        $newCar->addChild('make', $product->make);
+                        $newCar->addChild('model', $product->model);
+                        $newCar->addChild('year', $product->year);
+                        $newCar->addChild('mileage', $product->mileage);
+                        $newCar->addChild('color', $product->color);
+                        $newCar->addChild('transmission', $product->transmission);
+                        $newCar->addChild('description', $product->product_description);
+                        $image_array = explode('|', $product->product_image);
+                        $newCar->addChild('image', $image_array[0]);
+                        $newCar->addChild('price', $product->price);
+
+                        // Create a new buyer element
+                        $newBuyer = $newCar->addChild('buyer');
+                        $newBuyer->addChild('name', auth()->user()->name);
+                        $newBuyer->addChild('email', auth()->user()->email);
+
+                        // Save the updated XML file
+                        $sellersXml->asXML('../database/xml/sellers.xml');
+                    }
+                }
+            }
+
+            // Load the existing delivery XML file
+            $deliveryXml = simplexml_load_file('../database/xml/delivery.xml');
+            // Create a new delivery record as a car element
+            $newDelivery = $deliveryXml->addChild('car');
+            $newDelivery->addChild('payment_id', $payment->id);
+            $newDelivery->addChild('delivery_date', date("Y-m-d"));
+            $newDelivery->addChild('delivery_status', 'Prepare to Ship');
+            // Save the updated XML file
+            $deliveryXml->asXML('../database/xml/delivery.xml');
+
         return redirect('/payment-history')->with('success', 'Payment successful! Thank you for your purchase.');
     }
 
@@ -585,11 +634,28 @@ class PaymentController extends Controller
                 $totalSpent += $payment[0]->total_charge;
                 $count += 1; 
             }
+            $payment[0]->delivery_status = '';
             $payments[] = $payment[0];
             $previousPaymentId = $payment[0]->id;
             $name = $customer->name;
             $email = $customer->email;
             $phoneNum = $customer->phoneNum;
+        }
+
+        // Load the delivery XML file into a SimpleXMLElement object
+        $xml = simplexml_load_file('../database/xml/delivery.xml');
+
+        foreach ($xml->car as $car) {
+            $paymentId = (string) $car->payment_id;
+            $deliveryStatus = (string) $car->delivery_status;
+            
+            // Find the payment with the matching ID in the $payments array
+            foreach ($payments as $payment) {
+                if ($payment->id == $paymentId) {
+                    $payment->delivery_status = $deliveryStatus;
+                    break;
+                }
+            }
         }
 
         // Load the existing customers XML file
@@ -680,5 +746,71 @@ class PaymentController extends Controller
         }
         $response = array('message' => false);
         return json_encode($response);
+    }
+
+    public function delivery()
+    {
+        $xml = new DOMDocument();
+        $xml->load('../database/xml/delivery.xml');
+
+        // Apply the XSLT transformation to the XML document
+        $xsl = new DOMDocument();
+        $xsl->load('../database/xsl/delivery.xsl');
+
+        $proc = new XSLTProcessor();
+        $proc->importStylesheet($xsl);
+        $html = $proc->transformToXML($xml);
+
+        return view('admin/delivery', compact('html'));
+    }
+
+    public function edit_delivery($id)
+    {
+        $xml = new DOMDocument();
+        $xml->load('../database/xml/delivery.xml');
+
+        // Apply the XSLT transformation to the XML document
+        $xsl = new DOMDocument();
+        $xsl->load('../database/xsl/edit-delivery.xsl');
+
+        $proc = new XSLTProcessor();
+        $proc->importStylesheet($xsl);
+        $proc->setParameter('', 'payment_id', $id);
+
+        $html = $proc->transformToXML($xml);
+
+        return view('admin/edit-delivery', compact('html', 'id'));
+    }
+
+    public function update_delivery(Request $request, $id)
+    {
+        $deliveryXml = simplexml_load_file('../database/xml/delivery.xml');
+        $delivery = $deliveryXml->xpath("//car[payment_id='$id']");
+        if (!empty($delivery)) {
+            $delivery[0]->delivery_status = $request->delivery_status;
+            $deliveryXml->asXML('../database/xml/delivery.xml');
+            return redirect('/delivery')->with('success', 'Delivery status updated successfully');
+        }
+        
+        return redirect('/delivery')->with('failed', 'Delivery status updated failed');
+    }
+
+    public function monthlySales_report()
+    {
+        $monthlySales = Payment::select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS month'), DB::raw('SUM(total_charge) AS total_sales'))
+                  ->groupBy('month')
+                  ->orderBy('month', 'ASC')
+                  ->get();
+
+        // Initialize sales array
+        $salesArray = array_fill(0, 12, 0); // fill with 0 for all 12 months
+        
+        // Update sales array with monthly sales data
+        foreach ($monthlySales as $sale) {
+            $monthIndex = intval(substr($sale->month, 5)) - 1; // get month index (0-11) from date string
+            $salesArray[$monthIndex] = $sale->total_sales;
+        }
+        
+        return view('admin/report-monthlySales', compact('salesArray'));
     }
 }

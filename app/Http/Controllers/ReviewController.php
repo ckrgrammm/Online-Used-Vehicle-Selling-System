@@ -10,6 +10,7 @@ use App\Repositories\Interfaces\ReviewRepositoryInterface;
 use Session;
 use App\Models\Comment;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 
 class ReviewController extends Controller
@@ -243,5 +244,15 @@ class ReviewController extends Controller
         }
         $this->reviewRepository->updateLikes(json_encode($likes), $reviewId);
         return json_encode($response);
+    }
+
+    public function commentAnalysis_report()
+    {
+        $comments = Comment::select('id', 'rating', DB::raw('IFNULL(JSON_LENGTH(JSON_EXTRACT(likes, "$.users_id")), 0) as num_likes'))
+        ->orderBy('id')
+        ->get();
+
+        // return $comments;
+        return view('admin/report-commentAnalysis', compact('comments'));
     }
 }

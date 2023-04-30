@@ -400,5 +400,25 @@ class UserController extends Controller
         $products = $this->userRepository->searchProduct($product);
         return view('user/all-product', compact('products'));
     }
+
+    function userDemographic_report()
+    {
+        $userDemographic = User::selectRaw('gender, COUNT(*) as count')
+                    ->groupBy('gender')
+                    ->get();
+
+        $labelArray = [];
+        foreach ($userDemographic as $data) {
+            $labelArray[] = $data->gender === null ? 'not filled' : $data->gender;
+        }
+        $labelArray = str_replace('"', "'", json_encode($labelArray));
+        
+        $dataArray = [];
+        foreach ($userDemographic as $data) {
+            $dataArray[] = $data->count;
+        }
+        
+        return view('admin/report-userDemographic', compact('labelArray', 'dataArray'));
+    }
    
 }

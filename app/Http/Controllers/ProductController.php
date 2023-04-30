@@ -13,6 +13,8 @@ use App\Observers\ProductData;
 use App\Observers\ProductObserver;
 use App\Observers\Subject;
 use Illuminate\Support\Facades\URL;
+use \DOMDocument;
+use \XSLTProcessor;
 
 class ProductController extends Controller
 {
@@ -52,7 +54,20 @@ class ProductController extends Controller
         $products = $product->findMyCars(auth()->user()->id);
         $productsOnBid = $product->findMyCarsOnBid(auth()->user()->id);
 
-        return view('user/myCarsOnBid', compact('products', 'productsOnBid'));
+        $xml = new DOMDocument();
+        $xml->load('../database/xml/sellers.xml');
+
+        // Apply the XSLT transformation to the XML document
+        $xsl = new DOMDocument();
+        $xsl->load('../database/xsl/sellers.xsl');
+
+        $proc = new XSLTProcessor();
+        $proc->importStylesheet($xsl);
+        $proc->setParameter('', 'seller_id', auth()->user()->id);
+
+        $html = $proc->transformToXML($xml);
+
+        return view('user/myCarsOnBid', compact('products', 'productsOnBid', 'html'));
     }
 
     public function details($id)

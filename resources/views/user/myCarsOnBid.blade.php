@@ -114,11 +114,6 @@
 </div>
 
 <div class="container" style="margin-top: 10rem">
-    @if(\Session::has('success'))
-    <div class="alert alert-success">
-        <p>{{ \Session::get('success') }}</p>
-    </div><br>
-    @endif
     <h2>My Cars on Bid</h2><br>
     <div class="justify-content-around">
         <table id="bid" class="table table-hover" style="width:100%">
@@ -185,6 +180,13 @@
     </div>
 </div>
 
+<div class="container" style="margin-top: 10rem">
+    <h2>Sold Cars</h2><br>
+    <div class="justify-content-around">
+        {!!$html!!}
+    </div>
+</div>
+
 <script>
     jq(document).ready(function () {
         jq('#post').DataTable({
@@ -197,6 +199,15 @@
         });
 
         jq('#bid').DataTable({
+            "lengthMenu": [5, 10, 20, 50],
+            "drawCallback": function() {
+                $('.image-link').magnificPopup({
+                    type: 'image'
+                });
+            }
+        });
+
+        jq('#sold').DataTable({
             "lengthMenu": [5, 10, 20, 50],
             "drawCallback": function() {
                 $('.image-link').magnificPopup({
