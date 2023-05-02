@@ -593,7 +593,7 @@ class PaymentController extends Controller
             // Save the updated XML file
             $deliveryXml->asXML('../database/xml/delivery.xml');
 
-        return redirect('/payment-history')->with('success', 'Payment successful! Thank you for your purchase.');
+        return redirect('user/payment-history')->with('success', 'Payment successful! Thank you for your purchase.');
     }
 
     public function displayPaymentHistory()
