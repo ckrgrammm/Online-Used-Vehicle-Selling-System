@@ -90,11 +90,11 @@ class ProductObserver implements Observer{
             ]);
             return true;
         } 
-        // else if ($order->status === 'deleted') {
-        //     // If an order exists but its status is 'deleted', update its status to 'available'
-        //     $order->update(['status' => 'available']);
-        //     return true;
-        // }
+        else if ($order->status === 'deleted') {
+            // If an order exists but its status is 'deleted', update its status to 'available'
+            $order->update(['status' => 'available']);
+            return true;
+        }
         return false;
     }
     
