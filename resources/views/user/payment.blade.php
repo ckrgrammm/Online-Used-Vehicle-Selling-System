@@ -186,7 +186,7 @@
 
               <div class="col-md-3 mb-3">
                 <label for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" name="zip" placeholder="" required="" >
+                <input type="text" class="form-control" id="zip" name="zip" placeholder="" maxlength="5" required="" >
                 <div class="invalid-feedback">
                   Zip code required.
                 </div>
