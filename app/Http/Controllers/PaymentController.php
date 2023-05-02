@@ -58,24 +58,30 @@ class PaymentController extends Controller
                 function ($attribute, $value, $fail) use (&$iString) {
                     $i = array();
                     $order_ids = explode(',', $value);
+                    $user_id = null;
                     foreach ($order_ids as $index => $order_id) {
-                        foreach ($order_ids as $prevIndex => $prevOrderId) {
-                            if ($index !== $prevIndex && $order_id === $prevOrderId) {
-                                $fail('The '.$attribute.' cannot contain duplicate order id.');
+                        $exists = DB::table('orders')
+                            ->where('id', $order_id)
+                            ->where('status', 'available')
+                            ->exists();
+                        if (!$exists) {
+                            $fail("The {$attribute} must contain valid order IDs with a status of 'available'.");
+                            return;
+                        }
+                        $order = DB::table('orders')
+                            ->select('user_id')
+                            ->where('id', $order_id)
+                            ->first();
+                        $order_user_id = $order->user_id;
+                        if ($index === 0) {
+                            $user_id = $order_user_id;
+                        } else {
+                            if ($user_id !== $order_user_id) {
+                                $fail('The user ID of order ID is different.');
                                 return;
                             }
                         }
-                        if($order_id){
-                            $exists = DB::table('orders')
-                                ->where('id', $order_id)
-                                ->where('status', 'available')
-                                ->exists();
-                            if (!$exists) {
-                                $fail("The {$attribute} must contain valid order IDs with a status of 'available'.");
-                                return;
-                            }
-                            $i[] = $order_id;
-                        }
+                        $i[] = $order_id;
                     }
                     $iString = implode(',', $i);
                 },
@@ -85,6 +91,7 @@ class PaymentController extends Controller
             'method' => 'required',
             'address' => 'required|string'
         ]);
+        
         $date_string = $req->input('date');
         $payment_date = DateTime::createFromFormat('Y-m-d', $date_string);
         $data = [
@@ -182,13 +189,31 @@ class PaymentController extends Controller
                         $order_ids = explode(',', $value);
                         $old_order_id = $req->old_order_id;
                         $old_order_ids = explode(',', $old_order_id);
+                        $user_id = null;
                         foreach ($order_ids as $index => $order_id) {
+                            
                             foreach ($order_ids as $prevIndex => $prevOrderId) {
                                 if ($index !== $prevIndex && $order_id === $prevOrderId) {
                                     $fail('The '.$attribute.' cannot contain duplicate order id.');
                                     return;
                                 }
                             }
+
+                            $order = DB::table('orders')
+                            ->select('user_id')
+                            ->where('id', $order_id)
+                            ->first();
+                            $order_user_id = $order->user_id;
+                            
+                            if ($index === 0) {
+                                $user_id = $order_user_id;
+                            } else {
+                                if ($user_id !== $order_user_id) {
+                                    $fail('The user ID of order ID is different.');
+                                    return;
+                                }
+                            }
+
                             if ($order_id) {
                                 $order = DB::table('orders')->where('id', $order_id)->first();
                                 if (!$order || !in_array($order->status, ['available', 'paid'])) {
@@ -217,7 +242,7 @@ class PaymentController extends Controller
                 ]
             ]);
         }
-
+        
         $req->validate([
             'total_charge' => 'required|int|regex:/^[0-9]{0,10}$/',
             'date' => 'required|date',

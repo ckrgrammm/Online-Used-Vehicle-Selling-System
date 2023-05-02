@@ -11,7 +11,7 @@
           <div class="form-group">
             <label for="order_id">Order ID</label>
             <input type="text" name="order_id" class="form-control" id="order_id" placeholder="123" value="{{old('order_id', $payment->order_id)}}" maxlength="255">
-            <input type="hidden" name="old_order_id" value="{{old('order_id', $payment->order_id)}}">
+            <input type="text" name="old_order_id" value="{{ $payment->order_id }}">
             @error($errors->has('order_id'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

@@ -15,8 +15,8 @@
         <email>jane.doe@example.com</email>
         <phone>234-567-8901</phone>
         <total-spent>2800000</total-spent>
-        <membership-level>gold</membership-level>
-        <discount>6.0</discount>
+        <membership-level>platinum</membership-level>
+        <discount>8.0</discount>
     </customer>
     <customer id="3">
         <name>Bob Johnson</name>
@@ -26,4 +26,4 @@
         <membership-level>platinum</membership-level>
         <discount>8.0</discount>
     </customer>
-<customer id="18"><name>chye wenn han</name><email>wennhan@gmail.com</email><phone>121212</phone><total-spent>2226100</total-spent><membership-level>gold</membership-level><discount>6.0</discount></customer></customers>
+<customer id="18"><name>chye wenn han</name><email>wennhan@gmail.com</email><phone>121212</phone><total-spent>2226100</total-spent><membership-level>platinum</membership-level><discount>8.0</discount></customer></customers>
