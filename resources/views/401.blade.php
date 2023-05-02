@@ -87,7 +87,7 @@
         <p class="p-b">
             ... Back to previous page
         </p>
-        <a href='#' class="back">... Back to previous page</a>
+        <a href='javascript:history.back()' class="back">... Back to previous page</a>
     </div>
 </div>
   
