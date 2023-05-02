@@ -305,8 +305,8 @@
             <div class="col-lg-8">
                 <div class="breadcrumb_iner">
                     <div class="breadcrumb_iner_item">
-                        <h2>contact us</h2>
-                        <p>Home <span>-</span> contact us</p>
+                        <h2>Sell Used car</h2>
+                        <p>Home <span>-</span> Sell Used car</p>
                     </div>
                 </div>
             </div>
