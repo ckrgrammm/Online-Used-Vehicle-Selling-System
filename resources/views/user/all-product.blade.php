@@ -171,7 +171,7 @@
                                 @php
                                     $images = explode('|', $product->product_image);
                                 @endphp
-                                <img src="{{ asset('user/img/product/'.$images[0]) }}" alt="" width="270" height="275">
+                                <img src="{{ asset('user/img/product/'.$images[0]) }}" alt="" style="width: 100%;">
                                 <div class="single_product_text">
                                     <h4>{{ $product->make .' '. $product->model }}</h4>
                                     <h3 class="product_price">RM {{ $product->price }}</h3>
