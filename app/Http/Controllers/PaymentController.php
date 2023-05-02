@@ -147,7 +147,7 @@ class PaymentController extends Controller
 
         
 
-        return redirect('payments')->with('success', 'Successfully added a payment');
+        return redirect('admin/payments')->with('success', 'Successfully added a payment');
 
     }
 
