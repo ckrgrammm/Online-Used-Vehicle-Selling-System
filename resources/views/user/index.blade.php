@@ -93,9 +93,15 @@
             @foreach ($products as $item)
                 @php
                     if($i==0 || $i==3)
-                    $num = "7";
+                    {
+                        $num = "7";
+                        $imageWidth = 300;
+                    }
                     else 
-                    $num = "5";
+                    {
+                        $num = "5";
+                        $imageWidth = 220;
+                    }
                 @endphp
                 @if ($i <= 3)
                     <div class="col-lg-{{$num}} col-sm-6">
@@ -106,7 +112,7 @@
                             @php
                                 $imageArray = explode('|', $item->product_image);
                             @endphp
-                            <img src="{{asset('user/img/product/'.$imageArray[0])}}" width="300" height="300" alt="">
+                            <img src="{{asset('user/img/product/'.$imageArray[0])}}" width="{{$imageWidth}}" height="{{$imageWidth}}" alt="">
                         </div>
                     </div>
                 @endif
