@@ -126,7 +126,7 @@
             <div class="row"> 
               <div class="col-md-12 mb-3">
                 <label for="name">Your name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="" value="a" required="">
+                <input type="text" class="form-control" id="name" name="name" placeholder="" required="">
                 <div class="invalid-feedback">
                   Valid name is required.
                 </div>
@@ -135,7 +135,7 @@
 
             <div class="mb-3">
               <label for="email">Email</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required="" value="123@1" >
+              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required="" >
               <div class="invalid-feedback">
                 Please enter a valid email address for shipping updates.
               </div>
@@ -143,7 +143,7 @@
 
             <div class="mb-3">
               <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" value="1" required="" maxlength="150">
+              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St"required="" maxlength="150">
               <div class="invalid-feedback">
                 Please enter your shipping address.
               </div>
@@ -186,7 +186,7 @@
 
               <div class="col-md-3 mb-3">
                 <label for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" name="zip" placeholder="" required="" value="11111">
+                <input type="text" class="form-control" id="zip" name="zip" placeholder="" required="" >
                 <div class="invalid-feedback">
                   Zip code required.
                 </div>
@@ -219,7 +219,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="cc-name">Name on card</label>
-                <input type="text" class="form-control" id="cc-name" name="cc-name" placeholder="" required="" value="test">
+                <input type="text" class="form-control" id="cc-name" name="cc-name" placeholder="" required="" >
                 <small class="text-muted">Full name as displayed on card</small>
                 <div class="invalid-feedback">
                   Name on card is required
@@ -227,7 +227,7 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label for="cc-number">Credit card number</label>
-                <input type="text" class="form-control" id="cc-number" name="cc-number" placeholder="" required="" value="1234123412341234" maxlength="16">
+                <input type="text" class="form-control" id="cc-number" name="cc-number" placeholder="" required="" maxlength="16">
                 <div class="invalid-feedback">
                   Credit card number is required
                 </div>
@@ -236,14 +236,14 @@
             <div class="row">
               <div class="col-md-3 mb-3">
                 <label for="cc-expiration">Expiration</label>
-                <input type="text" class="form-control" id="cc-expiration" name="cc-expiration" placeholder="12/25" required="" value="12/23" maxlength="5">
+                <input type="text" class="form-control" id="cc-expiration" name="cc-expiration" placeholder="12/25" required="" maxlength="5">
                 <div class="invalid-feedback">
                   Expiration date required
                 </div>
               </div>
               <div class="col-md-3 mb-3">
                 <label for="cc-cvv">CVV</label>
-                <input type="text" class="form-control" id="cc-cvv" name="cc-cvv" placeholder="" required="" value="123" maxlength="3">
+                <input type="text" class="form-control" id="cc-cvv" name="cc-cvv" placeholder="" required="" maxlength="3">
                 <div class="invalid-feedback">
                   Security code required
                 </div>
