@@ -351,7 +351,7 @@ class PaymentController extends Controller
 
     }
 
-    public function destroyPayment(string $id)
+    public function destroyPayment($id)
     {
         $this->paymentBuilder->delete($id);
 

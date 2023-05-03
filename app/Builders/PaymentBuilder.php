@@ -34,14 +34,14 @@ class PaymentBuilder implements PaymentBuilderInterface
 
     public function update($id, $data)
     {
-        $payment = Payment::findOrFail($id);
+        $payment = $this->queryBuilder->findOrFail($id);
         $payment->update($data);
         return $payment;
     }
 
     public function delete($id)
     {
-        $payment = Payment::findOrFail($id);
+        $payment = $this->queryBuilder->findOrFail($id);
         $payment->deleted = 1;
         $payment->update();
     }
