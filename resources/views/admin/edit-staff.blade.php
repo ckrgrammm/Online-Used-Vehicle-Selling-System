@@ -51,11 +51,11 @@
                 <p>{{ \Session::get('success') }}</p>
             </div><br>
         @endif
-        <h4 class="card-title">Customer</h4>
+        <h4 class="card-title">Staff</h4>
         <p class="card-description"> Edit Info </p>
         <form class="forms-sample" method="POST" action="{{ route('staffs.update', $user->id) }}" >
           @csrf
-          <input type="hidden" name="_method" value="PATCH"> 
+          <input type="hidden" name="_method" value="PATCH"> ++++++++++++++++
           <div class="form-group">
             <label for="exampleInputName1">Name</label>
             <input type="text" name="name" class="form-control" id="exampleInputName1" placeholder="Name" value="{{old('name', $user->name)}}">
