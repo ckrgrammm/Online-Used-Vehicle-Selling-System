@@ -46,9 +46,27 @@ class User extends Authenticatable
     ];
 
     public function isAdmin()
-{
-    return $this->role === 'admin';
-}
+    {
+        return $this->role === 'admin';
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasManyThrough(Payment::class, Order::class);
+    }
+
+
+
 
 
 }

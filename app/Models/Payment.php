@@ -17,4 +17,16 @@ class Payment extends Model
         'billing_address',
         'deleted'
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
 }
