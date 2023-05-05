@@ -533,15 +533,19 @@ h2 {
                         <td style="white-space: pre-wrap;">{{ $payments[$index]->billing_address }}</td>
                         <td>{{ $payments[$index]->delivery_status }}</td>
                         <td class="text-center">
-                            @foreach($comments as $comm)
-                                @if($comm->payment_id == $payments[$index]->id)
-                                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="You have rated and reviewed this payment">Review</button>
-                                    @php break; @endphp
-                                @endif
-                                @if($comm === $comments->last() && $comm->payment_id != $payments[$index]->id)
-                                    <button type="button" class="btn btn-primary add_review" data-payment-id="{{ $payments[$index]->id }}">Review</button>
-                                @endif
-                            @endforeach
+                            @if(!empty(json_decode($comments, true)))
+                                @foreach($comments as $comm)
+                                    @if($comm->payment_id == $payments[$index]->id)
+                                        <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="You have rated and reviewed this payment">Review</button>
+                                        @php break; @endphp
+                                    @endif
+                                    @if(($comm === $comments->last() && $comm->payment_id != $payments[$index]->id))
+                                        <button type="button" class="btn btn-primary add_review" data-payment-id="{{ $payments[$index]->id }}">Review</button>
+                                    @endif
+                                @endforeach
+                            @else
+                                <button type="button" class="btn btn-primary add_review" data-payment-id="{{ $payments[$index]->id }}">Review</button>
+                            @endif
                         </td>
                         @else
                         <td></td>

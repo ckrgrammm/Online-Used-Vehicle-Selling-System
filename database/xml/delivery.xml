@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE delivery SYSTEM "delivery.dtd">
 <delivery>
-  <car>
-    <payment_id>133</payment_id>
-    <delivery_date>2023-05-01</delivery_date>
-    <delivery_status>delivered</delivery_status>
-  </car>
-  <car>
-    <payment_id>456</payment_id>
-    <delivery_date>2023-05-03</delivery_date>
-    <delivery_status>in transit</delivery_status>
-  </car>
-  <car>
-    <payment_id>789</payment_id>
-    <delivery_date>2023-05-05</delivery_date>
-    <delivery_status>not shipped</delivery_status>
-  </car>
-<car><payment_id>126</payment_id><delivery_date>2023-04-29</delivery_date><delivery_status>Ready for Pickup</delivery_status></car><car><payment_id>127</payment_id><delivery_date>2023-04-30</delivery_date><delivery_status>Ready for Pickup</delivery_status></car><car><payment_id>128</payment_id><delivery_date>2023-05-03</delivery_date><delivery_status>in Transit</delivery_status></car><car><payment_id>129</payment_id><delivery_date>2023-05-03</delivery_date><delivery_status>Prepare to Ship</delivery_status></car><car><payment_id>130</payment_id><delivery_date>2023-05-03</delivery_date><delivery_status>Prepare to Ship</delivery_status></car><car><payment_id>131</payment_id><delivery_date>2023-05-03</delivery_date><delivery_status>Prepare to Ship</delivery_status></car><car><payment_id>128</payment_id><delivery_date>2023-05-03</delivery_date><delivery_status>Prepare to Ship</delivery_status></car><car><payment_id>133</payment_id><delivery_date>2023-05-03</delivery_date><delivery_status>Prepare to Ship</delivery_status></car><car><payment_id>128</payment_id><delivery_date>2023-05-03</delivery_date><delivery_status>Prepare to Ship</delivery_status></car></delivery>
+<car><payment_id>128</payment_id><delivery_date>2023-05-05</delivery_date><delivery_status>in Transit</delivery_status></car><car><payment_id>129</payment_id><delivery_date>2023-05-05</delivery_date><delivery_status>Delivered</delivery_status></car><car><payment_id>130</payment_id><delivery_date>2023-05-05</delivery_date><delivery_status>Delayed</delivery_status></car><car><payment_id>131</payment_id><delivery_date>2023-05-05</delivery_date><delivery_status>Cancelled</delivery_status></car><car><payment_id>132</payment_id><delivery_date>2023-05-05</delivery_date><delivery_status>on Hold</delivery_status></car><car><payment_id>133</payment_id><delivery_date>2023-05-05</delivery_date><delivery_status>Prepare to Ship</delivery_status></car><car><payment_id>134</payment_id><delivery_date>2023-05-05</delivery_date><delivery_status>Ready for Pickup</delivery_status></car><car><payment_id>135</payment_id><delivery_date>2023-05-05</delivery_date><delivery_status>Prepare to Ship</delivery_status></car></delivery>
