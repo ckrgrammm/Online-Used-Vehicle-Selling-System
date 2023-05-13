@@ -126,7 +126,7 @@
             <div class="row"> 
               <div class="col-md-12 mb-3">
                 <label for="name">Your name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="" required="">
+                <input type="text" class="form-control" id="name" name="name" placeholder="" required="" value="{{old('name')}}">
                 <div class="invalid-feedback">
                   Valid name is required.
                 </div>
@@ -135,7 +135,7 @@
 
             <div class="mb-3">
               <label for="email">Email</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required="" >
+              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required="" value="{{old('email')}}">
               <div class="invalid-feedback">
                 Please enter a valid email address for shipping updates.
               </div>
@@ -143,7 +143,7 @@
 
             <div class="mb-3">
               <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St"required="" maxlength="150">
+              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St"required="" maxlength="150" value="{{old('address')}}">
               <div class="invalid-feedback">
                 Please enter your shipping address.
               </div>
@@ -155,7 +155,7 @@
                 <label for="country">Country</label>
                 <select class="custom-select d-block w-100" id="country" name="country" required="">
                   <option value="">Choose...</option>
-                  <option value="Malaysia">Malaysia</option>
+                  <option value="Malaysia" {{ old('country') == 'Malaysia' ? 'selected' : '' }}>Malaysia</option>
                 </select>
                 <div class="invalid-feedback" id="showHideMsg">
                 Please enter your country.
@@ -163,20 +163,20 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="state">State</label>
-                <select class="custom-select d-block w-100" id="state" name="state" required="">
+                <select class="custom-select d-block w-100" id="state" name="state" required>
                   <option value="">Choose...</option>
-                  <option value="Johor">Johor</option>
-                  <option value="KL">Kuala Lumpur</option>
-                  <option value="Selangor">Selangor</option>
-                  <option value="Kelantan">Kelantan</option>
-                  <option value="Sembilan">Negeri Sembilan</option>
-                  <option value="Perak">Perak</option>
-                  <option value="Kedah">Kedah</option>
-                  <option value="Pahang">Pahang</option>
-                  <option value="Perlis">Perlis</option>
-                  <option value="Terengganu">Terengganu</option>
-                  <option value="Malacca">Malacca</option>
-                  <option value="Penang">Penang</option>
+                  <option value="Johor" {{ old('state') == 'Johor' ? 'selected' : '' }}>Johor</option>
+                  <option value="KL" {{ old('state') == 'KL' ? 'selected' : '' }}>Kuala Lumpur</option>
+                  <option value="Selangor" {{ old('state') == 'Selangor' ? 'selected' : '' }}>Selangor</option>
+                  <option value="Kelantan" {{ old('state') == 'Kelantan' ? 'selected' : '' }}>Kelantan</option>
+                  <option value="Sembilan" {{ old('state') == 'Sembilan' ? 'selected' : '' }}>Negeri Sembilan</option>
+                  <option value="Perak" {{ old('state') == 'Perak' ? 'selected' : '' }}>Perak</option>
+                  <option value="Kedah" {{ old('state') == 'Kedah' ? 'selected' : '' }}>Kedah</option>
+                  <option value="Pahang" {{ old('state') == 'Pahang' ? 'selected' : '' }}>Pahang</option>
+                  <option value="Perlis" {{ old('state') == 'Perlis' ? 'selected' : '' }}>Perlis</option>
+                  <option value="Terengganu" {{ old('state') == 'Terengganu' ? 'selected' : '' }}>Terengganu</option>
+                  <option value="Malacca" {{ old('state') == 'Malacca' ? 'selected' : '' }}>Malacca</option>
+                  <option value="Penang" {{ old('state') == 'Penang' ? 'selected' : '' }}>Penang</option>
                 </select>
                 <div class="invalid-feedback">
                   Please provide a valid state.
@@ -186,7 +186,7 @@
 
               <div class="col-md-3 mb-3">
                 <label for="zip">Zip</label>
-                <input type="text" class="form-control" id="zip" name="zip" placeholder="" maxlength="5" required="" >
+                <input type="text" class="form-control" id="zip" name="zip" placeholder="" maxlength="5" required="" value="{{old('zip')}}">
                 <div class="invalid-feedback">
                   Zip code required.
                 </div>
@@ -197,7 +197,7 @@
             <div class="d-block my-3">
             @foreach ($shippingMethods as $method)
               <div class="custom-control custom-radio">
-                <input id="{{ $method['id'] }}" name="shippingMethod" type="radio" class="custom-control-input" required="" value="{{ $method['id'] }}" onchange="updateShippingPrice('{{ $method['name'] }}','{{ $method['price'] }}')">
+                <input id="{{ $method['id'] }}" name="shippingMethod" type="radio" class="custom-control-input" required="" value="{{ $method['id'] }}" onchange="updateShippingPrice('{{ $method['name'] }}','{{ $method['price'] }}')" @if(old('shippingMethod') == $method['id']) checked @endif>
                 <label class="custom-control-label" for="{{ $method['id'] }}">{{ $method['desc'] }} </label><span style="float:right;">RM{{ $method['price'] }}</span>
               </div>
               @endforeach
@@ -208,18 +208,18 @@
 
             <div class="d-block my-3">
               <div class="custom-control custom-radio">
-                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="" required="" value="credit card">
+                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" required="" value="credit card" @if(old('paymentMethod') == 'credit card') checked @endif>
                 <label class="custom-control-label" for="credit">Credit card</label>
               </div>
               <div class="custom-control custom-radio">
-                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required="" value="debit card">
+                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required="" value="debit card" @if(old('paymentMethod') == "debit card") checked @endif>
                 <label class="custom-control-label" for="debit">Debit card</label>
               </div>
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="cc-name">Name on card</label>
-                <input type="text" class="form-control" id="cc-name" name="cc-name" placeholder="" required="" >
+                <input type="text" class="form-control" id="cc-name" name="cc-name" placeholder="" required="" value="{{old('cc-name')}}">
                 <small class="text-muted">Full name as displayed on card</small>
                 <div class="invalid-feedback">
                   Name on card is required
@@ -227,7 +227,7 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label for="cc-number">Credit card number</label>
-                <input type="text" class="form-control" id="cc-number" name="cc-number" placeholder="" required="" maxlength="16">
+                <input type="text" class="form-control" id="cc-number" name="cc-number" placeholder="" required="" maxlength="16" value="{{old('cc-number')}}">
                 <div class="invalid-feedback">
                   Credit card number is required
                 </div>
@@ -236,14 +236,14 @@
             <div class="row">
               <div class="col-md-3 mb-3">
                 <label for="cc-expiration">Expiration</label>
-                <input type="text" class="form-control" id="cc-expiration" name="cc-expiration" placeholder="12/25" required="" maxlength="5">
+                <input type="text" class="form-control" id="cc-expiration" name="cc-expiration" placeholder="12/25" required="" maxlength="5" value="{{old('cc-expiration')}}">
                 <div class="invalid-feedback">
                   Expiration date required
                 </div>
               </div>
               <div class="col-md-3 mb-3">
                 <label for="cc-cvv">CVV</label>
-                <input type="text" class="form-control" id="cc-cvv" name="cc-cvv" placeholder="" required="" maxlength="3">
+                <input type="text" class="form-control" id="cc-cvv" name="cc-cvv" placeholder="" required="" maxlength="3" value="{{old('cc-cvv')}}">
                 <div class="invalid-feedback">
                   Security code required
                 </div>
@@ -255,7 +255,6 @@
             <input type="hidden" name="grand_total_hidden" id="grand_total_hidden">
             <input type="hidden" name="order_id_hidden" id="order_id_hidden" value="{{$orderId}}">
             <input type="hidden" name="product_price" id="product_price" value="{{$totalPrice}}">
-            <input id="card-type" name="cardType" type="hidden" value="credit card">
           </form>
         </div>
       </div>
@@ -285,15 +284,6 @@
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var voucherApply = false;
 
-    $('input[type=radio][name=paymentMethod]').change(function() {
-      if (this.value === 'credit card') {
-        $('#card-type').val('credit card');
-      }
-      else if (this.value === 'debit card') {
-        $('#card-type').val('debit card');
-      }
-    });
-
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       (function() {
         'use strict';
@@ -312,7 +302,7 @@
 
               // send an AJAX request
               const data = {
-                payMethod: $('input[name="cardType"]').val(),
+                payMethod: $('input[name="paymentMethod"]:checked').val(),
                 name: $('input[name="cc-name"]').val(),
                 number: $('input[name="cc-number"]').val(),
                 expDate: $('input[name="cc-expiration"]').val(),
