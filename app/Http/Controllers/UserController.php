@@ -123,7 +123,7 @@ class UserController extends Controller
 
     public function edit_password(Request $req, $id){
         $user = $this->userRepository->findUser($id);
-        if(!$req->password){
+        if(!$req->has('password')){
             if(!Hash::check($req->current_password, $user->password))
             {
                 return back()->with('error', 'Invalid current password');
@@ -163,7 +163,7 @@ class UserController extends Controller
             return redirect('/');
         } else {
             // Authentication failed
-            return redirect('login')->with('error', 'Email or password is not matched');
+            return redirect('login')->with('error', 'Email or password is not matched')->withInput();
 
         }
 

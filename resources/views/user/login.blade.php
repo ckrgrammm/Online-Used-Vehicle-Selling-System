@@ -49,7 +49,7 @@
                             <form class="row contact_form" action="/login" method="post">
                                 @csrf
                                 <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" id="email" name="email" value=""
+                                    <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}"
                                         placeholder="Email">
                                 </div>
                                 <div class="col-md-12 form-group p_star">

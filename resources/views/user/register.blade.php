@@ -9,6 +9,10 @@
         z-index: 2;
         font-weight: 500;
     }
+
+    ul {
+        list-style-type: disc; /* use a filled circle */
+    }
 </style>
     <!-- breadcrumb start-->
     <section class="breadcrumb breadcrumb_bg">
@@ -48,11 +52,11 @@
                             <form class="row contact_form" action="/register" method="post">
                                 @csrf
                                 <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" id="name" name="name" value=""
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}"
                                         placeholder="Name">
                                 </div>
                                 <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" id="email" name="email" value=""
+                                    <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}"
                                         placeholder="Email">
                                 </div>
                                 <div class="col-md-12 form-group p_star">

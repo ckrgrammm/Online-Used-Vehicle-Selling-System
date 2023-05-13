@@ -96,6 +96,16 @@ class ProductController extends Controller
             $response = array('message' => 'no login');
             return json_encode($response);
         }
+
+        $product = new ProductData();
+        $observer = new ProductObserver($product);
+        $product->attach($observer);
+        $product = $product->find($id);
+        if(auth()->user()-> id == $product->user_id){
+            $response = array('message' => 'owner');
+            return json_encode($response);
+        }
+
         $data = [
             'user_id'       => auth()->user()->id,
             'product_id'    => $id

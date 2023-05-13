@@ -197,6 +197,20 @@
                         hideClass: "animate__animated animate__fadeOut"
                     }
                 });
+              } else if(data.message === 'owner') {
+                swal({
+                    title: "Add to Cart Failed",
+                    text: "You cannot buy your own product.",
+                    icon: "error",
+                    timer: 2000, // Display duration in milliseconds
+                    buttons: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                    animation: {
+                        showClass: "animate__animated animate__fadeIn",
+                        hideClass: "animate__animated animate__fadeOut"
+                    }
+                });
               } else if(data.message === 'no login') {
                 window.location.href = '/login';
               }

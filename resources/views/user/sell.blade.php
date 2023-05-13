@@ -351,17 +351,17 @@
                                   <label class="fieldlabels">Make: * @if ($errors->has('make'))
                                       <span class="text-danger">{{ $errors->first('make') }}</span>
                                   @endif</label> 
-                                  <input type="text" name="make" placeholder="Mercedes-Benz" /> 
+                                  <input type="text" name="make" placeholder="Mercedes-Benz" value="{{old('make')}}"/> 
                                   
                                   <label class="fieldlabels">Model: * @if ($errors->has('model'))
                                       <span class="text-danger">{{ $errors->first('model') }}</span>
                                   @endif</label> 
-                                  <input type="text" name="model" placeholder="Mercedes-AMG G 63" />
+                                  <input type="text" name="model" placeholder="Mercedes-AMG G 63" value="{{old('model')}}"/>
                                   
                                   <label class="fieldlabels">Price: * @if ($errors->has('price'))
                                       <span class="text-danger">{{ $errors->first('price') }}</span>
                                   @endif</label> 
-                                  <input type="text" name="price" placeholder="RM500,000" />
+                                  <input type="text" name="price" placeholder="RM500,000" value="{{old('price')}}"/>
                                   
                               </div> <input type="button" name="next" class="next action-button" value="Next" />
                           </fieldset>
@@ -378,27 +378,27 @@
                                   <label class="fieldlabels">Year: * @if ($errors->has('year'))
                                       <span class="text-danger">{{ $errors->first('year') }}</span>
                                   @endif</label> 
-                                  <input type="text" name="year" placeholder="2021" /> 
+                                  <input type="text" name="year" placeholder="2021" value="{{old('year')}}"/> 
                                   
                                   <label class="fieldlabels">Mileage: * @if ($errors->has('mileage'))
                                       <span class="text-danger">{{ $errors->first('mileage') }}</span>
                                   @endif</label> 
-                                  <input type="text" name="mileage" placeholder="10km" />
+                                  <input type="text" name="mileage" placeholder="10km" value="{{old('mileage')}}"/>
                                   
                                   <label class="fieldlabels">Color: * @if ($errors->has('color'))
                                       <span class="text-danger">{{ $errors->first('color') }}</span>
                                   @endif</label> 
-                                  <input type="text" name="color" placeholder="black and pink" /> 
+                                  <input type="text" name="color" placeholder="black and pink" value="{{old('color')}}"/> 
                           
                                   <label class="fieldlabels">Transmission: * @if ($errors->has('transmission'))
                                       <span class="text-danger">{{ $errors->first('transmission') }}</span>
                                   @endif</label> 
-                                  <input type="text" name="transmission" placeholder="Manual" />
+                                  <input type="text" name="transmission" placeholder="Manual" value="{{old('transmission')}}"/>
                                  
-                                  <label class="fieldlabels">Product Description: * @if ($errors->has('description'))
+                                  <label class="fieldlabels">Product Description: * @if ($errors->has('pDesc'))
                                       <span class="text-danger">{{ $errors->first('pDesc') }}</span>
                                   @endif</label>
-                                  <textarea name="pDesc" id="pDesc" cols="30" rows="10"></textarea>
+                                  <textarea name="pDesc" id="pDesc" cols="30" rows="10">{{old('pDesc')}}</textarea>
                                   
                               </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
                           </fieldset>
