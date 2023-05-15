@@ -67,68 +67,72 @@ td.comment {
     </div><br>
 @endif
 
-<table id="example" class="table table-hover" style="width:100%">
-    <thead>
-        {{-- <tr>
-            <th>
-                <a href="{{route('comments.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
-            </th>
-        </tr> --}}
-        <tr>
-            <th>Name</th>
-            <th>Rating</th>
-            <th>Review</th>
-            <th>Image</th>
-            <th>Date Time</th>
-            <th>Comment</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($comments as $comment)
-        <tr>
-            <td>
-                <div class="d-flex align-items-center">
-                  <div class="avatar mr-3" style="background-image: url({{asset('user/img/profile/'.$comment->user_image)}})"></div>
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table id="example" class="table table-hover" style="width:100%">
+            <thead>
+                {{-- <tr>
+                    <th>
+                        <a href="{{route('comments.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
+                    </th>
+                </tr> --}}
+                <tr>
+                    <th>Name</th>
+                    <th>Rating</th>
+                    <th>Review</th>
+                    <th>Image</th>
+                    <th>Date Time</th>
+                    <th>Comment</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($comments as $comment)
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                        <div class="avatar mr-3" style="background-image: url({{asset('user/img/profile/'.$comment->user_image)}})"></div>
 
-                  <div class="">
-                    <p class="font-weight-bold mb-0">{{$comment->user_name}}</p>
-                    <p class="text-muted mb-0">{{$comment->user_email}}</p>
-                  </div>
-                </div>
-            </td>
-            <td>{{$comment->rating}} <i class="fas fa-star text-warning"></i></td>
-            <td>{{$comment->review}}</td>
-            <td>
-                @if($comment->image != NULL)
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
-                        @foreach (explode('|', $comment->image) as $image)
-                            <div class="swiper-slide">
-                                <a href="{{asset('user/img/review/'.$image)}}" class="image-link">
-                                    <img src="{{asset('user/img/review/'.$image)}}" class="img-fluid">
-                                </a>
+                        <div class="">
+                            <p class="font-weight-bold mb-0">{{$comment->user_name}}</p>
+                            <p class="text-muted mb-0">{{$comment->user_email}}</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td>{{$comment->rating}} <i class="fas fa-star text-warning"></i></td>
+                    <td>{{$comment->review}}</td>
+                    <td>
+                        @if($comment->image != NULL)
+                        <div class="swiper mySwiper">
+                            <div class="swiper-wrapper">
+                                @foreach (explode('|', $comment->image) as $image)
+                                    <div class="swiper-slide">
+                                        <a href="{{asset('user/img/review/'.$image)}}" class="image-link">
+                                            <img src="{{asset('user/img/review/'.$image)}}" class="img-fluid">
+                                        </a>
+                                    </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-pagination"></div>
-                </div>
-                @else
-                    <p style="text-align: center">No Image</p>   
-                @endif
-            </td>
-            <td>{{$comment->created_at}}</td>
-            <td class="comment">{{$comment->comment}}</td>
-            <td> 
-                <a href="{{route('comments.edit', $comment->id)}}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
-                <a href="/admin/deleteReview/{{$comment->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                        @else
+                            <p style="text-align: center">No Image</p>   
+                        @endif
+                    </td>
+                    <td>{{$comment->created_at}}</td>
+                    <td class="comment">{{$comment->comment}}</td>
+                    <td> 
+                        <a href="{{route('comments.edit', $comment->id)}}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
+                        <a href="/admin/deleteReview/{{$comment->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <script>
     $(document).ready(function () {
