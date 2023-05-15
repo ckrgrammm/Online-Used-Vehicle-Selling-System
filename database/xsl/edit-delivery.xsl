@@ -74,20 +74,6 @@
               <div class="form-check">
                 <label class="form-check-label">
                   <xsl:choose>
-                    <xsl:when test="delivery/car[payment_id=$payment_id]/delivery_status = 'Cancelled'">
-                        <input type="radio" class="form-check-input" name="delivery_status" id="cancelled" value="Cancelled" checked="checked"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <input type="radio" class="form-check-input" name="delivery_status" id="cancelled" value="Cancelled"/>
-                    </xsl:otherwise>
-                  </xsl:choose> Cancelled
-                </label>
-              </div>
-            </div>
-            <div class="col-sm-5">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <xsl:choose>
                     <xsl:when test="delivery/car[payment_id=$payment_id]/delivery_status = 'on Hold'">
                         <input type="radio" class="form-check-input" name="delivery_status" id="onHold" value="on Hold" checked="checked"/>
                     </xsl:when>

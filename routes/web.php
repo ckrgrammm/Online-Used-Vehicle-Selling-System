@@ -80,6 +80,8 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::get('/checkout/{selectedOrderIds}', [PaymentController::class, 'displayPayment'])->name('payment.display');
     Route::post('/payment', [PaymentController::class, 'createPayment'])->name('payment.create');
     Route::get('/payment-history', [PaymentController::class, 'displayPaymentHistory'])->name('payment.displayHistory');
+    Route::get('/destroyProduct/{id}', [ProductController::class, 'destroyProduct']);
+
     
 });
 
@@ -100,7 +102,6 @@ Route::prefix('admin')->middleware(['auth', 'isStafforAdmin'])->group(function()
     Route::resource('memberships', MembershipController::class);
     Route::get('/deleteUser/{id}', [UserController::class, 'destroyUser']);
     Route::get('/deleteReview/{id}', [ReviewController::class, 'destroyReview']);
-    Route::get('/destroyProduct/{id}', [ProductController::class, 'destroyProduct']);
     Route::get('/admin/all-product', [ProductController::class, 'admin'])->name('products.admin');
     Route::resource('payments', PaymentController::class);
     Route::get('/deletePayment/{id}', [PaymentController::class, 'destroyPayment']);
