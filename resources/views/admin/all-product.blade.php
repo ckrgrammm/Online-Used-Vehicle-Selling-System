@@ -43,68 +43,71 @@
 </div><br>
 @endif
 
-
-<table id="example" class="table table-hover" style="width:100%">
-    <thead>
-        {{-- <tr>
-            <th>
-                <a href="{{route('products.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
-            </th>
-        </tr> --}}
-        <tr>
-            <th>Make</th>
-            <th>Model</th>
-            <th>Year</th>
-            <th>Mileage</th>
-            <th>Color</th>
-            <th>Transmission</th>
-            <th>Description</th>
-            <th>Images</th>
-            <th>Price</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach($products as $product)
-        <tr>
-            <td>{{ $product->make }}</td>
-            <td>{{ $product->model }}</td>
-            <td>{{ $product->year }}</td>
-            <td>{{ $product->mileage }}</td>
-            <td>{{ $product->color }}</td>
-            <td>{{ $product->transmission }}</td>
-            <td>{{ $product->product_description }}</td>
-            <td>
-                @if($product->product_image != NULL)
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
-                        @foreach (explode('|', $product->product_image) as $image)
-                            <div class="swiper-slide">
-                                <a href="{{asset('user/img/product/'.$image)}}" class="image-link">
-                                    <img src="{{asset('user/img/product/'.$image)}}" class="img-fluid">
-                                </a>
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table id="example" class="table table-hover" style="width:100%">
+            <thead>
+                {{-- <tr>
+                    <th>
+                        <a href="{{route('products.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
+                    </th>
+                </tr> --}}
+                <tr>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th>Mileage</th>
+                    <th>Color</th>
+                    <th>Transmission</th>
+                    <th>Description</th>
+                    <th>Images</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($products as $product)
+                <tr>
+                    <td>{{ $product->make }}</td>
+                    <td>{{ $product->model }}</td>
+                    <td>{{ $product->year }}</td>
+                    <td>{{ $product->mileage }}</td>
+                    <td>{{ $product->color }}</td>
+                    <td>{{ $product->transmission }}</td>
+                    <td>{{ $product->product_description }}</td>
+                    <td>
+                        @if($product->product_image != NULL)
+                        <div class="swiper mySwiper">
+                            <div class="swiper-wrapper">
+                                @foreach (explode('|', $product->product_image) as $image)
+                                    <div class="swiper-slide">
+                                        <a href="{{asset('user/img/product/'.$image)}}" class="image-link">
+                                            <img src="{{asset('user/img/product/'.$image)}}" class="img-fluid">
+                                        </a>
+                                    </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-pagination"></div>
-                </div>
-                @else
-                    <p style="text-align: center">No Image</p>   
-                @endif
-            </td>
-            <td>{{ $product->price }}</td>
-           
-                <td> 
-                {{-- <a href="{{ route('products.edit', $product->id) }}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a> --}}
-                <a href="/admin/destroyProduct/{{$product->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
-            </td>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                        @else
+                            <p style="text-align: center">No Image</p>   
+                        @endif
+                    </td>
+                    <td>{{ $product->price }}</td>
+                
+                        <td> 
+                        {{-- <a href="{{ route('products.edit', $product->id) }}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a> --}}
+                        <a href="/user/destroyProduct/{{$product->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
+                    </td>
 
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <script>
     $(document).ready(function () {

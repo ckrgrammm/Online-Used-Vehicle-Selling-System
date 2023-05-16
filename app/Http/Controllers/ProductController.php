@@ -304,7 +304,7 @@ class ProductController extends Controller
         $product->delete($id);
 
         if($lastSegment == "myCarsOnBid"){
-            return redirect('/myCarsOnBid')->with('success', 'Product deleted successfully');
+            return redirect('user/myCarsOnBid')->with('success', 'Product deleted successfully');
         }
         return redirect()->route('products.admin')->with('success', 'Product deleted successfully');
     }

@@ -32,65 +32,69 @@
     </div><br>
 @endif
 
-<table id="example" class="table table-hover" style="width:100%">
-    <thead>
-        {{-- <tr>
-            <th>
-                <a href="{{route('customers.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
-            </th>
-        </tr> --}}
-        <tr>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>Address</th>
-            <th>Phone No</th>
-            <th>Role</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($users as $user)
-            <tr>
-            <td>
-                <div class="d-flex align-items-center">
-                  <div class="avatar mr-3" style="background-image: url({{asset('user/img/profile/'.$user->image)}})"></div>
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table id="example" class="table table-hover" style="width:100%">
+            <thead>
+                {{-- <tr>
+                    <th>
+                        <a href="{{route('customers.create')}}" class="btn btn-primary" title="Add">Add<i class="mdi mdi-plus-circle-outline"></i></a>
+                    </th>
+                </tr> --}}
+                <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Address</th>
+                    <th>Phone No</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($users as $user)
+                    <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                        <div class="avatar mr-3" style="background-image: url({{asset('user/img/profile/'.$user->image)}})"></div>
 
-                  <div class="">
-                    <p class="font-weight-bold mb-0">{{$user->name}}</p>
-                    <p class="text-muted mb-0">{{$user->email}}</p>
-                  </div>
-                </div>
-            </td>
-            <td>
-                @if($user->gender)
-                {{$user->gender}}
-                @else
-                -
-                @endif
-            </td>
-            <td>
-                @if($user->address)
-                {{$user->address}}
-                @else
-                -
-                @endif
-            </td>
-            <td>
-                @if($user->phoneNum)
-                {{$user->phoneNum}}
-                @else
-                -
-                @endif
-            </td>
-            <td>{{$user->role}}</td>
-            <td> 
-                <a href="{{route('customers.edit', $user->id)}}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
-                <a href="/admin/deleteUser/{{$user->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+                        <div class="">
+                            <p class="font-weight-bold mb-0">{{$user->name}}</p>
+                            <p class="text-muted mb-0">{{$user->email}}</p>
+                        </div>
+                        </div>
+                    </td>
+                    <td>
+                        @if($user->gender)
+                        {{$user->gender}}
+                        @else
+                        -
+                        @endif
+                    </td>
+                    <td>
+                        @if($user->address)
+                        {{$user->address}}
+                        @else
+                        -
+                        @endif
+                    </td>
+                    <td>
+                        @if($user->phoneNum)
+                        {{$user->phoneNum}}
+                        @else
+                        -
+                        @endif
+                    </td>
+                    <td>{{$user->role}}</td>
+                    <td> 
+                        <a href="{{route('customers.edit', $user->id)}}" class="btn btn-success btn-edit" title="Edit"><i class="mdi mdi-square-edit-outline"></i></a>
+                        <a href="/admin/deleteUser/{{$user->id}}" class="btn btn-danger delete_button btn-delete" title="Delete"><i class="mdi mdi-delete-outline"></i></a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 
     <script>
         $(document).ready(function () {
