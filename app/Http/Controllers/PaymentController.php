@@ -60,6 +60,13 @@ class PaymentController extends Controller
                     $order_ids = explode(',', $value);
                     $user_id = null;
                     foreach ($order_ids as $index => $order_id) {
+                            foreach ($order_ids as $prevIndex => $prev_order_ids) {
+                                if ($index !== $prevIndex && $order_id === $prev_order_ids) {
+                                    $fail('The '.$attribute.' cannot contain duplicate.');
+                                }
+                            }
+
+
                         $exists = DB::table('orders')
                             ->where('id', $order_id)
                             ->where('status', 'available')
